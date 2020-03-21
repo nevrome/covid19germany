@@ -29,7 +29,7 @@ download_RKI <- function() {
   
   readr::read_csv(
     "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
-    na = c("0-1", "-1", "unbekannt"),
+    na = c("0-1", "-1", "unbekannt", "-nicht erhoben-"),
     col_types = readr::cols(
       IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
