@@ -1,0 +1,20 @@
+#' hospital_beds
+#'
+#' Source: http://www.gbe-bund.de/oowa921-install/servlet/oowa/aw92/dboowasys921.xwdevkit/xwd_init?gbe.isgbetol/xs_start_neu/&p_aid=3&p_aid=9883226&nummer=841&p_sprache=D&p_indsp=-&p_aid=54727719
+#'
+#' @format A data frame with 16 rows and 7 variables.
+#' \itemize{
+#'   \item \bold{Bundesland}
+#'   \item \bold{AnzahlKrankenhaeuser}
+#'   \item \bold{AnzahlKrankenhaeusermitIntensiv}
+#'   \item \bold{AnzahlBettenIntensiv}
+#'   \item \bold{AnzahlBelegungstageIntensiv}
+#'   \item \bold{AnzahlBehandlungsfaelleIntensiv}
+#'   \item \bold{AnzahlBehandlungsfaelleIntensivmitBeatmung}
+#' }
+#' For further information about the values see the documentation on http://www.gbe-bund.de/
+#'
+#' @family context_data
+#'
+#' @name hospital_beds
+NULL
