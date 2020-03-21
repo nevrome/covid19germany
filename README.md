@@ -26,7 +26,7 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 
 - Convert downloaded RKI data to daily timeseries for federal states (Bundesland) or administrative districts (Lanskreis): `covid19germany::???(data, ("Bundesland" | "Landkreis"))`
 
-Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go to the current date (last update by RKI)
+Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
 
 |Bundesland|Meldedatum|cases|deaths|cumcases|cumdeaths|
 |------|----------|-|-|-|-|
