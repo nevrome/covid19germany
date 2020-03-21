@@ -1,0 +1,17 @@
+Bundesland,AnzahlKrankenhaeuser,AnzahlKrankenhaeusermitIntensiv,AnzahlBettenIntensiv,AnzahlBelegungstageIntensiv,AnzahlBehandlungsfaelleIntensiv,AnzahlBehandlungsfaelleIntensivmitBeatmung
+Baden-Württemberg,265,123,3262,900678,259066,47528
+Bayern,354,178,3790,1085912,300728,62044
+Berlin,83,35,1450,439183,94480,22887
+Brandenburg,57,46,745,227884,60472,10367
+Bremen,14,10,294,70939,21458,5319
+Hamburg,58,25,802,226420,49627,12366
+Hessen,159,91,1845,529893,144537,30393
+Mecklenburg-Vorpommern,39,30,1014,286333,68050,10804
+Niedersachsen,180,116,2362,667296,190313,40417
+Nordrhein-Westfalen,344,263,6148,1891532,537148,97448
+Rheinland-Pfalz,87,58,1343,334611,94716,18619
+Saarland,23,18,548,158573,42879,8658
+Sachsen,77,69,1859,539645,89816,21518
+Sachsen-Anhalt,48,34,972,278526,67842,11232
+Schleswig-Holstein,111,34,867,234244,60448,14936
+Thüringen,43,30,730,209791,49636,15916
