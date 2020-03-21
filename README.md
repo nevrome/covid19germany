@@ -14,7 +14,11 @@ devtools::install_github("nevrome/covid19germany")
 ```
 ## Functions
 
-- Download RKI data for germany (timeseries): `covid19germany::get_RKI_timeseries()`
+### Download [RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0):
+
+```
+covid19germany::get_RKI_timeseries()
+```
 
 Data format: One row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
 
@@ -24,9 +28,13 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
 
-- Convert downloaded RKI data to daily timeseries for federal states (Bundesland) or administrative districts (Lanskreis): `covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis"))`
+### Convert downloaded RKI data to daily timeseries for federal states (Bundesland) administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
 
-Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
+```
+covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe"))
+```
+
+Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are continuous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
 
 |Bundesland|Meldedatum|AnzahlFall|AnzahlTodesfall|KumAnzahlFall|KumAnzahlTodesfall|
 |------|----------|-|-|-|-|
