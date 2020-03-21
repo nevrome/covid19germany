@@ -10,6 +10,33 @@ hospital_beds <- readr::read_csv(
   )
 )
 
+ew_laender <- readr::read_delim(
+  "data-raw/EW_Laender.csv", delim=";",
+  col_types = readr::cols(
+    Bundesland = readr::col_character(),
+    FlaecheKm2 = readr::col_double(),
+    EwGesamt = readr::col_integer(),
+    EwMaennlich = readr::col_integer(),
+    EwWeiblich = readr::col_integer(),
+    EwProKm2 = readr::col_double()
+  )
+)
+
+ew_kreise <- readr::read_delim(
+  "data-raw/EW_Kreise.csv", ";",
+  col_types = readr::cols(
+    IdLandkreis = readr::col_integer(),
+    Landkreis = readr::col_character(),
+    NUTS3 = readr::col_character(),
+    FlaecheKm2 = readr::col_double(),
+    EwGesamt = readr::col_integer(),
+    EwMaennlich = readr::col_integer(),
+    EwWeiblich = readr::col_integer(),
+    EwProKm2 = readr::col_double()
+  )
+)
+
+
 usethis::use_data(hospital_beds, overwrite = T)
-
-
+usethis::use_data(ew_laender, overwrite = T)
+usethis::use_data(ew_kreise, overwrite = T)
