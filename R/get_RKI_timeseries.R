@@ -41,7 +41,7 @@ download_RKI <- function() {
       Geschlecht = readr::col_factor(),
       AnzahlFall = readr::col_integer(),
       AnzahlTodesfall = readr::col_integer(),
-      ObjectId = readr::col_double(),
+      ObjectId = readr::col_integer(),
       Meldedatum = readr::col_datetime(format = ""),
       IdLandkreis = readr::col_integer()
     )
