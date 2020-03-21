@@ -6,19 +6,22 @@
 \usage{
 plot_RKI_timeseries(
   x,
-  grouping_var = "Bundesland",
+  group = "Bundesland",
   type = "KumAnzahlFall",
-  label = T
+  label = T,
+  logy = F
 )
 }
 \arguments{
 \item{x}{data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}}
 
-\item{grouping_var}{character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"}
+\item{group}{character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"}
 
 \item{type}{character. Counter type}
 
 \item{label}{logical}
+
+\item{logy}{logical}
 }
 \description{
 plot_RKI_timeseries
