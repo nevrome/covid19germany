@@ -36,9 +36,12 @@ download_RKI <- function() {
       Landkreis = readr::col_character(),
       Altersgruppe = readr::col_factor(
         levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"), 
-        ordered = T
+        ordered = T,
+        include_na = T
       ),
-      Geschlecht = readr::col_factor(),
+      Geschlecht = readr::col_factor(
+        include_na = T
+      ),
       AnzahlFall = readr::col_integer(),
       AnzahlTodesfall = readr::col_integer(),
       ObjectId = readr::col_integer(),
