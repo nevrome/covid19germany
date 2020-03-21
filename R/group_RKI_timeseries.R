@@ -16,20 +16,20 @@ group_RKI_timeseries <- function(x, grouping_var) {
       !!grouping_var, .data[["Meldedatum"]]
     ) %>%
     dplyr::summarise(
-      AnzahlFall = sum(AnzahlFall),
-      AnzahlTodesfall = sum(AnzahlTodesfall)
+      AnzahlFall = sum(.data[["AnzahlFall"]]),
+      AnzahlTodesfall = sum(.data[["AnzahlTodesfall"]])
     ) %>%
     dplyr::ungroup() %>%
     tidyr::complete(
       tidyr::nesting(!!grouping_var),
-      Meldedatum = tidyr::full_seq(Meldedatum, 24*60*60),
+      Meldedatum = tidyr::full_seq(.data[["Meldedatum"]], 24*60*60),
       fill = list(AnzahlFall = 0, AnzahlTodesfall = 0)
     ) %>% dplyr::group_by(
       !!grouping_var
     ) %>%
     dplyr::mutate(
-      KumAnzahlFall = cumsum(AnzahlFall),
-      KumAnzahlTodesfall = cumsum(AnzahlTodesfall)
+      KumAnzahlFall = cumsum(.data[["AnzahlFall"]]),
+      KumAnzahlTodesfall = cumsum(.data[["AnzahlTodesfall"]])
     ) %>%
     dplyr::ungroup()
   

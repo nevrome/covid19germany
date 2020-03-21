@@ -19,6 +19,7 @@ Imports:
   readr,
   rlang,
   tibble,
+  tidyr,
   utils
 Suggests: 
   testthat (>= 2.1.0)
