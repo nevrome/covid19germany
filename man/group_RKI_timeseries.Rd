@@ -4,12 +4,12 @@
 \alias{group_RKI_timeseries}
 \title{group_RKI_timeseries}
 \usage{
-group_RKI_timeseries(x, grouping_var)
+group_RKI_timeseries(x, ...)
 }
 \arguments{
 \item{x}{data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}}
 
-\item{grouping_var}{character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"}
+\item{...}{character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"}
 }
 \description{
 group_RKI_timeseries
