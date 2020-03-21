@@ -21,6 +21,7 @@ NULL
 #' ew_laender
 #' 
 #' Source: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html
+#' Licence: Deutschland 2.0
 #' 
 #' @format A data frame with 16 rows and 6 variables.
 #' \itemize{
@@ -40,6 +41,7 @@ NULL
 #' ew_kreise
 #' 
 #' Source: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html
+#' Licence: Deutschland 2.0
 #' 
 #' @format A data frame with 401 rows and 8 variables.
 #' \itemize{

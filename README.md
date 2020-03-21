@@ -63,7 +63,7 @@ bayern <- time_series[time_series$Bundesland == "Bayern",]
 plot(bayern$Meldedatum, bayern$KumAnzahlFall, type="l")
 
 # Join population to RKI table
-# Population data for "Landkreise" is available as "ew_kreise"
+# Population data for "Landkreise" is available as "ew_kreise". Use "IdLandkreis" as join column.
 time_series <- time_series %>%
   left_join(ew_laender, by="Bundesland")
 
@@ -127,5 +127,7 @@ results in this plot:
 
 ![cumul_numbers](img/cumul_numbers.jpg)
 
+## Known issues
 
+* Missing population data for administrative units of Berlin in dataset ew_laender (Source: https://www.destatis.de)
 
