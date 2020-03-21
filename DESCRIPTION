@@ -16,6 +16,7 @@ Depends:
 Imports:
   dplyr,
   magrittr,
+  readr,
   rlang,
   tibble,
   utils
