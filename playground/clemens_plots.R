@@ -1,0 +1,1 @@
+rki <- covid19germany::get_RKI_timeseries()
