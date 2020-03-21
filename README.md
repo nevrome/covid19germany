@@ -28,7 +28,7 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
 
-### Convert downloaded RKI data to daily timeseries for federal states (Bundesland) administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
+### Convert downloaded RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
 
 ```
 covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe"))
