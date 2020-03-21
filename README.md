@@ -24,7 +24,7 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
 
-- Convert downloaded RKI data to daily timeseries for federal states (Bundesland) or administrative districts (Lanskreis): `covid19germany::???(data, ("Bundesland" | "Landkreis"))`
+- Convert downloaded RKI data to daily timeseries for federal states (Bundesland) or administrative districts (Lanskreis): `covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis"))`
 
 Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
 
@@ -40,3 +40,13 @@ Data format: Time series of cases, deaths, cumulative cases and cumulative death
 |Bayern|2020-02-04|2|0|10|0|
 |Bayern|2020-02-05|0|0|10|0|
 |Bayern|2020-02-06|1|0|11|0|
+
+Example:
+
+```r
+data <- covid19germany::get_RKI_timeseries()
+time_series <- covid19germany::group_RKI_timeseries(data, "Bundesland")
+
+bayern <- time_series[time_series$Bundesland == "Bayern",]
+plot(bayern$Meldedatum, bayern$KumAnzahlFall, type="l")
+```
