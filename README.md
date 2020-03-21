@@ -16,4 +16,27 @@ devtools::install_github("nevrome/covid19germany")
 
 - Download RKI data for germany (timeseries): `covid19germany::get_RKI_timeseries()`
 
+Data format: One row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
 
+|IdBundesland|Bundesland|Landkreis|Altersgruppe|Geschlecht|AnzahlFall|AnzahlTodesfall|ObjectId|Meldedatum|IdLandkreis|
+|--|--------------|------------|-------|-|-|-|------|----------|-----|
+|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|M|2|0|154936|2020-03-18|15003|
+|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
+|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
+
+- Convert downloaded RKI data to daily timeseries for federal states (Bundesland) or administrative districts (Lanskreis): `covid19germany::???(data, ("Bundesland" | "Landkreis"))`
+
+Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go to the current date (last update by RKI)
+
+|Bundesland|Meldedatum|cases|deaths|cumcases|cumdeaths|
+|------|----------|-|-|-|-|
+|Bayern|2020-01-28|2|0|2|0|
+|Bayern|2020-01-29|2|0|4|0|
+|Bayern|2020-01-30|0|0|4|0|
+|Bayern|2020-01-31|3|0|7|0|
+|Bayern|2020-02-01|0|0|7|0|
+|Bayern|2020-02-02|0|0|7|0|
+|Bayern|2020-02-03|1|0|8|0|
+|Bayern|2020-02-04|2|0|10|0|
+|Bayern|2020-02-05|0|0|10|0|
+|Bayern|2020-02-06|1|0|11|0|
