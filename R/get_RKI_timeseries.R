@@ -29,17 +29,21 @@ download_RKI <- function() {
   
   readr::read_csv(
     "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
+    na = c("0-1", "-1", "unbekannt"),
     col_types = readr::cols(
-      IdBundesland = readr::col_double(),
+      IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
       Landkreis = readr::col_character(),
-      Altersgruppe = readr::col_character(),
-      Geschlecht = readr::col_character(),
-      AnzahlFall = readr::col_double(),
-      AnzahlTodesfall = readr::col_double(),
+      Altersgruppe = readr::col_factor(
+        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"), 
+        ordered = T
+      ),
+      Geschlecht = readr::col_factor(),
+      AnzahlFall = readr::col_integer(),
+      AnzahlTodesfall = readr::col_integer(),
       ObjectId = readr::col_double(),
       Meldedatum = readr::col_datetime(format = ""),
-      IdLandkreis = readr::col_character()
+      IdLandkreis = readr::col_integer()
     )
   )
   
