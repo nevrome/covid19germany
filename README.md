@@ -28,7 +28,7 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 
 Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are contiguous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
 
-|Bundesland|Meldedatum|cases|deaths|cumcases|cumdeaths|
+|Bundesland|Meldedatum|AnzahlFall|AnzahlTodesfall|KumAnzahlFall|KumAnzahlTodesfall|
 |------|----------|-|-|-|-|
 |Bayern|2020-01-28|2|0|2|0|
 |Bayern|2020-01-29|2|0|4|0|
