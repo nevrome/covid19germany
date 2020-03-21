@@ -49,7 +49,7 @@ Data format: Time series of cases, deaths, cumulative cases and cumulative death
 |Bayern|2020-02-05|0|0|10|0|
 |Bayern|2020-02-06|1|0|11|0|
 
-Example:
+Examples:
 
 ```r
 data <- covid19germany::get_RKI_timeseries()
@@ -58,3 +58,59 @@ time_series <- covid19germany::group_RKI_timeseries(data, "Bundesland")
 bayern <- time_series[time_series$Bundesland == "Bayern",]
 plot(bayern$Meldedatum, bayern$KumAnzahlFall, type="l")
 ```
+
+```r
+library(ggplot2)
+library(magrittr)
+
+dat <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(dat, Bundesland) %>%
+  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = Meldedatum,
+                         y = AnzahlFall,
+                         fill = Bundesland),
+           stat = 'identity') +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen (täglich)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+results in this plot:
+
+![daily_numbers](img/daily_numbers.jpg)
+
+
+```r
+library(ggplot2)
+library(magrittr)
+
+dat <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(dat, Bundesland) %>%
+  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  dplyr::group_by(Bundesland) %>%
+  dplyr::mutate(kum_fall = cumsum(AnzahlFall)) %>%
+  dplyr::ungroup() %>%
+  ggplot() +
+  geom_area(mapping = aes(x = Meldedatum,
+                          y = kum_fall,
+                          fill = Bundesland),
+            stat = 'identity',
+            na.rm = T) +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen (kumulativ)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+results in this plot:
+
+![cumul_numbers](img/cumul_numbers.jpg)
+
+
+

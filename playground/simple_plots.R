@@ -15,7 +15,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
   ggtitle("Gemeldete Infektionen (täglich)") +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank())
-
+ggsave("img/daily_numbers.jpg")
 
 group_RKI_timeseries(dat, Bundesland) %>%
   dplyr::filter(Meldedatum > "2020-02-25") %>%
@@ -33,4 +33,5 @@ group_RKI_timeseries(dat, Bundesland) %>%
   ggtitle("Gemeldete Infektionen (kumulativ)") +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank())
+ggsave("img/cumul_numbers.jpg")
 
