@@ -1,4 +1,4 @@
-IdLandkreis;Landkreis;NUTS3;FlaecheKm2;EwGesamt;EwMaennlich;EwWeiblich;EwProKm2
+IdLandkreis;NameLandkreis;NUTS3;FlaecheKm2;EwGesamt;EwMaennlich;EwWeiblich;EwProKm2
 1001;Flensburg, Stadt;DEF01;56.73;89504;44599;44905;1578
 1002;Kiel, Landeshauptstadt;DEF02;118.65;247548;120566;126982;2086
 1003;Lübeck, Hansestadt;DEF03;214.19;217198;104371;112827;1014

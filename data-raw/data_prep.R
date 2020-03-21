@@ -26,7 +26,7 @@ ew_kreise <- readr::read_delim(
   "data-raw/EW_Kreise.csv", ";",
   col_types = readr::cols(
     IdLandkreis = readr::col_integer(),
-    Landkreis = readr::col_character(),
+    NameLandkreis = readr::col_character(),
     NUTS3 = readr::col_character(),
     FlaecheKm2 = readr::col_double(),
     EwGesamt = readr::col_integer(),
