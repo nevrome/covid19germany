@@ -2,5 +2,6 @@
 
 export(get_RKI_timeseries)
 export(group_RKI_timeseries)
+export(plot_RKI_timeseries)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)
