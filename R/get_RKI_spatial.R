@@ -24,6 +24,8 @@ get_RKI_spatial <- function(
   cache = T, cache_dir = tempdir(), cache_max_age = 24 * 60 * 60
 ) {
   
+  check_if_packages_are_available("sf")
+  
   url <- urls[names(urls) == resolution]
 
   # caching is activated
