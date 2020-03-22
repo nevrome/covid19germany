@@ -1,10 +1,18 @@
 #' plot_RKI_timeseries
 #'
+#' Simple plotting function for the RKI data.
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+#'
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
-#' @param group character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"
-#' @param type character. Counter type
-#' @param label logical
-#' @param logy logical
+#' @param group character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe". See \code{\link{group_RKI_timeseries}} for more information
+#' @param type character. Type of count information. One of: "AnzahlFall", "AnzahlTodesfall", "KumAnzahlFall", "KumAnzahlTodesfall"
+#' @param label logical. Should labels be added?
+#' @param logy logical. Should the y-axis be log10-scaled?
+#'
+#' @examples 
+#' rki_timeseries <- get_RKI_timeseries()
+#' 
+#' plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlTodesfall")
 #'
 #' @export
 plot_RKI_timeseries <- function(x, group = "Bundesland", type = "KumAnzahlFall", label = T, logy = F) {

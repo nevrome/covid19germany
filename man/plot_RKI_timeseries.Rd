@@ -15,14 +15,21 @@ plot_RKI_timeseries(
 \arguments{
 \item{x}{data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}}
 
-\item{group}{character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"}
+\item{group}{character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe". See \code{\link{group_RKI_timeseries}} for more information}
 
-\item{type}{character. Counter type}
+\item{type}{character. Type of count information. One of: "AnzahlFall", "AnzahlTodesfall", "KumAnzahlFall", "KumAnzahlTodesfall"}
 
-\item{label}{logical}
+\item{label}{logical. Should labels be added?}
 
-\item{logy}{logical}
+\item{logy}{logical. Should the y-axis be log10-scaled?}
 }
 \description{
-plot_RKI_timeseries
+Simple plotting function for the RKI data.
+Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+}
+\examples{
+rki_timeseries <- get_RKI_timeseries()
+
+plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlTodesfall")
+
 }
