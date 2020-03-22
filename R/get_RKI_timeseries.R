@@ -10,8 +10,10 @@
 #'
 #' @return A tibble with the dataset
 #'
-#' @examples 
+#' @examples
+#' \donttest{ 
 #' rki_timeseries <- get_RKI_timeseries()
+#' }
 #' 
 #' @export 
 get_RKI_timeseries <- function(

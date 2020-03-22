@@ -34,6 +34,8 @@ Downloads the latest version of a COVID-19 spatial dataset by the Robert Koch In
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \examples{
+\donttest{
 rki_spatial_Bundesland <- get_RKI_spatial()
+}
 
 }

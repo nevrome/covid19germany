@@ -12,7 +12,9 @@
 #' @return An object of class sf with the dataset
 #'
 #' @examples 
+#' \donttest{
 #' rki_spatial_Bundesland <- get_RKI_spatial()
+#' }
 #' 
 #' @export 
 get_RKI_spatial <- function(
