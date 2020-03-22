@@ -143,6 +143,31 @@ results in this plot:
 
 ![cumul_numbers](man/figures/cumul_numbers.jpg)
 
+Since we have the inhabitant numbers right in the package, co-analysing them toegther with the epidemiologocal data is straight forward:
+
+```r
+data("ew_laender")
+group_RKI_timeseries(dat, Bundesland) %>%
+  dplyr::left_join(ew_laender, by="Bundesland") %>%
+  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  dplyr::group_by(Bundesland) %>%
+  dplyr::mutate(kum_fall_per100k_ew = cumsum(AnzahlFall) / EwGesamt) %>%
+  dplyr::ungroup() %>%
+  ggplot() +
+  geom_line(mapping = aes(x = Meldedatum,
+                          y = kum_fall_per100k_ew,
+                          col = Bundesland)) +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen pro 100K Einwohner (kumulativ)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+resulting in this plot:
+
+![cumul_numbers_per_100k](man/figures/cumul_numbers_per_100k.jpg)
+
 ## Known issues
 
 * Missing population data for administrative units of Berlin in dataset ew_laender (Source: https://www.destatis.de)
