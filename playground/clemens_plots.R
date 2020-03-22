@@ -17,21 +17,8 @@ library(covid19germany)
 # download rki data
 rki <- get_RKI_timeseries()
 
-# download a shapefile with geoinformation for the german Länder
-shape_zip <- tempfile()
-unzip_dir <- file.path(tempdir(), "gershape")
-download.file(
-  "https://opendata.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0.zip",
-  destfile = shape_zip
-)
-unzip(shape_zip, exdir = unzip_dir)
-
-# load the shapefile
-landkreis_sf <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Landkreise.shp")) %>% 
-  # prepare Landkreis ID for merging
-  dplyr::mutate(
-    IdLandkreis = as.integer(RS)  
-  )
+# download a shapefile with geoinformation for the german Landkreise
+landkreis_sf <- get_RKI_spatial("Landkreis")
 
 # download and filter rki data to 2020-03-21
 rki_202003021_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
