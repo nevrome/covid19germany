@@ -1,6 +1,7 @@
 #' hospital_beds
 #'
-#' Source: http://www.gbe-bund.de/oowa921-install/servlet/oowa/aw92/dboowasys921.xwdevkit/xwd_init?gbe.isgbetol/xs_start_neu/&p_aid=3&p_aid=9883226&nummer=841&p_sprache=D&p_indsp=-&p_aid=54727719
+#' Source: \url{http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation}, 
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 #'
 #' @format A data frame with 16 rows and 7 variables.
 #' \itemize{
@@ -12,16 +13,17 @@
 #'   \item \bold{AnzahlBehandlungsfaelleIntensiv}
 #'   \item \bold{AnzahlBehandlungsfaelleIntensivmitBeatmung}
 #' }
-#' For further information about the values see the documentation on http://www.gbe-bund.de/
 #'
 #' @family context_data
 #'
 #' @name hospital_beds
 NULL
+
 #' ew_laender
 #' 
-#' Source: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html
-#' Licence: Deutschland 2.0
+#' Source: \url{https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html}, 
+#' Licence: Deutschland 2.0, 
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 #' 
 #' @format A data frame with 16 rows and 6 variables.
 #' \itemize{
@@ -32,16 +34,17 @@ NULL
 #'   \item \bold{EwWeiblich}
 #'   \item \bold{EwProKm2}
 #' }
-#' For further information about the values see the documentation on https://www.destatis.de
 #'
 #' @family context_data
 #'
 #' @name ew_laender
 NULL
+
 #' ew_kreise
 #' 
-#' Source: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html
-#' Licence: Deutschland 2.0
+#' Source: \url{https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html}, 
+#' Licence: Deutschland 2.0, 
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 #' 
 #' @format A data frame with 401 rows and 8 variables.
 #' \itemize{
@@ -54,7 +57,6 @@ NULL
 #'   \item \bold{EwWeiblich}
 #'   \item \bold{EwProKm2}
 #' }
-#' For further information about the values see the documentation on https://www.destatis.de
 #'
 #' @family context_data
 #'

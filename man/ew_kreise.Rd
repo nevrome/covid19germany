@@ -13,11 +13,11 @@
   \item \bold{EwMaennlich}
   \item \bold{EwWeiblich}
   \item \bold{EwProKm2}
-}
-For further information about the values see the documentation on https://www.destatis.de}
+}}
 \description{
-Source: https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html
-Licence: Deutschland 2.0
+Source: \url{https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html}, 
+Licence: Deutschland 2.0, 
+Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \seealso{
 Other context_data: 
