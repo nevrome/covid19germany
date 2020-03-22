@@ -11,8 +11,10 @@ ag=aggregate(df$AnzahlFall,by=list(Bundesland=df$Bundesland,Meldedatum=df$Melded
 ## split data by regions:
 ag.split=split(ag,ag$Bundesland)
 
+jpeg("plots/log-lin-predictions.jpg",width=1440,height=1440)
 ## plot
 par(mfrow=c(4,4))
+par(cex=1.2)
 for (this.ag in ag.split){
   keep=(this.ag$x>=MIN.CASES)
   this.ag=this.ag[keep,]
@@ -37,3 +39,4 @@ for (this.ag in ag.split){
   plot(this.ag[,"Meldedatum"],this.ag[,"x"],type="b",col="black",pch=20,main=this.region,xlab="date",ylab="cases",ylim=c(0,ymax))
   points(this.ag[,"Meldedatum"],this.ag[,"x.pred"],type="b",col="red")
 }
+dev.off()
