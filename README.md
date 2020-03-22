@@ -162,7 +162,7 @@ resulting in this plot:
 ![cumul_numbers_per_100k](man/figures/cumul_numbers_per_100k.jpg)
 
 ## Simple Model
-A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach: 
+A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach on new cases per day (i.e. not cumulative in this analysis): 
 ```r
 ## globals:
 MIN.CASES=5
