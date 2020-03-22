@@ -28,7 +28,6 @@ Downloads the latest version of a COVID-19 timeseries dataset by the Robert Koch
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \examples{
-
 rki_timeseries <- get_RKI_timeseries()
 
 }
