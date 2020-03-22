@@ -60,15 +60,36 @@ Data format: tibble/data.frame with a time series of cases, deaths, cumulative c
 
 ### Population numbers
 
+```
+covid19germany::ew_laender
+covid19germany::ew_kreise
+```
+
+[Population numbers for the german Länder](https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung) and [Kreise](https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html) on 2018-12-31. Provided by the Statistisches Bundesamt.
+
+Data format: tibble/data.frame with information about population and area size of Länder and Kreise. One row per Land/Landkreis.
+
+|Bundesland         | FlaecheKm2| EwGesamt| EwMaennlich| EwWeiblich| EwProKm2|
+|:------------------|----------:|--------:|-----------:|----------:|--------:|
+|Schleswig-Holstein |   15804.30|  2896712|     1419457|    1477255|      183|
+|Hamburg            |     755.09|  1841179|      902048|     939131|     2438|
+|Niedersachsen      |   47709.51|  7982448|     3943243|    4039205|      167|
+
+| IdLandkreis|NameLandkreis          |NUTS3 | FlaecheKm2| EwGesamt| EwMaennlich| EwWeiblich| EwProKm2|
+|-----------:|:----------------------|:-----|----------:|--------:|-----------:|----------:|--------:|
+|        1001|Flensburg, Stadt       |DEF01 |      56.73|    89504|       44599|      44905|     1578|
+|        1002|Kiel, Landeshauptstadt |DEF02 |     118.65|   247548|      120566|     126982|     2086|
+|        1003|Lübeck, Hansestadt     |DEF03 |     214.19|   217198|      104371|     112827|     1014|
+
 ### Hospital beds
 
 ```
 covid19germany::hospital_beds
 ```
 
-[Hospital beds and ICUs in Germany in 2017 with a last update from 2018-11-13](http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation). Provided by the Statistisches Bundesamt as well as the Robert Koch Institut.
+[Hospital beds and ICUs in Germany](http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation) in 2017 with a last update from 2018-11-13. Provided by the Statistisches Bundesamt as well as the Robert Koch Institut.
 
-Data format: tibble/data.frame with information about 
+Data format: tibble/data.frame with information about number, facilities and occupancy rate of hospitals and hospital beds in the german Länder. One row per Land.
 
 |Bundesland             |AnzahlKrankenhaeuser | AnzahlKrankenhaeusermitIntensiv| AnzahlBettenIntensiv| AnzahlBelegungstageIntensiv| AnzahlBehandlungsfaelleIntensiv| AnzahlBehandlungsfaelleIntensivmitBeatmung|
 |:----------------------|:--------------------|-------------------------------:|--------------------:|---------------------------:|-------------------------------:|------------------------------------------:|

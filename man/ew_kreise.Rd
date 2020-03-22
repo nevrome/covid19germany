@@ -15,7 +15,7 @@
   \item \bold{EwProKm2}
 }}
 \description{
-Source: \url{https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html}, 
+Source: \url{https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung}, 
 Licence: Deutschland 2.0, 
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
