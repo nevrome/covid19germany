@@ -42,7 +42,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
   dplyr::filter(Meldedatum > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   dplyr::group_by(Bundesland) %>%
-  dplyr::mutate(kum_fall_per100k_ew = cumsum(AnzahlFall) / EwGesamt) %>%
+  dplyr::mutate(kum_fall_per100k_ew = 100000 * cumsum(AnzahlFall) / EwGesamt) %>%
   dplyr::ungroup() %>%
   ggplot() +
   geom_line(mapping = aes(x = Meldedatum,
