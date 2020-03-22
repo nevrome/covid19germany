@@ -1,7 +1,16 @@
 #' group_RKI_timeseries
 #'
+#' Restructures the RKI data to a grouped time series data.frame. Days with no observations are added to make them 
+#' explicit. Grouping can be done with one or multiple variables (see parameter \code{...}).
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+#' 
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
-#' @param ... character. "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"
+#' @param ... character. One or multiple grouping columns of x, so "Bundesland", "Landkreis", "Geschlecht" or "Altersgruppe"
+#'
+#' @examples 
+#' rki_timeseries <- get_RKI_timeseries()
+#' 
+#' grouped_timeseries <- group_RKI_timeseries(rki_timeseries, "Bundesland", "Geschlecht")
 #'
 #' @export
 group_RKI_timeseries <- function(x, ...) {

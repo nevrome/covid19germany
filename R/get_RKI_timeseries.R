@@ -11,7 +11,6 @@
 #' @return A tibble with the dataset
 #'
 #' @examples 
-#' 
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
 #' @export 

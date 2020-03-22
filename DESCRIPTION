@@ -1,5 +1,5 @@
 Package: covid19germany
-Title: Download data related to the COVID-19 outbreak in Germany
+Title: Load, visualise and analyse daily updated data on the COVID-19 outbreak in Germany
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Clemens",
@@ -12,7 +12,7 @@ Authors@R:
              role = "aut",
              email = "stephan_schiffels@mac.com",
              comment = c(ORCID = "0000-0002-1017-9150")))
-Description: A basic interface to access data form the Robert Koch Institute and other sources.
+Description: A basic interface to access and prepare data from the Robert Koch Institute and other relevant sources.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
