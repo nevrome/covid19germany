@@ -26,13 +26,13 @@ devtools::install_github("nevrome/covid19germany")
 
 ### RKI timeseries
 
-[RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0):
-
 ```
 covid19germany::get_RKI_timeseries()
 ```
 
-Data format: One row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
+Data source: [Daily updated RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0). This data is provided by the Bundesamt für Kartographie und Geodäsie as well as the Robert Koch-Institut. 
+
+Data format: tibble/data.frame with one row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
 
 |IdBundesland|Bundesland|Landkreis|Altersgruppe|Geschlecht|AnzahlFall|AnzahlTodesfall|ObjectId|Meldedatum|IdLandkreis|
 |--|--------------|------------|-------|-|-|-|------|----------|-----|
@@ -40,26 +40,19 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
 
-You can convert downloaded RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
+You can convert this RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) and/or age (Altersgruppe). It's possible to group by muliple of these at once.
 
 ```
-covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe"))
+covid19germany::group_RKI_timeseries(data, "Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe")
 ```
 
-Data format: Time series of cases, deaths, cumulative cases and cumulative deaths, with one row per day. Days are continuous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI)
+Data format: tibble/data.frame with a time series of cases, deaths, cumulative cases and cumulative deaths. One row per day and grouping unit. Days are continuous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI). `covid19germany::group_RKI_timeseries(data, "Bundesland")`:
 
-|Bundesland|Meldedatum|AnzahlFall|AnzahlTodesfall|KumAnzahlFall|KumAnzahlTodesfall|
-|------|----------|-|-|-|-|
-|Bayern|2020-01-28|2|0|2|0|
-|Bayern|2020-01-29|2|0|4|0|
-|Bayern|2020-01-30|0|0|4|0|
-|Bayern|2020-01-31|3|0|7|0|
-|Bayern|2020-02-01|0|0|7|0|
-|Bayern|2020-02-02|0|0|7|0|
-|Bayern|2020-02-03|1|0|8|0|
-|Bayern|2020-02-04|2|0|10|0|
-|Bayern|2020-02-05|0|0|10|0|
-|Bayern|2020-02-06|1|0|11|0|
+|Bundesland|Meldedatum|AnzahlFall|AnzahlTodesfall|KumAnzahlFall|KumAnzahlTodesfall|IdBundesland|
+|------|----------|-|-|-|-|-|
+|Bayern|2020-01-28|2|0|2|-|9|
+|Bayern|2020-01-29|2|0|4|0|9|
+|Bayern|2020-01-30|0|0|4|0|9|
 
 ### Population numbers
 
