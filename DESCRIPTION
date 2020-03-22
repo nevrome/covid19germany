@@ -9,7 +9,7 @@ Authors@R:
              comment = c(ORCID = "0000-0003-3448-5715")),
       person(given = "Stephan",
              family = "Schiffels",
-             rope = "aut",
+             role = "aut",
              email = "stephan_schiffels@mac.com",
              comment = c(ORCID = "0000-0002-1017-9150")))
 Description: A basic interface to access data form the Robert Koch Institute and other sources.

@@ -8,7 +8,7 @@ group_RKI_timeseries <- function(x, ...) {
   
   .grouping_var <- rlang::ensyms(...)
   
-  result <- x %>% 
+  res <- x %>% 
     dplyr::select(
       !!!.grouping_var, "AnzahlFall", "AnzahlTodesfall", "Meldedatum"
     ) %>% 
@@ -32,16 +32,21 @@ group_RKI_timeseries <- function(x, ...) {
       KumAnzahlTodesfall = cumsum(.data[["AnzahlTodesfall"]])
     ) %>%
     dplyr::ungroup()
-  if (.grouping_var == "Landkreis") {
-    ids <- x[c("Landkreis", "IdLandkreis")] %>%
-      dplyr::group_by(.data[["Landkreis"]]) %>%
-      dplyr::summarise(
-        IdLandkreis = max(.data[["IdLandkreis"]])
-      ) %>%
-      dplyr::ungroup()
-    
-    result <- result %>%
-      left_join(ids, by="Landkreis")
+  
+  if ("Bundesland" %in% colnames(res)) {
+    res <- res %>%
+      dplyr::left_join(
+        x %>% dplyr::select("IdBundesland", "Bundesland") %>% unique, by = "Bundesland"
+      )
   }
-  return(result)
+  
+  if ("Landkreis" %in% colnames(res)) {
+    res <- res %>%
+      dplyr::left_join(
+        x %>% dplyr::select("IdLandkreis", "Landkreis") %>% unique, by = "Landkreis"
+      )
+  }
+  
+  return(res)
+  
 }

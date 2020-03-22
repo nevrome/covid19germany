@@ -17,4 +17,9 @@ For further information about the values see the documentation on http://www.gbe
 \description{
 Source: http://www.gbe-bund.de/oowa921-install/servlet/oowa/aw92/dboowasys921.xwdevkit/xwd_init?gbe.isgbetol/xs_start_neu/&p_aid=3&p_aid=9883226&nummer=841&p_sprache=D&p_indsp=-&p_aid=54727719
 }
+\seealso{
+Other context_data: 
+\code{\link{ew_kreise}},
+\code{\link{ew_laender}}
+}
 \concept{context_data}
