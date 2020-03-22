@@ -17,6 +17,8 @@
 #' @export
 plot_RKI_timeseries <- function(x, group = "Bundesland", type = "KumAnzahlFall", label = T, logy = F) {
 
+  check_if_packages_are_available("ggplot2")
+  
   x <- group_RKI_timeseries(x, !!group)
   
   p <- x %>%

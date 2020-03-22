@@ -33,7 +33,6 @@ Depends:
   R (>= 2.10)
 Imports:
   dplyr,
-  ggplot2,
   magrittr,
   readr,
   rlang,
@@ -41,7 +40,8 @@ Imports:
   tidyr,
   tidyselect,
   utils
-Suggests: 
+Suggests:
+  ggplot2,
   sf,
   testthat (>= 2.1.0)
 RoxygenNote: 7.0.2
