@@ -30,7 +30,7 @@ devtools::install_github("nevrome/covid19germany")
 covid19germany::get_RKI_timeseries()
 ```
 
-Data source: [Daily updated RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0). This data is provided by the Bundesamt für Kartographie und Geodäsie as well as the Robert Koch-Institut. 
+[Daily updated RKI data about COVID-19 cases and deaths for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0). Provided by the Bundesamt für Kartographie und Geodäsie as well as the Robert Koch Institut. 
 
 Data format: tibble/data.frame with one row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
 
@@ -57,6 +57,20 @@ Data format: tibble/data.frame with a time series of cases, deaths, cumulative c
 ### Population numbers
 
 ### Hospital beds
+
+```
+covid19germany::hospital_beds
+```
+
+[Hospital beds and ICUs in Germany in 2017 with a last update from 2018-11-13](http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation). Provided by the Statistisches Bundesamt as well as the Robert Koch Institut.
+
+Data format: tibble/data.frame with information about 
+
+|Bundesland             |AnzahlKrankenhaeuser | AnzahlKrankenhaeusermitIntensiv| AnzahlBettenIntensiv| AnzahlBelegungstageIntensiv| AnzahlBehandlungsfaelleIntensiv| AnzahlBehandlungsfaelleIntensivmitBeatmung|
+|:----------------------|:--------------------|-------------------------------:|--------------------:|---------------------------:|-------------------------------:|------------------------------------------:|
+|Baden-Württemberg      |265                  |                             123|                 3262|                      900678|                          259066|                                      47528|
+|Bayern                 |354                  |                             178|                 3790|                     1085912|                          300728|                                      62044|
+|Berlin                 |83                   |                              35|                 1450|                      439183|           
 
 ## Example code snippets
 
