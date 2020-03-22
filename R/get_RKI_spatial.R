@@ -49,18 +49,18 @@ download_RKI_spatial <- function(url, resolution) {
   
   shape_zip <- tempfile()
   unzip_dir <- file.path(tempdir(), "RKI_spatial_shapefiles")
-  download.file(url, destfile = shape_zip)
-  unzip(shape_zip, exdir = unzip_dir)
+  utils::download.file(url, destfile = shape_zip)
+  utils::unzip(shape_zip, exdir = unzip_dir)
   
   if (resolution == "Bundesland") {
-    sf_object <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Bundesländer.shp")) %>% 
+    sf_object <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Bundesl\u00E4nder.shp")) %>% 
       dplyr::mutate(
-        Bundesland = LAN_ew_GEN  
+        Bundesland = .data[["LAN_ew_GEN"]]  
       )
   } else if (resolution == "Landkreis") {
     sf_object <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Landkreise.shp")) %>% 
       dplyr::mutate(
-        IdLandkreis = as.integer(RS)  
+        IdLandkreis = as.integer(.data[["RS"]])  
       )
   }
 
