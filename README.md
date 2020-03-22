@@ -223,16 +223,16 @@ rki <- get_RKI_timeseries()
 shape_zip <- tempfile()
 unzip_dir <- file.path(tempdir(), "gershape")
 download.file(
-  "https://public.opendatasoft.com/explore/dataset/landkreise-in-germany/download/?format=shp&timezone=Europe/Berlin&lang=en",
+  "https://opendata.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0.zip",
   destfile = shape_zip
 )
 unzip(shape_zip, exdir = unzip_dir)
 
 # load the shapefile
-landkreis_sf <- sf::read_sf(file.path(unzip_dir, "landkreise-in-germany.shp")) %>% 
+landkreis_sf <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Landkreise.shp")) %>% 
   # prepare Landkreis ID for merging
   dplyr::mutate(
-    IdLandkreis = as.integer(cca_2)  
+    IdLandkreis = as.integer(RS)  
   )
 
 # download and filter rki data to 2020-03-21
