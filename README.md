@@ -53,15 +53,30 @@ Data format: Time series of cases, deaths, cumulative cases and cumulative death
 |Bayern|2020-02-05|0|0|10|0|
 |Bayern|2020-02-06|1|0|11|0|
 
-Examples:
+## Examples
+
+### Reading data, joining population data
 
 ```r
+# Get RKI data and transform to daily time series, e.g. per "Bundesland"
 data <- covid19germany::get_RKI_timeseries()
 time_series <- covid19germany::group_RKI_timeseries(data, "Bundesland")
 
+# Extract one "Bundesland" and plot cumulative cases
 bayern <- time_series[time_series$Bundesland == "Bayern",]
 plot(bayern$Meldedatum, bayern$KumAnzahlFall, type="l")
+
+# Join population to RKI table
+# Population data for "Landkreise" is available as "ew_kreise". Use "IdLandkreis" as join column.
+time_series <- time_series %>%
+  left_join(ew_laender, by="Bundesland")
+
+# Calculate cases per 100k inhabitants
+time_series$KumFaelle100kEW <- 100000 * time_series$KumAnzahlFall / time_series$EwGesamt
+  
 ```
+
+### Example plots
 
 ```r
 library(ggplot2)
@@ -116,5 +131,7 @@ results in this plot:
 
 ![cumul_numbers](img/cumul_numbers.jpg)
 
+## Known issues
 
+* Missing population data for administrative units of Berlin in dataset ew_laender (Source: https://www.destatis.de)
 
