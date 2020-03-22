@@ -1,13 +1,19 @@
 # covid19germany
 
-R Package to download data related to the COVID-19 outbreak in Germany directly into R. This package exists to simplify data analysis.
-
-Developed in the context of the [#WirvsVirus hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
+R Package to download data related to the COVID-19 outbreak in Germany directly into R. This package exists to simplify data analysis and was developed in the context of the [#WirvsVirus hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
 
 <p align="center">
   <img src="man/figures/Logo_Projekt_01.png" width = 300>
 </p>
 
+- [**Install**](#Install)
+- [**Functions and data**](#functions-and-data)
+    - [RKI timeseries](#rki-timeseries)
+    - [Population numbers](#population-numbers)
+    - [Hospital beds](#hospital-beds) 
+- [**Example code snippets**](#example-code-snippets)
+    - [Get and join data](#get-and-join-data)
+    
 ## Install 
 
 Install the development version from github with
@@ -16,9 +22,11 @@ Install the development version from github with
 if(!require('devtools')) install.packages('devtools')
 devtools::install_github("nevrome/covid19germany")
 ```
-## Functions
+## Functions and data
 
-### Download [RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0):
+### RKI timeseries
+
+[RKI data for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0):
 
 ```
 covid19germany::get_RKI_timeseries()
@@ -32,7 +40,7 @@ Data format: One row per spatial unit ("Landkreis"), date and age group, with da
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
 |15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
 
-### Convert downloaded RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
+You can convert downloaded RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) or age (Altersgruppe):
 
 ```
 covid19germany::group_RKI_timeseries(data, ("Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe"))
@@ -53,9 +61,13 @@ Data format: Time series of cases, deaths, cumulative cases and cumulative death
 |Bayern|2020-02-05|0|0|10|0|
 |Bayern|2020-02-06|1|0|11|0|
 
-## Examples
+### Population numbers
 
-### Reading data, joining population data
+### Hospital beds
+
+## Example code snippets
+
+### Get and join data
 
 ```r
 # Get RKI data and transform to daily time series, e.g. per "Bundesland"
