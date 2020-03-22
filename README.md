@@ -25,8 +25,8 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
 Install the development version from github with
 
 ```
-if(!require('devtools')) install.packages('devtools')
-devtools::install_github("nevrome/covid19germany")
+if(!require('remotes')) install.packages('remotes')
+remotes::install_github("nevrome/covid19germany")
 ```
 
 
