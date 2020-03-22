@@ -37,6 +37,7 @@ Imports:
   magrittr,
   readr,
   rlang,
+  sf,
   tibble,
   tidyr,
   tidyselect,
