@@ -14,6 +14,7 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
 - [**Example code snippets**](#example-code-snippets)
     - [Get and join data](#get-and-join-data)
     - [Simple plots](#simple-plots)
+    - [Simple map](#simple-map)
     - [Simple model](#simple-model)
 - [**Web App**](#web-app)
 
@@ -205,6 +206,61 @@ group_RKI_timeseries(rki, Bundesland) %>%
 ```
 
 ![](man/figures/cumul_numbers_per_100k.jpg)
+
+### Simple Map
+
+```
+library(sf)
+library(ggplot2)
+library(lubridate)
+library(magrittr)
+library(covid19germany)
+
+# download rki data
+rki <- get_RKI_timeseries()
+
+# download a shapefile with geoinformation for the german Länder
+shape_zip <- tempfile()
+unzip_dir <- file.path(tempdir(), "gershape")
+download.file(
+  "https://public.opendatasoft.com/explore/dataset/landkreise-in-germany/download/?format=shp&timezone=Europe/Berlin&lang=en",
+  destfile = shape_zip
+)
+unzip(shape_zip, exdir = unzip_dir)
+
+# load the shapefile
+landkreis_sf <- sf::read_sf(file.path(unzip_dir, "landkreise-in-germany.shp")) %>% 
+  # prepare Landkreis ID for merging
+  dplyr::mutate(
+    IdLandkreis = as.integer(cca_2)  
+  )
+
+# download and filter rki data to 2020-03-21
+rki_202003021_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
+  dplyr::filter(Meldedatum == as_datetime("2020-03-21"))
+
+# merge spatial data and rki data
+landkreis_sf_COVID19 <- landkreis_sf %>%
+  dplyr::left_join(
+    rki_202003021_landkreise, by = c("IdLandkreis")
+  )
+
+# plot
+landkreis_sf_COVID19 %>%
+  ggplot() +
+  geom_sf(
+    aes(fill = KumAnzahlFall)
+  ) +
+  scale_fill_viridis_c(direction = -1) +
+  theme_minimal() +
+  ggtitle("Summe der gemeldeten Infektionen pro Landkreis am 21.03.2020") +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+![](man/figures/map_cumul_20200321.jpeg)
 
 ### Simple Model
 
