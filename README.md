@@ -9,6 +9,7 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
 - [**Install**](#Install)
 - [**Functions and data**](#functions-and-data)
     - [RKI timeseries](#rki-timeseries)
+    - [RKI spatial](#rki-spatial)
     - [Population numbers](#population-numbers)
     - [Hospital beds](#hospital-beds) 
 - [**Example code snippets**](#example-code-snippets)
@@ -60,6 +61,16 @@ Data format: tibble/data.frame with a time series of cases, deaths, cumulative c
 |Bayern|2020-01-28|2|0|2|-|9|
 |Bayern|2020-01-29|2|0|4|0|9|
 |Bayern|2020-01-30|0|0|4|0|9|
+
+### RKI spatial
+
+```
+covid19germany::get_RKI_spatial("Bundesland" | "Landkreis")
+```
+
+[Daily updated RKI data about COVID-19 cases and deaths for germany (spatial)](https://npgeo-corona-npgeo-de.hub.arcgis.com/search?groupIds=b28109b18022405bb965c602b13e1bbc). Provided by the Bundesamt für Kartographie und Geodäsie as well as the Robert Koch Institut. 
+
+Data format: sf object with columns for cases and deaths as well as geometry information for the spatial units. One row per Bundesland or per Landkreis. This table only contains information for one day. It can also be used to plot past data when combined with the timeseries dataset. See the [Simple map](#simple-map) section for an implementation example.
 
 ### Population numbers
 
