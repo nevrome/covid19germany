@@ -34,23 +34,29 @@ shinyserver <- function(input, output) {
         logy <- ifelse(input$logyInput == "logarithmisch" , TRUE, FALSE)
         label <- ifelse(input$labelInput == "ja" , TRUE, FALSE)
 
-        rki_pre_df %>%
-            filter(
-                Meldedatum >= min_meldedatum,
-                Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d")
-            ) %>%
-            plot_RKI_timeseries(
-                group = input$group_varInput,
-                type = input$typeInput,
-                label = label,
-                logy = logy) +
-
-            scale_x_datetime(date_breaks = "1 week",
-                             date_minor_breaks = "1 week")+
-            theme_minimal()+
-            theme(axis.text.x.bottom = element_text(angle = 45, hjust = 1))+
-            labs(x="")#+
-            # annotate("text", x = min_meldedatum,
-            #          y = 25, label = "Some text")
+        gg <- rki_pre_df %>%
+                filter(
+                    Meldedatum >= min_meldedatum,
+                    Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d")
+                ) %>%
+                plot_RKI_timeseries(
+                    group = input$group_varInput,
+                    type = input$typeInput,
+                    label = label,
+                    logy = logy) +
+    
+                scale_x_datetime(date_breaks = "1 week",
+                                 date_minor_breaks = "1 week")+
+                theme_minimal()+
+                theme(axis.text.x.bottom = element_text(angle = 45, hjust = 1))+
+                labs(x="")
+        
+        if (input$predInput != 0) {
+            gg <- gg %>% 
+                    plot_RKI_add_modelpredictions(n_days_future = input$predInput)
+        }
+        
+        return(gg)
+        
     })
 }

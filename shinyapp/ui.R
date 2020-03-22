@@ -39,8 +39,17 @@ sidebarLayout(
     # select labels
     radioButtons(inputId = "labelInput",
                  label = "Beschriftungen",
-                 choices = c("ja", "nein")),
+                 choices = c("ja", "nein"),
+                 selected = "nein"),
+    
+    # select model prediction
+    sliderInput(inputId = "predInput",
+                label = "Vorhersage mit log-linearem Regressionsmodel in Tagen",
+                min = 0,
+                max = 7,
+                value = 0),
 
+    
     # wirvsvirus logo
     tags$img(src = "Logo_Projekt_02.png",
              width = "275px", height = "100px"),
