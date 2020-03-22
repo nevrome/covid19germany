@@ -1,11 +1,24 @@
 #' get_RKI_timeseries
 #'
-#' @param cache logical. Should data be cached?
+#' Downloads the latest version of a COVID-19 timeseries dataset by the Robert Koch Institute.
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+#'
+#' @param url character. Data source url
+#' @param cache logical. Should the data be cached?
 #' @param cache_dir character. Path to cache directory
 #' @param cache_max_age numeric. Maximum age of cache in seconds
 #'
-#' @export
-get_RKI_timeseries <- function(cache = T, cache_dir = tempdir(), cache_max_age = 24 * 60 * 60) {
+#' @return A tibble with the dataset
+#'
+#' @examples 
+#' 
+#' rki_timeseries <- get_RKI_timeseries()
+#' 
+#' @export 
+get_RKI_timeseries <- function(
+  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", 
+  cache = T, cache_dir = tempdir(), cache_max_age = 24 * 60 * 60
+) {
   
   # caching is activated
   if (cache) {
@@ -14,21 +27,21 @@ get_RKI_timeseries <- function(cache = T, cache_dir = tempdir(), cache_max_age =
     if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > (Sys.time() - cache_max_age)) {
       load(tab_cache_file)
     } else {
-      this_tab <- download_RKI()
+      this_tab <- download_RKI(url)
       save(this_tab, file = tab_cache_file)
     }
   # caching is not activated
   } else {
-    this_tab <- download_RKI()
+    this_tab <- download_RKI(url)
   }
   
   return(this_tab) 
 }
 
-download_RKI <- function() {
+download_RKI <- function(url) {
   
   readr::read_csv(
-    "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
+    url,
     na = c("0-1", "-1", "unbekannt", "-nicht erhoben-"),
     col_types = readr::cols(
       IdBundesland = readr::col_integer(),

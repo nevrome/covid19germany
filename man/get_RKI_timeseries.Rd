@@ -5,18 +5,30 @@
 \title{get_RKI_timeseries}
 \usage{
 get_RKI_timeseries(
+  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
   cache = T,
   cache_dir = tempdir(),
   cache_max_age = 24 * 60 * 60
 )
 }
 \arguments{
-\item{cache}{logical. Should data be cached?}
+\item{url}{character. Data source url}
+
+\item{cache}{logical. Should the data be cached?}
 
 \item{cache_dir}{character. Path to cache directory}
 
 \item{cache_max_age}{numeric. Maximum age of cache in seconds}
 }
+\value{
+A tibble with the dataset
+}
 \description{
-get_RKI_timeseries
+Downloads the latest version of a COVID-19 timeseries dataset by the Robert Koch Institute.
+Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+}
+\examples{
+
+rki_timeseries <- get_RKI_timeseries()
+
 }
