@@ -34,7 +34,6 @@ Depends:
 Imports:
   dplyr,
   ggplot2,
-  ggrepel,
   magrittr,
   readr,
   rlang,

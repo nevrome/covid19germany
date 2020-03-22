@@ -12,7 +12,7 @@
 #' @examples 
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
-#' plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlTodesfall")
+#' plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlFall")
 #'
 #' @export
 plot_RKI_timeseries <- function(x, group = "Bundesland", type = "KumAnzahlFall", label = T, logy = F) {
@@ -26,25 +26,28 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "KumAnzahlFall",
     ggplot2::ggplot(
       ggplot2::aes_string(
         "Meldedatum", "Anzahl", 
-        color = group, group = group,
+        color = group, fill = group, group = group,
         label = "label"
       )
     ) +
-    ggplot2::geom_line() +
-    ggplot2::guides(
-      color = FALSE
-    ) +
-    ggplot2::ggtitle(type)
-  
-  if (label) {
-    p <- p + ggrepel::geom_label_repel(
-        na.rm = TRUE
-      )
-  }
-  
-  if (logy) {
-    p <- p + ggplot2::scale_y_log10()
-  }
+    ggplot2::ggtitle(type) +
+    ggplot2::theme_minimal()
 
+  if (!logy) {
+    p <- p + 
+      ggplot2::geom_area()
+  } else {
+    p <- p + 
+      ggplot2::geom_line() +
+      ggplot2::scale_y_log10()
+  }
+    
+  if (!label) {
+    p <- p + ggplot2::guides(
+      fill = FALSE,
+      color = FALSE
+    )
+  }
+  
   return(p)
 }

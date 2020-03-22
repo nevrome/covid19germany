@@ -30,6 +30,6 @@ Please see the README for more information: \url{https://github.com/nevrome/covi
 \examples{
 rki_timeseries <- get_RKI_timeseries()
 
-plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlTodesfall")
+plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlFall")
 
 }
