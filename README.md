@@ -13,7 +13,11 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
     - [Hospital beds](#hospital-beds) 
 - [**Example code snippets**](#example-code-snippets)
     - [Get and join data](#get-and-join-data)
-    
+    - [Example plots](#example-plots)
+- [**Simple Model**](#simple-model)
+- [**Web App**](#web-app)
+
+
 ## Install 
 
 Install the development version from github with
@@ -105,7 +109,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
 
 results in this plot:
 
-![daily_numbers](man/figures/daily_numbers.jpg)
+![](man/figures/daily_numbers.jpg)
 
 
 ```r
@@ -134,7 +138,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
 
 results in this plot:
 
-![cumul_numbers](man/figures/cumul_numbers.jpg)
+![](man/figures/cumul_numbers.jpg)
 
 Since we have the inhabitant numbers right in the package, co-analysing them toegther with the epidemiologocal data is straight forward:
 
@@ -159,7 +163,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
 
 resulting in this plot:
 
-![cumul_numbers_per_100k](man/figures/cumul_numbers_per_100k.jpg)
+![](man/figures/cumul_numbers_per_100k.jpg)
 
 ## Simple Model
 A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach: 
@@ -205,7 +209,17 @@ for (this.ag in ag.split){
   points(this.ag[,"Meldedatum"],this.ag[,"x.pred"],type="b",col="red")
 }
 ```
-![predictions](man/figures/log-lin-predictions.jpg)
+![](man/figures/log-lin-predictions.jpg)
+
+
+## Web App
+
+This package contains a web application for interactive visualization of up--to--date data based on the [R Shiny](https://shiny.rstudio.com/) frame work.
+Access the web--app right [here](https://joboog.shinyapps.io/Covid19germany/).
+Have fun!
+
+![](man/figures/shinyapp.png)
+
 
 ## Known issues
 
