@@ -100,7 +100,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
 
 results in this plot:
 
-![daily_numbers](img/daily_numbers.jpg)
+![daily_numbers](man/figures/daily_numbers.jpg)
 
 
 ```r
@@ -129,7 +129,7 @@ group_RKI_timeseries(dat, Bundesland) %>%
 
 results in this plot:
 
-![cumul_numbers](img/cumul_numbers.jpg)
+![cumul_numbers](man/figures/cumul_numbers.jpg)
 
 ## Known issues
 
