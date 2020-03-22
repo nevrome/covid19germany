@@ -105,22 +105,24 @@ Data format: tibble/data.frame with information about number, facilities and occ
 ### Get and join data
 
 ```r
-# Get RKI data and transform to daily time series, e.g. per "Bundesland"
-data <- covid19germany::get_RKI_timeseries()
-time_series <- covid19germany::group_RKI_timeseries(data, "Bundesland")
+library(magrittr)
+library(covid19germany)
 
-# Extract one "Bundesland" and plot cumulative cases
-bayern <- time_series[time_series$Bundesland == "Bayern",]
-plot(bayern$Meldedatum, bayern$KumAnzahlFall, type="l")
+# Get RKI data and transform to daily time series, e.g. per "Bundesland" and "Landkreis"
+rki <- get_RKI_timeseries()
+rki_timeseries_bundesland <- rki %>% group_RKI_timeseries("Bundesland")
+rki_timeseries_landkreis <- rki %>% group_RKI_timeseries("Landkreis")
 
-# Join population to RKI table
-# Population data for "Landkreise" is available as "ew_kreise". Use "IdLandkreis" as join column.
-time_series <- time_series %>%
-  left_join(ew_laender, by="Bundesland")
+# Join population info to RKI data
+rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
+  dplyr::left_join(ew_laender, by = "Bundesland")
 
-# Calculate cases per 100k inhabitants
-time_series$KumFaelle100kEW <- 100000 * time_series$KumAnzahlFall / time_series$EwGesamt
-  
+rki_timeseries_landkreis <- rki_timeseries_landkreis %>%
+  dplyr::left_join(ew_kreise, by = "IdLandkreis")
+
+# Join hospital info to RKI data
+rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
+  dplyr::left_join(hospital_beds, by = "Bundesland")
 ```
 
 ### Simple plots
@@ -128,10 +130,11 @@ time_series$KumFaelle100kEW <- 100000 * time_series$KumAnzahlFall / time_series$
 ```r
 library(ggplot2)
 library(magrittr)
+library(covid19germany)
 
-dat <- get_RKI_timeseries(cache=F)
+rki <- get_RKI_timeseries(cache=F)
 
-group_RKI_timeseries(dat, Bundesland) %>%
+group_RKI_timeseries(rki, Bundesland) %>%
   dplyr::filter(Meldedatum > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   ggplot() +
@@ -151,10 +154,11 @@ group_RKI_timeseries(dat, Bundesland) %>%
 ```r
 library(ggplot2)
 library(magrittr)
+library(covid19germany)
 
-dat <- get_RKI_timeseries(cache=F)
+rki <- get_RKI_timeseries(cache=F)
 
-group_RKI_timeseries(dat, Bundesland) %>%
+group_RKI_timeseries(rki, Bundesland) %>%
   dplyr::filter(Meldedatum > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   dplyr::group_by(Bundesland) %>%
@@ -177,8 +181,13 @@ group_RKI_timeseries(dat, Bundesland) %>%
 Since we have the inhabitant numbers right in the package, co-analysing them toegther with the epidemiologocal data is straight forward:
 
 ```r
-data("ew_laender")
-group_RKI_timeseries(dat, Bundesland) %>%
+library(ggplot2)
+library(magrittr)
+library(covid19germany)
+
+rki <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(rki, Bundesland) %>%
   dplyr::left_join(ew_laender, by="Bundesland") %>%
   dplyr::filter(Meldedatum > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
@@ -200,7 +209,10 @@ group_RKI_timeseries(dat, Bundesland) %>%
 ### Simple Model
 
 A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach on new cases per day (i.e. not cumulative in this analysis): 
+
 ```r
+library(covid19germany)
+
 ## globals:
 MIN.CASES=5
 N.DAYS.FUTURE=7
