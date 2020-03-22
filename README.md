@@ -13,8 +13,8 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
     - [Hospital beds](#hospital-beds) 
 - [**Example code snippets**](#example-code-snippets)
     - [Get and join data](#get-and-join-data)
-    - [Example plots](#example-plots)
-    - [**Simple Model**](#simple-model)
+    - [Simple plots](#simple-plots)
+    - [Simple model](#simple-model)
 - [**Web App**](#web-app)
 
 
