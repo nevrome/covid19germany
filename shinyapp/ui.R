@@ -18,7 +18,14 @@ sidebarLayout(
                    startview = "month",
                    weekstart = 1
                    ),
-
+    
+    # select wich Bundeslaender
+    checkboxGroupInput(inputId = "bundeslandInput",
+                       label = "Nutze Daten von folgenden Bundesländern",
+                       choices = rki_pre_df$Bundesland %>% unique(),
+                       selected = c("Bayern", "Baden-Württemberg",
+                                    "Nordrhein-Westfalen")),  
+    
     # select grouping variabel for plot
     selectInput(inputId = "group_varInput",
                 label = "Gruppierung",

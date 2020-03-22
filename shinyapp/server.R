@@ -37,7 +37,8 @@ shinyserver <- function(input, output) {
         gg <- rki_pre_df %>%
                 filter(
                     Meldedatum >= min_meldedatum,
-                    Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d")
+                    Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d"),
+                    Bundesland %in% input$bundeslandInput
                 ) %>%
                 plot_RKI_timeseries(
                     group = input$group_varInput,
