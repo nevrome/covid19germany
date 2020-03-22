@@ -11,7 +11,11 @@ Authors@R:
              family = "Schiffels",
              role = "aut",
              email = "stephan_schiffels@mac.com",
-             comment = c(ORCID = "0000-0002-1017-9150")))
+             comment = c(ORCID = "0000-0002-1017-9150")),
+      person(given = "Martin",
+             family = "Lange",
+             role = "aut",
+             email = "martin_lange_@gmx.net"))
 Description: A basic interface to access and prepare data from the Robert Koch Institute and other relevant sources.
 License: MIT + file LICENSE
 Encoding: UTF-8
