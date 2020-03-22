@@ -187,7 +187,7 @@ for (this.ag in ag.split){
   points(this.ag[,"Meldedatum"],this.ag[,"x.pred"],type="b",col="red")
 }
 ```
-![cumul_numbers](man/figures/log-lin-predictions.jpg)
+![predictions](man/figures/log-lin-predictions.jpg)
 
 ## Known issues
 
