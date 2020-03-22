@@ -275,7 +275,8 @@ landkreis_sf_COVID19 %>%
 
 A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach on new cases per day (i.e. not cumulative in this analysis): 
 
-```r
+<!--
+```{r}
 library(covid19germany)
 
 ## globals:
@@ -319,7 +320,29 @@ for (this.ag in ag.split){
   points(this.ag[,"Meldedatum"],this.ag[,"x.pred"],type="b",col="red")
 }
 ```
+
 ![](man/figures/log-lin-predictions.jpg)
+-->
+
+```r
+library(tidyverse)
+library(covid19germany)
+
+# read data
+df = get_RKI_timeseries()
+
+# create ggplot object
+gg <- rki %>%  
+        plot_RKI_timeseries(label = FALSE)
+
+# add predictions of log-linear regression model
+gg <- gg %>%  plot_RKI_add_modelpredictions()
+
+# create plotgrid
+gg + facet_wrap(Bundesland~., scales = "free_y")
+```
+
+![](man/figures/log_lin_predictions2.png)
 
 
 ## Web App
