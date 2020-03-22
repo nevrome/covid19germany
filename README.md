@@ -14,7 +14,7 @@ An R package to load, visualise and analyse daily updated data on the COVID-19 o
 - [**Example code snippets**](#example-code-snippets)
     - [Get and join data](#get-and-join-data)
     - [Example plots](#example-plots)
-- [**Simple Model**](#simple-model)
+    - [**Simple Model**](#simple-model)
 - [**Web App**](#web-app)
 
 
@@ -26,6 +26,8 @@ Install the development version from github with
 if(!require('devtools')) install.packages('devtools')
 devtools::install_github("nevrome/covid19germany")
 ```
+
+
 ## Functions and data
 
 ### RKI timeseries
@@ -97,6 +99,7 @@ Data format: tibble/data.frame with information about number, facilities and occ
 |Bayern                 |354                  |                             178|                 3790|                     1085912|                          300728|                                      62044|
 |Berlin                 |83                   |                              35|                 1450|                      439183|                           94480|                                   22887|
 
+
 ## Example code snippets
 
 ### Get and join data
@@ -120,7 +123,7 @@ time_series$KumFaelle100kEW <- 100000 * time_series$KumAnzahlFall / time_series$
   
 ```
 
-### Example plots
+### Simple plots
 
 ```r
 library(ggplot2)
@@ -141,8 +144,6 @@ group_RKI_timeseries(dat, Bundesland) %>%
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank())
 ```
-
-results in this plot:
 
 ![](man/figures/daily_numbers.jpg)
 
@@ -171,8 +172,6 @@ group_RKI_timeseries(dat, Bundesland) %>%
         axis.title.y=element_blank())
 ```
 
-results in this plot:
-
 ![](man/figures/cumul_numbers.jpg)
 
 Since we have the inhabitant numbers right in the package, co-analysing them toegther with the epidemiologocal data is straight forward:
@@ -196,11 +195,10 @@ group_RKI_timeseries(dat, Bundesland) %>%
         axis.title.y=element_blank())
 ```
 
-resulting in this plot:
-
 ![](man/figures/cumul_numbers_per_100k.jpg)
 
-## Simple Model
+### Simple Model
+
 A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach on new cases per day (i.e. not cumulative in this analysis): 
 ```r
 ## globals:
