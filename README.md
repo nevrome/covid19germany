@@ -129,6 +129,15 @@ rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
 ### Simple plots
 
 ```r
+library(magrittr)
+library(covid19germany)
+
+get_RKI_timeseries() %>% plot_RKI_timeseries("Altersgruppe", "KumAnzahlTodesfall")
+```
+
+![](man/figures/cumul_death_by_age.jpg)
+
+```r
 library(ggplot2)
 library(magrittr)
 library(covid19germany)
