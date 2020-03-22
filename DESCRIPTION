@@ -15,7 +15,11 @@ Authors@R:
       person(given = "Martin",
              family = "Lange",
              role = "aut",
-             email = "martin_lange_@gmx.net"))
+             email = "martin_lange_@gmx.net"),
+      person(given = "Moritz",
+             family = "Aschoff",
+             role = "aut",
+             email = "not available"))
 Description: A basic interface to access and prepare data from the Robert Koch Institute and other relevant sources.
 License: MIT + file LICENSE
 Encoding: UTF-8
