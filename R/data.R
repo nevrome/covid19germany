@@ -62,3 +62,23 @@ NULL
 #'
 #' @name ew_kreise
 NULL
+
+#' ew_alter
+#' 
+#' Source: \url{https://www-genesis.destatis.de/genesis/online}, 
+#' Licence: Deutschland 2.0, 
+#' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
+#' 
+#' @format A data frame with 6 rows and 4 variables.
+#' \itemize{
+#'   \item \bold{Altersgruppe}
+#'   \item \bold{Landkreis}
+#'   \item \bold{EwGesamt}
+#'   \item \bold{EwMaennlich}
+#'   \item \bold{EwWeiblich}
+#' }
+#'
+#' @family context_data
+#'
+#' @name ew_alter
+NULL

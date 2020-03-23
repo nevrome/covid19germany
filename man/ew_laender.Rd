@@ -19,6 +19,7 @@ Please see the README for more information: \url{https://github.com/nevrome/covi
 }
 \seealso{
 Other context_data: 
+\code{\link{ew_alter}},
 \code{\link{ew_kreise}},
 \code{\link{hospital_beds}}
 }
