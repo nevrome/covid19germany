@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https://travis-ci.com/nevrome/covid19germany) [![Coverage Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.svg)](https://codecov.io/github/nevrome/covid19germany?branch=master)
+
 # covid19germany
 
 An R package to load, visualise and analyse daily updated data on the COVID-19 outbreak in Germany. This package exists to simplify data analysis and was developed in the context of the [#WirvsVirus hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
