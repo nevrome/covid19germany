@@ -18,7 +18,14 @@ sidebarLayout(
                    startview = "month",
                    weekstart = 1
                    ),
-
+    
+    # select wich Bundeslaender
+    checkboxGroupInput(inputId = "bundeslandInput",
+                       label = "Nutze Daten von folgenden Bundesländern",
+                       choices = rki_pre_df$Bundesland %>% unique(),
+                       selected = c("Bayern", "Baden-Württemberg",
+                                    "Nordrhein-Westfalen")),  
+    
     # select grouping variabel for plot
     selectInput(inputId = "group_varInput",
                 label = "Gruppierung",
@@ -39,8 +46,17 @@ sidebarLayout(
     # select labels
     radioButtons(inputId = "labelInput",
                  label = "Beschriftungen",
-                 choices = c("ja", "nein")),
+                 choices = c("ja", "nein"),
+                 selected = "nein"),
+    
+    # select model prediction
+    sliderInput(inputId = "predInput",
+                label = "Vorhersage mit log-linearem Regressionsmodel in Tagen",
+                min = 0,
+                max = 7,
+                value = 0),
 
+    
     # wirvsvirus logo
     tags$img(src = "Logo_Projekt_02.png",
              width = "275px", height = "100px"),
