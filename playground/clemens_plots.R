@@ -8,38 +8,30 @@ plot_RKI_timeseries(rki, "Geschlecht", "KumAnzahlTodesfall", logy = T)
 
 ####
 
-library(sf)
-library(ggplot2)
-library(lubridate)
-library(magrittr)
 library(covid19germany)
 
-# download rki data
 rki <- get_RKI_timeseries()
+rki_timeseries_bundesland <- group_RKI_timeseries(rki, "Bundesland")
 
-# download a shapefile with geoinformation for the german Landkreise
-landkreis_sf <- get_RKI_spatial("Landkreis")
+rki_timeseries_bundesland_split <- split(rki_timeseries_bundesland, rki_timeseries_bundesland$Bundesland)
 
-# download and filter rki data to 2020-03-21
-rki_202003021_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
-  dplyr::filter(Meldedatum == as_datetime("2020-03-21"))
+r0_bavaria <- rki_timeseries_bundesland_split$Bayern %$%
+  KumAnzahlFall %>%
+  EpiEstim::estimate_R(method = "uncertain_si", config = config) %$%
+  R
 
-# merge spatial data and rki data
-landkreis_sf_COVID19 <- landkreis_sf %>%
-  dplyr::left_join(
-    rki_202003021_landkreise, by = c("IdLandkreis")
-  )
-
-# plot
-landkreis_sf_COVID19 %>%
+r0_bavaria %>%
   ggplot() +
-  geom_sf(
-    aes(fill = KumAnzahlFall)
+  geom_line(
+    aes(t_start, `Mean(R)`)
   ) +
-  scale_fill_viridis_c(direction = -1) +
-  theme_minimal() +
-  ggtitle("Summe der gemeldeten Infektionen pro Landkreis am 21.03.2020") +
-  theme(
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank()
+  geom_ribbon(
+    aes(
+      x = t_start,
+      ymin = `Mean(R)` - `Std(R)`,
+      ymax = `Mean(R)` + `Std(R)`
+    ),
+    alpha = 0.5
   )
+  
+
