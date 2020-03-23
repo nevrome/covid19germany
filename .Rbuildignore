@@ -4,3 +4,4 @@
 ^playground$
 ^data-raw$
 ^shinyapp$
+^\.travis\.yml$
