@@ -3,7 +3,8 @@
 \name{hospital_beds}
 \alias{hospital_beds}
 \title{hospital_beds}
-\format{A data frame with 16 rows and 7 variables.
+\format{
+A data frame with 16 rows and 7 variables.
 \itemize{
   \item \bold{Bundesland}
   \item \bold{AnzahlKrankenhaeuser}
@@ -12,7 +13,8 @@
   \item \bold{AnzahlBelegungstageIntensiv}
   \item \bold{AnzahlBehandlungsfaelleIntensiv}
   \item \bold{AnzahlBehandlungsfaelleIntensivmitBeatmung}
-}}
+}
+}
 \description{
 Source: \url{http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation}, 
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}

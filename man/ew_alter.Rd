@@ -3,14 +3,16 @@
 \name{ew_alter}
 \alias{ew_alter}
 \title{ew_alter}
-\format{A data frame with 6 rows and 4 variables.
+\format{
+A data frame with 6 rows and 4 variables.
 \itemize{
   \item \bold{Altersgruppe}
   \item \bold{Landkreis}
   \item \bold{EwGesamt}
   \item \bold{EwMaennlich}
   \item \bold{EwWeiblich}
-}}
+}
+}
 \description{
 Source: \url{https://www-genesis.destatis.de/genesis/online}, 
 Licence: Deutschland 2.0, 

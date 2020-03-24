@@ -3,7 +3,8 @@
 \name{ew_laender}
 \alias{ew_laender}
 \title{ew_laender}
-\format{A data frame with 16 rows and 6 variables.
+\format{
+A data frame with 16 rows and 6 variables.
 \itemize{
   \item \bold{Bundesland}
   \item \bold{FlaecheKm2}
@@ -11,7 +12,8 @@
   \item \bold{EwMaennlich}
   \item \bold{EwWeiblich}
   \item \bold{EwProKm2}
-}}
+}
+}
 \description{
 Source: \url{https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html}, 
 Licence: Deutschland 2.0, 

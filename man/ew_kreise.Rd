@@ -3,7 +3,8 @@
 \name{ew_kreise}
 \alias{ew_kreise}
 \title{ew_kreise}
-\format{A data frame with 401 rows and 8 variables.
+\format{
+A data frame with 401 rows and 8 variables.
 \itemize{
   \item \bold{IdLandkreis}
   \item \bold{Landkreis}
@@ -13,7 +14,8 @@
   \item \bold{EwMaennlich}
   \item \bold{EwWeiblich}
   \item \bold{EwProKm2}
-}}
+}
+}
 \description{
 Source: \url{https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung}, 
 Licence: Deutschland 2.0, 
