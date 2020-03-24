@@ -33,8 +33,7 @@ growth_factor_RKI_timeseries <- function(x, days = 1) {
     
     time_interval <- days * time_of_day
 
-    joining_cols <- base::colnames(x)[
-        base::which(! base::colnames(x) %in% base::c(counts_RKI_timeseries, "Meldedatum"))]
+    joining_cols <- base::colnames(x)[base::which(! base::colnames(x) %in% base::c(counts_RKI_timeseries, "Meldedatum"))]
 
     if (base::length(joining_cols) > 0) {
         
@@ -43,7 +42,7 @@ growth_factor_RKI_timeseries <- function(x, days = 1) {
             dplyr::filter(Meldedatum.x == Meldedatum.y + time_interval) %>%
             dplyr::mutate(Wachstumsfaktor = KumAnzahlFall.x / KumAnzahlFall.y) %>%
             dplyr::rename(Meldedatum = Meldedatum.x) %>%
-            dplyr::select(-matches('.[xy]$'))
+            dplyr::select(-tidyselect::matches('.[xy]$'))
         
     } else {
 
