@@ -79,11 +79,12 @@ Data format: sf object with columns for cases and deaths as well as geometry inf
 ```
 covid19germany::ew_laender
 covid19germany::ew_kreise
+covid19germany::ew_alter
 ```
 
 [Population numbers for the german Länder](https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung) and [Kreise](https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html) on 2018-12-31. Provided by the Statistisches Bundesamt.
 
-Data format: tibble/data.frame with information about population and area size of Länder and Kreise. One row per Land/Landkreis.
+Data format: tibble/data.frame with information about population and area size of Länder and Kreise. One row per Land/Landkreis/Altersgruppe.
 
 |Bundesland         | FlaecheKm2| EwGesamt| EwMaennlich| EwWeiblich| EwProKm2|
 |:------------------|----------:|--------:|-----------:|----------:|--------:|
@@ -96,6 +97,13 @@ Data format: tibble/data.frame with information about population and area size o
 |        1001|Flensburg, Stadt       |DEF01 |      56.73|    89504|       44599|      44905|     1578|
 |        1002|Kiel, Landeshauptstadt |DEF02 |     118.65|   247548|      120566|     126982|     2086|
 |        1003|Lübeck, Hansestadt     |DEF03 |     214.19|   217198|      104371|     112827|     1014|
+
+
+|Altersgruppe | EwGesamt| EwMaennlich| EwWeiblich|
+|:------------|--------:|-----------:|----------:|
+|A00-A04      |  3926397|     2014097|    1912300|
+|A05-A14      |  7364418|     3786605|    3577813|
+|A15-A34      | 19213113|     9977728|    9235385|
 
 ### Hospital beds
 

@@ -36,7 +36,31 @@ ew_kreise <- readr::read_delim(
   )
 )
 
+ew_alter <- readr::read_csv(
+  "data-raw/EW_Alter.csv",
+  col_types = readr::cols(
+    alter = col_double(),
+    m = col_double(),
+    w = col_double(),
+    total = col_double()
+  )) %>%
+  dplyr::group_by(
+    gr = cut(alter, 
+      breaks = c(0, 4, 14, 34, 59, 79, 100), 
+      labels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59",
+                 "A60-A79", "A80+"),
+      include.lowest = TRUE)) %>%
+  dplyr::summarise(
+    EwGesamt = sum(total),
+    EwMaennlich = sum(m),
+    EwWeiblich = sum(w))  %>%
+  dplyr::mutate(Altersgruppe = gr) %>%
+  dplyr::select(.data$Altersgruppe, .data$EwGesamt, .data$EwMaennlich, .data$EwWeiblich)
 
-usethis::use_data(hospital_beds, overwrite = T)
-usethis::use_data(ew_laender, overwrite = T)
-usethis::use_data(ew_kreise, overwrite = T)
+
+
+
+usethis::use_data(hospital_beds, overwrite = TRUE)
+usethis::use_data(ew_laender, overwrite = TRUE)
+usethis::use_data(ew_kreise, overwrite = TRUE)
+usethis::use_data(ew_alter, overwrite = TRUE)
