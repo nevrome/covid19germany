@@ -14,19 +14,32 @@ library(covid19germany)
 library(ggplot2)
 
 rki <- covid19germany::get_RKI_timeseries()
+
+min_doubling_time <- function(x) {
+  es <- estimatepast_RKI_timeseries(rki, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)
+  sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
+}
+
+est_doubling_time <- optim(par = 4, min_doubling_time)$par
+
 de <- rki %>%
-  estimatepast_RKI_timeseries %>%
+  estimatepast_RKI_timeseries(doubling_time = est_doubling_time) %>%
   dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
   tidyr::pivot_longer(cols = c(
-    "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
-    ), names_to = "count"
+      "KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer",
+      "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
+    ), names_to = "Anzahltyp"
   )
 
-de %>% ggplot() +
+de %>% 
+  dplyr::filter(
+    Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")
+  ) %>%
+  ggplot() +
   geom_bar(
     ggplot2::aes(
       Meldedatum, value,
-      fill = count
+      fill = Anzahltyp
     ),
     stat = "identity",
     position = "dodge"
