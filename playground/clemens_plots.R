@@ -15,13 +15,12 @@ library(ggplot2)
 
 rki <- covid19germany::get_RKI_timeseries()
 de <- rki %>%
-  group_RKI_timeseries() %>%
-  dplyr::mutate(
-    A_estimation_of_cases_from_later_deaths = c(KumAnzahlTodesfall[17:(length(KumAnzahlTodesfall))], rep(NA, 16)) * 100,
-    B_estimation_of_cases_from_A = c(rep(NA, 16), A_estimation_of_cases_from_later_deaths[1:(length(A_estimation_of_cases_from_later_deaths) - 16)]) * 8 
-  ) %>%
+  estimatepast_RKI_timeseries %>%
   dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
-  tidyr::pivot_longer(cols = c("KumAnzahlFall", "KumAnzahlTodesfall", "A_estimation_of_cases_from_later_deaths", "B_estimation_of_cases_from_A"), names_to = "count")
+  tidyr::pivot_longer(cols = c(
+    "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
+    ), names_to = "count"
+  )
 
 de %>% ggplot() +
   geom_bar(
