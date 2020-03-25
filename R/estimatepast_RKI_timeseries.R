@@ -33,6 +33,12 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death = 0.01, mean_days_unt
             rep(NA, mean_days_until_death - 1),
             .data[["HochrechnungInfektionennachToden"]][1:(length(.data[["HochrechnungInfektionennachToden"]]) - (mean_days_until_death - 1))]
           ) * (2^(mean_days_until_death/doubling_time))
+        ) %>%
+        dplyr::mutate(
+          HochrechnungTodenachDunkelziffer = c(
+            rep(NA, mean_days_until_death - 1),
+            .data[["HochrechnungDunkelziffer"]][1:(length(.data[["HochrechnungDunkelziffer"]]) - (mean_days_until_death - 1))]
+          ) * prop_death
         )
     }
   ) %>%
