@@ -9,7 +9,7 @@ group_RKI_timeseries(x, ...)
 \arguments{
 \item{x}{data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}}
 
-\item{...}{character. One or multiple grouping columns of x, so "Bundesland", "Landkreis", "Geschlecht" or "Altersgruppe"}
+\item{...}{variable names. One or multiple grouping columns of x, so Bundesland, Landkreis, Geschlecht or Altersgruppe}
 }
 \description{
 Restructures the RKI data to a grouped time series data.frame. Days with no observations are added to make them 
@@ -19,6 +19,6 @@ Please see the README for more information: \url{https://github.com/nevrome/covi
 \examples{
 rki_timeseries <- get_RKI_timeseries()
 
-grouped_timeseries <- group_RKI_timeseries(rki_timeseries, "Bundesland", "Geschlecht")
+group_RKI_timeseries(rki_timeseries, Bundesland, Geschlecht)
 
 }
