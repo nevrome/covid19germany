@@ -24,7 +24,20 @@ estimatepast_RKI_timeseries(
 \item{doubling_time}{numeric. Mean number of days for the number of infected to double}
 }
 \description{
-estimatepast_RKI_timeseries
+This function implements two sequential methods to estimate the real number of infected based on the current 
+cumulative death count as presented by Tomas Pueyo in this 
+(\url{https://medium.com/@tomaspueyo/coronavirus-act-today-or-people-will-die-f4d3d9cd99ca}) blog post.
+}
+\details{
+\emph{HochrechnungInfektionennachToden}, the actual number of infected, is calculated with the current 
+cumulative number of deaths \strong{KumAnzahlTodesfall}, the death rate \strong{prop_death} and the average number 
+of days \strong{mean_days_until_death} from infection to death (in case of death). 
+This approach only allows to estimate values at least \strong{mean_days_until_death} days in the past. 
+\emph{HochrechnungDunkelziffer} employs \emph{HochrechnungInfektionennachToden} to estimate the number of actually 
+infected people beyond the \strong{mean_days_until_death} threshold with a simple exponential growth model considering
+\strong{doubling_time}.
+With \emph{HochrechnungDunkelziffer} and \strong{prop_death} we can calculate an expected number of deaths
+\emph{HochrechnungTodenachDunkelziffer}.
 }
 \examples{
 rki_timeseries <- get_RKI_timeseries()
