@@ -25,8 +25,8 @@ group_RKI_timeseries <- function(x, ...) {
       !!!.grouping_var, .data[["Meldedatum"]]
     ) %>%
     dplyr::summarise(
-      AnzahlFall = sum(.data[["AnzahlFall"]]),
-      AnzahlTodesfall = sum(.data[["AnzahlTodesfall"]])
+      AnzahlFall = sum(.data[["AnzahlFall"]], na.rm = T),
+      AnzahlTodesfall = sum(.data[["AnzahlTodesfall"]], na.rm = T)
     ) %>%
     dplyr::ungroup() %>%
     tidyr::complete(
