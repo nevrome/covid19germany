@@ -31,20 +31,26 @@ de <- rki %>%
     ), names_to = "Anzahltyp"
   )
 
-de %>% 
-  dplyr::filter(
-    Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")
-  ) %>%
-  ggplot() +
-  geom_bar(
-    ggplot2::aes(
-      Meldedatum, value,
-      fill = Anzahltyp
-    ),
-    stat = "identity",
-    position = "dodge"
-  ) +
-  theme_minimal()
+cowplot::plot_grid(
+  de %>% dplyr::filter(
+      Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")
+    ) %>% ggplot() +
+    geom_bar(
+      ggplot2::aes(Meldedatum, value, fill = Anzahltyp),
+      stat = "identity",
+      position = "dodge"
+    ) + theme_minimal() + guides(fill = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + xlab("") + ylab(""),
+  de %>% dplyr::filter(
+      Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")
+    ) %>% ggplot() +
+    geom_bar(
+      ggplot2::aes(Meldedatum, value, fill = Anzahltyp),
+      stat = "identity",
+      position = "dodge"
+    ) + theme_minimal() + guides(fill = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) + xlab("") + ylab(""),
+  align = "hv",
+  nrow = 2
+)
 
 ####
 
