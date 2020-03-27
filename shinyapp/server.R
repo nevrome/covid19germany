@@ -18,8 +18,8 @@ shinyserver <- function(input, output, session) {
 
         rki_pre_df %>%
             filter(
-                Meldedatum >= min_meldedatum,
-                Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d")
+                Date >= min_meldedatum,
+                Date <= strptime(input$dateInput[2], format="%Y-%m-%d")
             ) %>%
             plot_RKI_timeseries(
                 group = input$group_varInput,
@@ -49,21 +49,21 @@ shinyserver <- function(input, output, session) {
                 mean_days_until_death = input$mean_days_until_death, 
                 doubling_time = input$doubling_time
             ) %>%
-            dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
+            dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
             tidyr::pivot_longer(cols = c(
-                "KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer",
-                "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
-            ), names_to = "Anzahltyp"
+                "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
+                "CumNumberDead", "EstimationCumNumberDead"
+            ), names_to = "CountType"
         )
         
-        p1 <- de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")) %>% 
+        p1 <- de %>% dplyr::filter(CountType %in% c("CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent")) %>% 
             ggplot() + geom_line(
-                ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+                ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
             ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
             scale_color_brewer(palette = "Set2") + xlab("") + ylab("")
-        p2 <- de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")) %>% 
+        p2 <- de %>% dplyr::filter(CountType %in% c("CumNumberDead", "EstimationCumNumberDead")) %>% 
             ggplot() + geom_line(
-                ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+                ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
             ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
             scale_color_brewer(palette = "Accent") + xlab("") + ylab("")
         
@@ -94,7 +94,7 @@ shinyserver <- function(input, output, session) {
             mean_days_until_death = input$mean_days_until_death, 
             doubling_time = x
         )
-        sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
+        sum(abs(es$CumNumberDead - es$EstimationCumNumberDead), na.rm = T)
     }
     
     observeEvent(input$est_group, {

@@ -26,5 +26,5 @@ rki_df <- get_RKI_timeseries()
 # preprocess data ---------------------------------------------------------
 
 rki_pre_df <- rki_df %>%
-            arrange(-desc(Meldedatum))
+            arrange(-desc(Date))
 

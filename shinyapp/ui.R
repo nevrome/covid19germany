@@ -12,10 +12,10 @@ fluidPage(
                 # input slider to limit date range of ts plot
                 dateRangeInput(inputId = "dateInput",
                                label = "Date",
-                               start = substr((as.character(min(rki_pre_df$Meldedatum, na.rm = TRUE))),1,10),
-                               end = substr((as.character(max(rki_pre_df$Meldedatum, na.rm = TRUE))),1,10),
-                               min = substr((as.character(min(rki_pre_df$Meldedatum, na.rm = TRUE))),1,10),
-                               max = substr((as.character(max(rki_pre_df$Meldedatum, na.rm = TRUE))),1,10),
+                               start = substr((as.character(min(rki_pre_df$Date, na.rm = TRUE))),1,10),
+                               end = substr((as.character(max(rki_pre_df$Date, na.rm = TRUE))),1,10),
+                               min = substr((as.character(min(rki_pre_df$Date, na.rm = TRUE))),1,10),
+                               max = substr((as.character(max(rki_pre_df$Date, na.rm = TRUE))),1,10),
                                format = "yyyy-mm-dd",
                                startview = "month",
                                weekstart = 1
@@ -24,14 +24,14 @@ fluidPage(
                 # select grouping variabel for plot
                 selectInput(inputId = "group_varInput",
                             label = "Gruppierung",
-                            choices = c("Bundesland", "Landkreis", "Geschlecht",
-                                        "Altersgruppe")),
+                            choices = c("Bundesland", "Landkreis", "Gender",
+                                        "Age")),
             
                 # select y-axis variable for plot
                 selectInput(inputId = "typeInput",
                             label = "Zeige",
-                            choices = c("KumAnzahlFall", "KumAnzahlTodesfall", "AnzahlFall",
-                                        "AnzahlTodesfall")),
+                            choices = c("CumNumberTestedIll", "CumNumberDead", "NumberNewTestedIll",
+                                        "NumberNewDead")),
             
                 # select axis transformation
                 radioButtons(inputId = "logyInput",
@@ -82,7 +82,7 @@ fluidPage(
                     selectInput(
                         inputId = "est_group",
                         label = "Gruppierung",
-                        choices = c("Keine", "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"),
+                        choices = c("Keine", "Bundesland", "Landkreis", "Gender", "Age"),
                         selected = "Keine"
                     ),
                     
