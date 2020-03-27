@@ -42,27 +42,27 @@ covid19germany::get_RKI_timeseries()
 
 [Daily updated RKI data about COVID-19 cases and deaths for germany (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0). Provided by the Bundesamt für Kartographie und Geodäsie as well as the Robert Koch Institut. 
 
-Data format: tibble/data.frame with one row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("AnzahlFall") and deaths ("AnzahlTodesfall").
+Data format: tibble/data.frame with one row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("NumberNewTestedIll") and deaths ("NumberNewDead").
 
-|IdBundesland|Bundesland|Landkreis|Altersgruppe|Geschlecht|AnzahlFall|AnzahlTodesfall|ObjectId|Meldedatum|IdLandkreis|
-|--|--------------|------------|-------|-|-|-|------|----------|-----|
-|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|M|2|0|154936|2020-03-18|15003|
-|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154937|2020-03-12|15003|
-|15|Sachsen-Anhalt|SK Magdeburg|A35-A59|W|1|0|154938|2020-03-17|15003|
+| ObjectId|Date       | IdBundesland|Bundesland    | IdLandkreis|Landkreis |Age     |Gender | NumberNewTestedIll| NumberNewDead|
+|--------:|:----------|------------:|:-------------|-----------:|:---------|:-------|:------|------------------:|-------------:|
+|   404635|2020-03-19 |            3|Niedersachsen |        3157|LK Peine  |A35-A59 |M      |                  2|             0|
+|   404636|2020-03-20 |            3|Niedersachsen |        3157|LK Peine  |A35-A59 |M      |                  1|             0|
+|   404637|2020-03-21 |            3|Niedersachsen |        3157|LK Peine  |A35-A59 |M      |                  2|             0|
 
-You can convert this RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Geschlecht) and/or age (Altersgruppe). It's possible to group by muliple of these at once.
+You can convert this RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Gender) and/or age (Age). It's possible to group by muliple of these at once.
 
 ```
-covid19germany::group_RKI_timeseries(data, "Bundesland" | "Landkreis" | "Geschlecht" | "Altersgruppe")
+covid19germany::group_RKI_timeseries(data, "Bundesland" | "Landkreis" | "Gender" | "Age")
 ```
 
 Data format: tibble/data.frame with a time series of cases, deaths, cumulative cases and cumulative deaths. One row per day and grouping unit. Days are continuous, without gaps. All time series start at 2020-01-28, and go up to the current date (last update by RKI). `covid19germany::group_RKI_timeseries(data, "Bundesland")`:
 
-|Bundesland|Meldedatum|AnzahlFall|AnzahlTodesfall|KumAnzahlFall|KumAnzahlTodesfall|IdBundesland|
-|------|----------|-|-|-|-|-|
-|Bayern|2020-01-28|2|0|2|-|9|
-|Bayern|2020-01-29|2|0|4|0|9|
-|Bayern|2020-01-30|0|0|4|0|9|
+|Bundesland        |Date       | NumberNewTestedIll| NumberNewDead| CumNumberTestedIll| CumNumberDead| IdBundesland|
+|:-----------------|:----------|------------------:|-------------:|------------------:|-------------:|------------:|
+|Baden-Württemberg |2020-01-24 |                  1|             0|                  1|             0|            8|
+|Baden-Württemberg |2020-01-25 |                  0|             0|                  1|             0|            8|
+|Baden-Württemberg |2020-01-26 |                  0|             0|                  1|             0|            8|
 
 ### RKI spatial
 
@@ -84,26 +84,25 @@ covid19germany::ew_alter
 
 [Population numbers for the german Länder](https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung) and [Kreise](https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html) on 2018-12-31. Provided by the Statistisches Bundesamt.
 
-Data format: tibble/data.frame with information about population and area size of Länder and Kreise. One row per Land/Landkreis/Altersgruppe.
+Data format: tibble/data.frame with information about population and area size of Länder and Kreise. One row per Land/Landkreis/Age.
 
-|Bundesland         | FlaecheKm2| EwGesamt| EwMaennlich| EwWeiblich| EwProKm2|
-|:------------------|----------:|--------:|-----------:|----------:|--------:|
-|Schleswig-Holstein |   15804.30|  2896712|     1419457|    1477255|      183|
-|Hamburg            |     755.09|  1841179|      902048|     939131|     2438|
-|Niedersachsen      |   47709.51|  7982448|     3943243|    4039205|      167|
+|Bundesland         |  AreaKm2| PopulationTotal| PopulationMale| PopulationFemale| PopulationperKm2|
+|:------------------|--------:|---------------:|--------------:|----------------:|----------------:|
+|Schleswig-Holstein | 15804.30|         2896712|        1419457|          1477255|              183|
+|Hamburg            |   755.09|         1841179|         902048|           939131|             2438|
+|Niedersachsen      | 47709.51|         7982448|        3943243|          4039205|              167|
 
-| IdLandkreis|NameLandkreis          |NUTS3 | FlaecheKm2| EwGesamt| EwMaennlich| EwWeiblich| EwProKm2|
-|-----------:|:----------------------|:-----|----------:|--------:|-----------:|----------:|--------:|
-|        1001|Flensburg, Stadt       |DEF01 |      56.73|    89504|       44599|      44905|     1578|
-|        1002|Kiel, Landeshauptstadt |DEF02 |     118.65|   247548|      120566|     126982|     2086|
-|        1003|Lübeck, Hansestadt     |DEF03 |     214.19|   217198|      104371|     112827|     1014|
+| IdLandkreis|NameLandkreis          |NUTS3 | AreaKm2| PopulationTotal| PopulationMale| PopulationFemale| PopulationperKm2|
+|-----------:|:----------------------|:-----|-------:|---------------:|--------------:|----------------:|----------------:|
+|        1001|Flensburg, Stadt       |DEF01 |   56.73|           89504|          44599|            44905|             1578|
+|        1002|Kiel, Landeshauptstadt |DEF02 |  118.65|          247548|         120566|           126982|             2086|
+|        1003|Lübeck, Hansestadt     |DEF03 |  214.19|          217198|         104371|           112827|             1014|
 
-
-|Altersgruppe | EwGesamt| EwMaennlich| EwWeiblich|
-|:------------|--------:|-----------:|----------:|
-|A00-A04      |  3926397|     2014097|    1912300|
-|A05-A14      |  7364418|     3786605|    3577813|
-|A15-A34      | 19213113|     9977728|    9235385|
+|Age     | PopulationTotal| PopulationMale| PopulationFemale|
+|:-------|---------------:|--------------:|----------------:|
+|A00-A04 |         3926397|        2014097|          1912300|
+|A05-A14 |         7364418|        3786605|          3577813|
+|A15-A34 |        19213113|        9977728|          9235385|
 
 ### Hospital beds
 
@@ -115,12 +114,11 @@ covid19germany::hospital_beds
 
 Data format: tibble/data.frame with information about number, facilities and occupancy rate of hospitals and hospital beds in the german Länder. One row per Land.
 
-|Bundesland             |AnzahlKrankenhaeuser | AnzahlKrankenhaeusermitIntensiv| AnzahlBettenIntensiv| AnzahlBelegungstageIntensiv| AnzahlBehandlungsfaelleIntensiv| AnzahlBehandlungsfaelleIntensivmitBeatmung|
-|:----------------------|:--------------------|-------------------------------:|--------------------:|---------------------------:|-------------------------------:|------------------------------------------:|
-|Baden-Württemberg      |265                  |                             123|                 3262|                      900678|                          259066|                                      47528|
-|Bayern                 |354                  |                             178|                 3790|                     1085912|                          300728|                                      62044|
-|Berlin                 |83                   |                              35|                 1450|                      439183|                           94480|                                   22887|
-
+|Bundesland        |NumberHospital | NumberHospitalwithICU| NumberICUBed| NumberDaysICUBedinUse| NumberICUCase| NumberICUCasewithRespirator|
+|:-----------------|:--------------|---------------------:|------------:|---------------------:|-------------:|---------------------------:|
+|Baden-Württemberg |265            |                   123|         3262|                900678|        259066|                       47528|
+|Bayern            |354            |                   178|         3790|               1085912|        300728|                       62044|
+|Berlin            |83             |                    35|         1450|                439183|         94480|                       22887|
 
 ## Example code snippets
 
@@ -153,7 +151,7 @@ rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
 library(magrittr)
 library(covid19germany)
 
-get_RKI_timeseries() %>% plot_RKI_timeseries("Altersgruppe", "KumAnzahlTodesfall")
+get_RKI_timeseries() %>% plot_RKI_timeseries("Age", "CumNumberDead")
 ```
 
 ![](man/figures/cumul_deathbyage.jpg)
@@ -166,11 +164,11 @@ library(covid19germany)
 rki <- get_RKI_timeseries(cache=F)
 
 group_RKI_timeseries(rki, Bundesland) %>%
-  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  dplyr::filter(Date > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   ggplot() +
-  geom_bar(mapping = aes(x = Meldedatum,
-                         y = AnzahlFall,
+  geom_bar(mapping = aes(x = Date,
+                         y = NumberNewTestedIll,
                          fill = Bundesland),
            stat = 'identity') +
   theme_minimal() +
@@ -190,13 +188,13 @@ library(covid19germany)
 rki <- get_RKI_timeseries(cache=F)
 
 group_RKI_timeseries(rki, Bundesland) %>%
-  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  dplyr::filter(Date > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   dplyr::group_by(Bundesland) %>%
-  dplyr::mutate(kum_fall = cumsum(AnzahlFall)) %>%
+  dplyr::mutate(kum_fall = cumsum(NumberNewTestedIll)) %>%
   dplyr::ungroup() %>%
   ggplot() +
-  geom_area(mapping = aes(x = Meldedatum,
+  geom_area(mapping = aes(x = Date,
                           y = kum_fall,
                           fill = Bundesland),
             stat = 'identity',
@@ -220,13 +218,13 @@ rki <- get_RKI_timeseries(cache=F)
 
 group_RKI_timeseries(rki, Bundesland) %>%
   dplyr::left_join(ew_laender, by="Bundesland") %>%
-  dplyr::filter(Meldedatum > "2020-02-25") %>%
+  dplyr::filter(Date > "2020-02-25") %>%
   tidyr::drop_na(Bundesland) %>%
   dplyr::group_by(Bundesland) %>%
-  dplyr::mutate(kum_fall_per100k_ew = cumsum(AnzahlFall) / EwGesamt) %>%
+  dplyr::mutate(kum_fall_per100k_ew = cumsum(NumberNewTestedIll) / PopulationTotal) %>%
   dplyr::ungroup() %>%
   ggplot() +
-  geom_line(mapping = aes(x = Meldedatum,
+  geom_line(mapping = aes(x = Date,
                           y = kum_fall_per100k_ew,
                           col = Bundesland)) +
   theme_minimal() +
@@ -254,7 +252,7 @@ landkreis_sf <- get_RKI_spatial("Landkreis")
 
 # download and filter rki data to 2020-03-21
 rki_202003021_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
-  dplyr::filter(Meldedatum == as_datetime("2020-03-21"))
+  dplyr::filter(Date == as_datetime("2020-03-21"))
 
 # merge spatial data and rki data
 landkreis_sf_COVID19 <- landkreis_sf %>%
@@ -266,7 +264,7 @@ landkreis_sf_COVID19 <- landkreis_sf %>%
 landkreis_sf_COVID19 %>%
   ggplot() +
   geom_sf(
-    aes(fill = KumAnzahlFall)
+    aes(fill = CumNumberTestedIll)
   ) +
   scale_fill_viridis_c(direction = -1) +
   theme_minimal() +
@@ -294,7 +292,7 @@ N.DAYS.FUTURE=7
 df = get_RKI_timeseries()
 
 ## aggregate case-counts by regions:
-ag=aggregate(df$AnzahlFall,by=list(Bundesland=df$Bundesland,Meldedatum=df$Meldedatum),sum)
+ag=aggregate(df$NumberNewTestedIll,by=list(Bundesland=df$Bundesland,Date=df$Date),sum)
 
 ## split data by regions:
 ag.split=split(ag,ag$Bundesland)
@@ -308,23 +306,23 @@ for (this.ag in ag.split){
   this.region=unique(this.ag$Bundesland)
   
   ## create model
-  this.ag = this.ag[order(this.ag$Meldedatum),]
+  this.ag = this.ag[order(this.ag$Date),]
   this.ag[,"x.log"]=log(this.ag[,"x"])
-  mdl=lm("x.log ~ Meldedatum",data=this.ag)
+  mdl=lm("x.log ~ Date",data=this.ag)
 
   ## append N.DAYS.FUTURE to data
   n=(nrow(this.ag)+1)
-  last.date=as.Date(max(this.ag$Meldedatum))
+  last.date=as.Date(max(this.ag$Date, na.rm = T))
   this.ag[n:(n+N.DAYS.FUTURE-1),]=NA
-  this.ag[n:(n+N.DAYS.FUTURE-1),"Meldedatum"]=seq(last.date+1,by=1,length.out=N.DAYS.FUTURE)
+  this.ag[n:(n+N.DAYS.FUTURE-1),"Date"]=seq(last.date+1,by=1,length.out=N.DAYS.FUTURE)
 
   ## predict on all dates (including future dates)
   this.ag[,"x.pred"]=exp(predict(mdl,newdata=this.ag))
 
   ## plot data and prediction
   ymax=max(this.ag[,c("x.pred","x")],na.rm=TRUE)
-  plot(this.ag[,"Meldedatum"],this.ag[,"x"],type="b",col="black",pch=20,main=this.region,xlab="date",ylab="cases",ylim=c(0,ymax))
-  points(this.ag[,"Meldedatum"],this.ag[,"x.pred"],type="b",col="red")
+  plot(this.ag[,"Date"],this.ag[,"x"],type="b",col="black",pch=20,main=this.region,xlab="date",ylab="cases",ylim=c(0,ymax))
+  points(this.ag[,"Date"],this.ag[,"x.pred"],type="b",col="red")
 }
 ```
 ![](man/figures/log-lin-predictions.jpg)
