@@ -56,19 +56,24 @@ shinyserver <- function(input, output, session) {
             ), names_to = "Anzahltyp"
         )
         
-        cowplot::plot_grid(
-            de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")) %>% 
-                ggplot() + geom_line(
-                    ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
-                ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
-                scale_color_brewer(palette = "Set2") + xlab("") + ylab(""),
-            de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")) %>% 
-                ggplot() + geom_line(
-                    ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
-                ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
-                scale_color_brewer(palette = "Accent") + xlab("") + ylab(""),
-            align = "hv", nrow = 2
-        )
+        p1 <- de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")) %>% 
+            ggplot() + geom_line(
+                ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+            ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
+            scale_color_brewer(palette = "Set2") + xlab("") + ylab("")
+        p2 <- de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")) %>% 
+            ggplot() + geom_line(
+                ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+            ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
+            scale_color_brewer(palette = "Accent") + xlab("") + ylab("")
+        
+        logy <- ifelse(input$est_logy == "logarithmisch" , TRUE, FALSE)
+        if (logy) {
+            p1 <- p1 + ggplot2::scale_y_log10() 
+            p2 <- p2 + ggplot2::scale_y_log10() 
+        }
+        
+        cowplot::plot_grid(p1, p2, align = "hv", nrow = 2)
     })
     
     observeEvent(input$estimate_doubling_time, {

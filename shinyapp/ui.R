@@ -112,7 +112,7 @@ fluidPage(
 
                     actionButton("estimate_doubling_time", "Verdopplungszeit abschätzen"),
 
-                    radioButtons(inputId = "logyInput",
+                    radioButtons(inputId = "est_logy",
                                  label = "Darstellung y-Achse",
                                  choices = c("linear", "logarithmisch"))
                     
