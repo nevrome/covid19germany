@@ -62,6 +62,18 @@ download_RKI <- function(url) {
       Meldedatum = readr::col_datetime(format = ""),
       IdLandkreis = readr::col_integer()
     )
-  )
+  ) %>%
+    dplyr::transmute(
+      ObjectId = .data[["ObjectId"]],
+      Date = .data[["Meldedatum"]],
+      IdBundesland = .data[["IdBundesland"]],
+      Bundesland = .data[["Bundesland"]],
+      IdLandkreis = .data[["IdLandkreis"]],
+      Landkreis = .data[["Landkreis"]],
+      Age = .data[["Altersgruppe"]],
+      Gender = .data[["Geschlecht"]],
+      NumberNewTestedIll = .data[["AnzahlFall"]],
+      NumberNewDead = .data[["AnzahlTodesfall"]],
+    )
   
 }
