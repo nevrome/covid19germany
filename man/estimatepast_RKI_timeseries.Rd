@@ -7,9 +7,9 @@
 estimatepast_RKI_timeseries(
   x,
   ...,
-  prop_death = 0.01,
-  mean_days_until_death = 17,
-  doubling_time = 4
+  prop_death,
+  mean_days_until_death,
+  doubling_time
 )
 }
 \arguments{
@@ -42,7 +42,14 @@ With \emph{HochrechnungDunkelziffer} and \strong{prop_death} we can calculate an
 \examples{
 rki_timeseries <- get_RKI_timeseries()
 
-estimatepast_RKI_timeseries(rki_timeseries)
-estimatepast_RKI_timeseries(rki_timeseries, Bundesland, Geschlecht)
+estimatepast_RKI_timeseries(
+  rki_timeseries, 
+  prop_death = 0.01, mean_days_until_death = 17, doubling_time = 4
+)
+
+estimatepast_RKI_timeseries(
+  rki_timeseries, Bundesland, Geschlecht, 
+  prop_death = 0.03, mean_days_until_death = 17, doubling_time = 3
+)
 
 }
