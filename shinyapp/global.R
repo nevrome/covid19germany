@@ -14,6 +14,7 @@ library(shiny)
 library(tidyverse)
 library(lubridate)
 library(covid19germany)
+library(scales)
 
 
 

@@ -69,8 +69,8 @@ shinyserver <- function(input, output, session) {
         
         logy <- ifelse(input$est_logy == "logarithmisch" , TRUE, FALSE)
         if (logy) {
-            p1 <- p1 + ggplot2::scale_y_log10() 
-            p2 <- p2 + ggplot2::scale_y_log10() 
+            p1 <- p1 + ggplot2::scale_y_log10(labels = scales::comma) 
+            p2 <- p2 + ggplot2::scale_y_log10(labels = scales::comma) 
         }
         
         cowplot::plot_grid(p1, p2, align = "hv", nrow = 2)
