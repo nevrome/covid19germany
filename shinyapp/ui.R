@@ -75,7 +75,15 @@ fluidPage(
             )
         ),
         
-        tabPanel("Hochrechnungen")
+        tabPanel("Hochrechnungen",
+            sidebarLayout(
+                sidebarPanel(
+                ),
+                mainPanel(
+                    plotOutput(outputId = "rki_est_plot")
+                )
+            )
+        )
     
     )
 
