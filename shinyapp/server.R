@@ -2,24 +2,6 @@
 
 shinyserver <- function(input, output) {
 
-    # # time series plot grouping federal states
-    # output$rki_tsPlot_states <- renderPlot({
-    #
-    #     rki_pre_df %>%
-    #         filter(
-    #             Meldedatum >= strptime(input$dateInput[1], format="%Y-%m-%d"),
-    #             Meldedatum <= strptime(input$dateInput[2], format="%Y-%m-%d")
-    #         ) %>%
-    #         group_RKI_timeseries("Bundesland") %>%
-    #
-    #         ggplot(aes(x = Meldedatum, y = KumAnzahlFall,
-    #                    color = Bundesland))+
-    #         geom_line()+
-    #         #facet_grid(Altersgruppe~.)+
-    #         labs(title = "Anzahl von offiziell gemeldeten Fällen in Deutschland")+
-    #         theme_minimal()
-    # })
-    #
     output$rki_tsPlot <- renderPlot({
 
         # define date of the next monday as limit for x axis
