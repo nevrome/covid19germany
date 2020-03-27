@@ -79,6 +79,19 @@ fluidPage(
             sidebarLayout(
                 sidebarPanel(
                     
+                    selectInput(
+                        inputId = "est_group",
+                        label = "Gruppierung",
+                        choices = c("Keine", "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe"),
+                        selected = "Keine"
+                    ),
+                    
+                    selectInput(
+                        inputId = "est_unit",
+                        label = "Zeige",
+                        choices = "Keine"
+                    ),
+                    
                     numericInput(
                         inputId = "prop_death",
                         label = "Sterbewahrscheinlichkeit",
@@ -98,7 +111,7 @@ fluidPage(
                     ),
 
                     actionButton("estimate_doubling_time", "Verdopplungszeit abschätzen"),
-                    
+
                     radioButtons(inputId = "logyInput",
                                  label = "Darstellung y-Achse",
                                  choices = c("linear", "logarithmisch"))

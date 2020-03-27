@@ -38,8 +38,13 @@ shinyserver <- function(input, output, session) {
     
     output$rki_est_plot <- renderPlot({
         
-        de <- rki_df %>%
-            estimatepast_RKI_timeseries(
+        rki_sel <- rki_df
+        if (input$est_group != "Keine") {
+            rki_sel <- rki_sel[rki_sel[[input$est_group]] == input$est_unit, ]
+        }
+        
+        de <- estimatepast_RKI_timeseries(
+                rki_sel,
                 prop_death = input$prop_death, 
                 mean_days_until_death = input$mean_days_until_death, 
                 doubling_time = input$doubling_time
@@ -49,7 +54,7 @@ shinyserver <- function(input, output, session) {
                 "KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer",
                 "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
             ), names_to = "Anzahltyp"
-            )
+        )
         
         cowplot::plot_grid(
             de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")) %>% 
@@ -72,13 +77,27 @@ shinyserver <- function(input, output, session) {
     })
     
     min_doubling_time <- function(x) {
+        
+        rki_sel <- rki_df
+        if (input$est_group != "Keine") {
+            rki_sel <- rki_sel[rki_sel[[input$est_group]] == input$est_unit, ]
+        }
+        
         es <- estimatepast_RKI_timeseries(
-            rki_df, 
+            rki_sel, 
             prop_death = input$prop_death, 
             mean_days_until_death = input$mean_days_until_death, 
             doubling_time = x
         )
         sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
     }
+    
+    observeEvent(input$est_group, {
+        if (input$est_group == "Keine") {
+            shiny::updateSelectInput(session, "est_unit", choices = "Keine")
+        } else {
+            shiny::updateSelectInput(session, "est_unit", choices = unique(rki_df[[input$est_group]]))
+        }
+    })
     
 }
