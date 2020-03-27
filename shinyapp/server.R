@@ -38,15 +38,14 @@ shinyserver <- function(input, output) {
     
     output$rki_est_plot <- renderPlot({
         
-        min_doubling_time <- function(x) {
-            es <- estimatepast_RKI_timeseries(rki_df, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)
-            sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
-        }
-        
-        est_doubling_time <- optim(par = 4, min_doubling_time)$par
+        #est_doubling_time <- optim(par = 4, min_doubling_time)$par
         
         de <- rki_df %>%
-            estimatepast_RKI_timeseries(prop_death = 0.01, mean_days_until_death = 17, doubling_time = est_doubling_time) %>%
+            estimatepast_RKI_timeseries(
+                prop_death = input$prop_death, 
+                mean_days_until_death = input$mean_days_until_death, 
+                doubling_time = input$doubling_time
+            ) %>%
             dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
             tidyr::pivot_longer(cols = c(
                 "KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer",
@@ -68,4 +67,15 @@ shinyserver <- function(input, output) {
             align = "hv", nrow = 2
         )
     })
+    
+    min_doubling_time <- function(x) {
+        es <- estimatepast_RKI_timeseries(
+            rki_df, 
+            prop_death = input$prop_death, 
+            mean_days_until_death = input$mean_days_until_death, 
+            doubling_time = x
+        )
+        sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
+    }
+    
 }

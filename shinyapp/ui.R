@@ -78,6 +78,29 @@ fluidPage(
         tabPanel("Hochrechnungen",
             sidebarLayout(
                 sidebarPanel(
+                    
+                    numericInput(
+                        inputId = "prop_death",
+                        label = "Sterbewahrscheinlichkeit",
+                        value = 0.01
+                    ),
+                    
+                    sliderInput(
+                        inputId = "mean_days_until_death",
+                        label = "Durchschnittliche Zeit von Infektion bis Tod (im Todesfall)",
+                        min = 14, max = 20, value = 17
+                    ),
+                    
+                    numericInput(
+                        inputId = "doubling_time",
+                        label = "Zeit (in Tagen) in der sich die Zahl der Infizierten verdoppelt",
+                        value = 4
+                    ),
+
+                    radioButtons(inputId = "logyInput",
+                                 label = "Darstellung y-Achse",
+                                 choices = c("linear", "logarithmisch"))
+                    
                 ),
                 mainPanel(
                     plotOutput(outputId = "rki_est_plot")
