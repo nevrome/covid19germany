@@ -13,26 +13,37 @@ library(magrittr)
 library(covid19germany)
 library(ggplot2)
 
-rki <- covid19germany::get_RKI_timeseries()
-de <- rki %>%
-  group_RKI_timeseries() %>%
-  dplyr::mutate(
-    A_estimation_of_cases_from_later_deaths = c(KumAnzahlTodesfall[17:(length(KumAnzahlTodesfall))], rep(NA, 16)) * 100,
-    B_estimation_of_cases_from_A = c(rep(NA, 16), A_estimation_of_cases_from_later_deaths[1:(length(A_estimation_of_cases_from_later_deaths) - 16)]) * 8 
-  ) %>%
-  dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
-  tidyr::pivot_longer(cols = c("KumAnzahlFall", "KumAnzahlTodesfall", "A_estimation_of_cases_from_later_deaths", "B_estimation_of_cases_from_A"), names_to = "count")
+rki <- covid19germany::get_RKI_timeseries(cache = F)
 
-de %>% ggplot() +
-  geom_bar(
-    ggplot2::aes(
-      Meldedatum, value,
-      fill = count
-    ),
-    stat = "identity",
-    position = "dodge"
-  ) +
-  theme_minimal()
+min_doubling_time <- function(x) {
+  es <- estimatepast_RKI_timeseries(rki, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)
+  sum(abs(es$KumAnzahlTodesfall - es$HochrechnungTodenachDunkelziffer), na.rm = T)
+}
+
+est_doubling_time <- optim(par = 4, min_doubling_time)$par
+
+de <- rki %>%
+  estimatepast_RKI_timeseries(doubling_time = est_doubling_time) %>%
+  dplyr::select(-AnzahlFall, -AnzahlTodesfall) %>%
+  tidyr::pivot_longer(cols = c(
+      "KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer",
+      "KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer"
+    ), names_to = "Anzahltyp"
+  )
+
+cowplot::plot_grid(
+  de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlFall", "HochrechnungInfektionennachToden", "HochrechnungDunkelziffer")) %>% 
+    ggplot() + geom_line(
+      ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+    ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
+    scale_color_brewer(palette = "Set2") + xlab("") + ylab("") + xlim(c(lubridate::as_datetime("2020-02-15"), NA)),
+  de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")) %>% 
+    ggplot() + geom_line(
+      ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
+    ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
+  scale_color_brewer(palette = "Accent") + xlab("") + ylab("") + xlim(c(lubridate::as_datetime("2020-02-15"), NA)),
+  align = "hv", nrow = 2
+)
 
 ####
 

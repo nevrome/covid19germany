@@ -5,12 +5,12 @@
 #' Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 #' 
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
-#' @param ... character. One or multiple grouping columns of x, so "Bundesland", "Landkreis", "Geschlecht" or "Altersgruppe"
+#' @param ... variable names. One or multiple grouping columns of x, so Bundesland, Landkreis, Geschlecht or Altersgruppe
 #'
 #' @examples 
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
-#' grouped_timeseries <- group_RKI_timeseries(rki_timeseries, "Bundesland", "Geschlecht")
+#' group_RKI_timeseries(rki_timeseries, Bundesland, Geschlecht)
 #'
 #' @export
 group_RKI_timeseries <- function(x, ...) {
