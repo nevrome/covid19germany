@@ -13,7 +13,7 @@ library(magrittr)
 library(covid19germany)
 library(ggplot2)
 
-rki <- covid19germany::get_RKI_timeseries()
+rki <- covid19germany::get_RKI_timeseries(cache = F)
 
 min_doubling_time <- function(x) {
   es <- estimatepast_RKI_timeseries(rki, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)

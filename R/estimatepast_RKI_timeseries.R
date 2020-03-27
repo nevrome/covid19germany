@@ -37,22 +37,12 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death = 0.01, mean_days_unt
     function(y) {
       y %>%
         dplyr::mutate(
-          HochrechnungInfektionennachToden = c(
-            .data[["KumAnzahlTodesfall"]][mean_days_until_death:(length(.data[["KumAnzahlTodesfall"]]))],
-            rep(NA, mean_days_until_death - 1)
-          ) / prop_death
-        ) %>%
-        dplyr::mutate(
-          HochrechnungDunkelziffer = c(
-            rep(NA, mean_days_until_death - 1),
-            .data[["HochrechnungInfektionennachToden"]][1:(length(.data[["HochrechnungInfektionennachToden"]]) - (mean_days_until_death - 1))]
-          ) * (2^(mean_days_until_death/doubling_time))
-        ) %>%
-        dplyr::mutate(
-          HochrechnungTodenachDunkelziffer = c(
-            rep(NA, mean_days_until_death - 1),
-            .data[["HochrechnungDunkelziffer"]][1:(length(.data[["HochrechnungDunkelziffer"]]) - (mean_days_until_death - 1))]
-          ) * prop_death
+          HochrechnungInfektionennachToden = dplyr::lead(.data[["KumAnzahlTodesfall"]], mean_days_until_death - 1) / 
+            prop_death,
+          HochrechnungDunkelziffer = dplyr::lag(.data[["HochrechnungInfektionennachToden"]], mean_days_until_death - 1) * 
+            (2^(mean_days_until_death/doubling_time)),
+          HochrechnungTodenachDunkelziffer = dplyr::lag(.data[["HochrechnungDunkelziffer"]], mean_days_until_death - 1) * 
+            prop_death
         )
     }
   ) %>%
