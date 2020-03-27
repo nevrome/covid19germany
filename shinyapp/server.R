@@ -1,6 +1,6 @@
 # here you put the backend stuff
 
-shinyserver <- function(input, output) {
+shinyserver <- function(input, output, session) {
 
     output$rki_tsPlot <- renderPlot({
 
@@ -38,8 +38,6 @@ shinyserver <- function(input, output) {
     
     output$rki_est_plot <- renderPlot({
         
-        #est_doubling_time <- optim(par = 4, min_doubling_time)$par
-        
         de <- rki_df %>%
             estimatepast_RKI_timeseries(
                 prop_death = input$prop_death, 
@@ -58,14 +56,19 @@ shinyserver <- function(input, output) {
                 ggplot() + geom_line(
                     ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
                 ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
-                scale_color_brewer(palette = "Set2") + xlab("") + ylab("") + xlim(c(lubridate::as_datetime("2020-02-15"), NA)),
+                scale_color_brewer(palette = "Set2") + xlab("") + ylab(""),
             de %>% dplyr::filter(Anzahltyp %in% c("KumAnzahlTodesfall", "HochrechnungTodenachDunkelziffer")) %>% 
                 ggplot() + geom_line(
                     ggplot2::aes(Meldedatum, value, color = Anzahltyp), size = 2, alpha = 0.7
                 ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
-                scale_color_brewer(palette = "Accent") + xlab("") + ylab("") + xlim(c(lubridate::as_datetime("2020-02-15"), NA)),
+                scale_color_brewer(palette = "Accent") + xlab("") + ylab(""),
             align = "hv", nrow = 2
         )
+    })
+    
+    observeEvent(input$estimate_doubling_time, {
+        est_doubling_time <- optim(par = 4, min_doubling_time)$par
+        shiny::updateNumericInput(session, "doubling_time", value = est_doubling_time)
     })
     
     min_doubling_time <- function(x) {

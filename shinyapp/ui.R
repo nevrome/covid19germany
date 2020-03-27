@@ -93,10 +93,12 @@ fluidPage(
                     
                     numericInput(
                         inputId = "doubling_time",
-                        label = "Zeit (in Tagen) in der sich die Zahl der Infizierten verdoppelt",
+                        label = "Verdopplungszeit: Zeit (in Tagen) in der sich die Zahl der Infizierten verdoppelt",
                         value = 4
                     ),
 
+                    actionButton("estimate_doubling_time", "Verdopplungszeit abschätzen"),
+                    
                     radioButtons(inputId = "logyInput",
                                  label = "Darstellung y-Achse",
                                  choices = c("linear", "logarithmisch"))
