@@ -6,12 +6,12 @@
 #' @format A data frame with 16 rows and 7 variables.
 #' \itemize{
 #'   \item \bold{Bundesland}
-#'   \item \bold{AnzahlKrankenhaeuser}
-#'   \item \bold{AnzahlKrankenhaeusermitIntensiv}
-#'   \item \bold{AnzahlBettenIntensiv}
-#'   \item \bold{AnzahlBelegungstageIntensiv}
-#'   \item \bold{AnzahlBehandlungsfaelleIntensiv}
-#'   \item \bold{AnzahlBehandlungsfaelleIntensivmitBeatmung}
+#'   \item \bold{NumberHospital}
+#'   \item \bold{NumberHospitalwithICU}
+#'   \item \bold{NumberICUBed}
+#'   \item \bold{NumberDaysICUBedinUse}
+#'   \item \bold{NumberICUCase}
+#'   \item \bold{NumberICUCasewithRespirator}
 #' }
 #'
 #' @family context_data
@@ -28,11 +28,11 @@ NULL
 #' @format A data frame with 16 rows and 6 variables.
 #' \itemize{
 #'   \item \bold{Bundesland}
-#'   \item \bold{FlaecheKm2}
-#'   \item \bold{EwGesamt}
-#'   \item \bold{EwMaennlich}
-#'   \item \bold{EwWeiblich}
-#'   \item \bold{EwProKm2}
+#'   \item \bold{AreaKm2}
+#'   \item \bold{PopulationTotal}
+#'   \item \bold{PopulationMale}
+#'   \item \bold{PopulationFemale}
+#'   \item \bold{PopulationperKm2}
 #' }
 #'
 #' @family context_data
@@ -51,11 +51,11 @@ NULL
 #'   \item \bold{IdLandkreis}
 #'   \item \bold{Landkreis}
 #'   \item \bold{NUTS3}
-#'   \item \bold{FlaecheKm2}
-#'   \item \bold{EwGesamt}
-#'   \item \bold{EwMaennlich}
-#'   \item \bold{EwWeiblich}
-#'   \item \bold{EwProKm2}
+#'   \item \bold{AreaKm2}
+#'   \item \bold{PopulationTotal}
+#'   \item \bold{PopulationMale}
+#'   \item \bold{PopulationFemale}
+#'   \item \bold{PopulationperKm2}
 #' }
 #'
 #' @family context_data
@@ -71,11 +71,10 @@ NULL
 #' 
 #' @format A data frame with 6 rows and 4 variables.
 #' \itemize{
-#'   \item \bold{Altersgruppe}
-#'   \item \bold{Landkreis}
-#'   \item \bold{EwGesamt}
-#'   \item \bold{EwMaennlich}
-#'   \item \bold{EwWeiblich}
+#'   \item \bold{Age}
+#'   \item \bold{PopulationTotal}
+#'   \item \bold{PopulationMale}
+#'   \item \bold{PopulationFemale}
 #' }
 #'
 #' @family context_data

@@ -7,11 +7,11 @@
 A data frame with 16 rows and 6 variables.
 \itemize{
   \item \bold{Bundesland}
-  \item \bold{FlaecheKm2}
-  \item \bold{EwGesamt}
-  \item \bold{EwMaennlich}
-  \item \bold{EwWeiblich}
-  \item \bold{EwProKm2}
+  \item \bold{AreaKm2}
+  \item \bold{PopulationTotal}
+  \item \bold{PopulationMale}
+  \item \bold{PopulationFemale}
+  \item \bold{PopulationperKm2}
 }
 }
 \description{

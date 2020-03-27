@@ -8,7 +8,15 @@ hospital_beds <- readr::read_csv(
     AnzahlBehandlungsfaelleIntensiv = readr::col_integer(),
     AnzahlBehandlungsfaelleIntensivmitBeatmung = readr::col_integer()
   )
-)
+) %>%
+  dplyr::rename(
+    NumberHospital = AnzahlKrankenhaeuser,
+    NumberHospitalwithICU = AnzahlKrankenhaeusermitIntensiv,
+    NumberICUBed = AnzahlBettenIntensiv,
+    NumberDaysICUBedinUse = AnzahlBelegungstageIntensiv,
+    NumberICUCase = AnzahlBehandlungsfaelleIntensiv,
+    NumberICUCasewithRespirator = AnzahlBehandlungsfaelleIntensivmitBeatmung
+  )
 
 ew_laender <- readr::read_delim(
   "data-raw/EW_Laender.csv", delim=";",
@@ -20,8 +28,15 @@ ew_laender <- readr::read_delim(
     EwWeiblich = readr::col_integer(),
     EwProKm2 = readr::col_double()
   )
-)
-
+) %>%
+  dplyr::rename(
+    AreaKm2 = FlaecheKm2,
+    PopulationTotal = EwGesamt,
+    PopulationMale = EwMaennlich,
+    PopulationFemale = EwWeiblich,
+    PopulationperKm2 = EwProKm2
+  )
+  
 ew_kreise <- readr::read_delim(
   "data-raw/EW_Kreise.csv", ";",
   col_types = readr::cols(
@@ -34,7 +49,14 @@ ew_kreise <- readr::read_delim(
     EwWeiblich = readr::col_integer(),
     EwProKm2 = readr::col_double()
   )
-)
+) %>%
+  dplyr::rename(
+    AreaKm2 = FlaecheKm2,
+    PopulationTotal = EwGesamt,
+    PopulationMale = EwMaennlich,
+    PopulationFemale = EwWeiblich,
+    PopulationperKm2 = EwProKm2
+  )
 
 ew_alter <- readr::read_csv(
   "data-raw/EW_Alter.csv",
@@ -45,17 +67,26 @@ ew_alter <- readr::read_csv(
     total = col_double()
   )) %>%
   dplyr::group_by(
-    gr = cut(alter, 
-      breaks = c(0, 4, 14, 34, 59, 79, 100), 
-      labels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59",
-                 "A60-A79", "A80+"),
-      include.lowest = TRUE)) %>%
+    gr = cut(
+      alter,
+      breaks = c(0, 4, 14, 34, 59, 79, 100),
+      labels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
+      include.lowest = TRUE
+    )
+  ) %>%
   dplyr::summarise(
     EwGesamt = sum(total),
     EwMaennlich = sum(m),
-    EwWeiblich = sum(w))  %>%
+    EwWeiblich = sum(w)
+  )  %>%
   dplyr::mutate(Altersgruppe = gr) %>%
-  dplyr::select(.data$Altersgruppe, .data$EwGesamt, .data$EwMaennlich, .data$EwWeiblich)
+  dplyr::select(.data$Altersgruppe, .data$EwGesamt, .data$EwMaennlich, .data$EwWeiblich) %>%
+  dplyr::rename(
+    Age = Altersgruppe,
+    PopulationTotal = EwGesamt,
+    PopulationMale = EwMaennlich,
+    PopulationFemale = EwWeiblich
+  )
 
 
 
