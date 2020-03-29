@@ -235,8 +235,7 @@ pest1 <- cowplot::plot_grid(pest1a, pest1b, align = "h", ncol = 2, rel_widths = 
 cowplot::ggsave2("pest1.png", pest1, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
 
 
-
-ggplot() +
+pest2a <- ggplot() +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
     mapping = aes(
@@ -251,14 +250,41 @@ ggplot() +
       Date, value, 
       color = as.character(doubling_time)
     ),
-    size = 2
+    size = 1,
+    alpha = 0.6
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated deaths") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F)
+
+pest2b <- ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value,
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
+    mapping = aes(
+      Date, value, 
+      color = as.character(doubling_time)
+    ),
+    size = 1,
+    alpha = 0.6
   ) +
   scale_y_log10(labels = scales::comma) +
-  #scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated deaths") + ylab("") + xlab("") +
-  theme_minimal()
+  ggtitle("") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(
+    color = guide_legend(title = "Doubling time scenarios", keywidth = 5)
+  )
 
-
+pest2 <- cowplot::plot_grid(pest2a, pest2b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
+cowplot::ggsave2("pest2.png", pest2, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
 
 
 
