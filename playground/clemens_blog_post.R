@@ -143,7 +143,7 @@ rki_full <- covid19germany::get_RKI_timeseries(cache = F)
 
 model_grid <- expand.grid(
   prop_death = c(0.01, 0.03, 0.05),
-  doubling_time = c(2, 4, 6)
+  doubling_time = c(3, 4, 5, 6)
 )
 
 est_multi <- lapply(1:nrow(model_grid), function(i) {
@@ -164,16 +164,16 @@ est_multi <- lapply(1:nrow(model_grid), function(i) {
 
 ggplot() +
   geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value > 100),
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      linetype = as.character(prop_death)
     ),
     size = 2,
-    alpha = 0.6
+    color = "grey"
   ) +
   geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast"),
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
     mapping = aes(
       Date, value, 
       linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
@@ -181,30 +181,32 @@ ggplot() +
     size = 2,
     alpha = 0.6
   ) +
-  scale_y_log10() +
-  scale_color_viridis_d(option = "plasma")
+  scale_y_log10(labels = scales::comma) +
+  #scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
+  theme_minimal()
 
 ggplot() +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
     mapping = aes(
       Date, value,
-      color = "red"
     ),
     size = 2,
-    alpha = 0.6
+    color = "red"
   ) +
   geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead"),
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      color = as.character(doubling_time)
     ),
-    size = 2,
-    alpha = 0.6
+    size = 2
   ) +
-  scale_y_log10() +
-  scale_color_viridis_d(option = "plasma")
+  scale_y_log10(labels = scales::comma) +
+  #scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated deaths") + ylab("") + xlab("") +
+  theme_minimal()
 
 
 
