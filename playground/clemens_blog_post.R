@@ -143,7 +143,7 @@ rki_full <- covid19germany::get_RKI_timeseries(cache = F)
 
 model_grid <- expand.grid(
   prop_death = c(0.01, 0.03, 0.05),
-  doubling_time = c(3, 4, 5, 6)
+  doubling_time = c(3, 5, 7)
 )
 
 est_multi <- lapply(1:nrow(model_grid), function(i) {
@@ -162,15 +162,24 @@ est_multi <- lapply(1:nrow(model_grid), function(i) {
   return(est)
 }) %>% dplyr::bind_rows()
 
-ggplot() +
+pest1a <- ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberTestedIll", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+    color = "red"
+  ) +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
     mapping = aes(
       Date, value, 
       linetype = as.character(prop_death)
     ),
-    size = 2,
-    color = "grey"
+    size = 1,
+    color = "grey",
+    alpha = 0.6
   ) +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
@@ -178,13 +187,54 @@ ggplot() +
       Date, value, 
       linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
     ),
-    size = 2,
+    size = 1,
+    alpha = 0.6
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F, linetype = F)
+
+pest1b <-  ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberTestedIll", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(prop_death)
+    ),
+    size = 1,
+    color = "grey",
+    alpha = 0.6
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+    ),
+    size = 1,
     alpha = 0.6
   ) +
   scale_y_log10(labels = scales::comma) +
-  #scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
-  theme_minimal()
+  ggtitle("") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(
+    color = guide_legend(title = "Doubling time scenarios", keywidth = 5), 
+    linetype = guide_legend(title = "Death probability scenarios", keywidth = 5)
+  )
+
+pest1 <- cowplot::plot_grid(pest1a, pest1b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
+cowplot::ggsave2("pest1.png", pest1, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
+
+
 
 ggplot() +
   geom_line(
@@ -192,7 +242,7 @@ ggplot() +
     mapping = aes(
       Date, value,
     ),
-    size = 2,
+    size = 1,
     color = "red"
   ) +
   geom_line(
