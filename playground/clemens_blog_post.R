@@ -136,3 +136,78 @@ m2b <- landkreis_sf_COVID19 %>%
 
 map2 <- cowplot::plot_grid(m2a, m2b, align = "hv", ncol = 2)
 cowplot::ggsave2("map2.png", map2, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
+
+#### estimation ####
+
+rki_full <- covid19germany::get_RKI_timeseries(cache = F)
+
+model_grid <- expand.grid(
+  prop_death = c(0.01, 0.03, 0.05),
+  doubling_time = c(2, 4, 6)
+)
+
+est_multi <- lapply(1:nrow(model_grid), function(i) {
+  pd <- model_grid$prop_death[i]
+  dti <- model_grid$doubling_time[i]
+  est <- covid19germany::estimatepast_RKI_timeseries(rki_full, prop_death = pd, mean_days_until_death = 17, doubling_time = dti) %>%
+    dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
+    tidyr::pivot_longer(cols = c(
+      "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
+      "CumNumberDead", "EstimationCumNumberDead"
+    ), names_to = "CountType") %>%
+    dplyr::mutate(
+      prop_death = pd,
+      doubling_time = dti
+    )
+  return(est)
+}) %>% dplyr::bind_rows()
+
+ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value > 100),
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+    ),
+    size = 2,
+    alpha = 0.6
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast"),
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+    ),
+    size = 2,
+    alpha = 0.6
+  ) +
+  scale_y_log10() +
+  scale_color_viridis_d(option = "plasma")
+
+ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value,
+      color = "red"
+    ),
+    size = 2,
+    alpha = 0.6
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead"),
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+    ),
+    size = 2,
+    alpha = 0.6
+  ) +
+  scale_y_log10() +
+  scale_color_viridis_d(option = "plasma")
+
+
+
+
+
+
