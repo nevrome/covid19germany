@@ -175,17 +175,16 @@ pest1a <- ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death)
+      color = as.character(prop_death)
     ),
     size = 1,
-    color = "grey",
     alpha = 0.6
   ) +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      color = as.character(prop_death), linetype = as.character(doubling_time), group = interaction(prop_death, doubling_time)
     ),
     size = 1,
     alpha = 0.6
@@ -193,7 +192,10 @@ pest1a <- ggplot() +
   scale_y_continuous(labels = scales::comma) +
   ggtitle("Estimated number of infected") + ylab("") + xlab("") +
   theme_minimal() +
-  guides(color = F, linetype = F)
+  guides(color = F, linetype = F) +
+  geom_vline(
+    aes(xintercept = max(est_multi$Date) - 16 * 24*60*60)
+  )
 
 pest1b <-  ggplot() +
   geom_line(
@@ -208,17 +210,16 @@ pest1b <-  ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death)
+      color = as.character(prop_death)
     ),
     size = 1,
-    color = "grey",
     alpha = 0.6
   ) +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
     mapping = aes(
       Date, value, 
-      linetype = as.character(prop_death), color = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      color = as.character(prop_death), linetype = as.character(doubling_time), group = interaction(prop_death, doubling_time)
     ),
     size = 1,
     alpha = 0.6
@@ -227,135 +228,13 @@ pest1b <-  ggplot() +
   ggtitle("") + ylab("") + xlab("") +
   theme_minimal() +
   guides(
-    color = guide_legend(title = "Doubling time scenarios", keywidth = 5), 
-    linetype = guide_legend(title = "Death probability scenarios", keywidth = 5)
+    color = guide_legend(title = "Death probability scenarios", keywidth = 5), 
+    linetype = guide_legend(title = "Doubling time scenarios", keywidth = 5)
+  ) +
+  geom_vline(
+    aes(xintercept = max(est_multi$Date) - 16 * 24*60*60)
   )
 
 pest1 <- cowplot::plot_grid(pest1a, pest1b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
 cowplot::ggsave2("pest1.png", pest1, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
-
-
-pest2a <- ggplot() +
-  geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
-    mapping = aes(
-      Date, value,
-    ),
-    size = 1,
-    color = "red"
-  ) +
-  geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
-    mapping = aes(
-      Date, value, 
-      color = as.character(doubling_time)
-    ),
-    size = 1,
-    alpha = 0.6
-  ) +
-  scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated deaths") + ylab("") + xlab("") +
-  theme_minimal() +
-  guides(color = F)
-
-pest2b <- ggplot() +
-  geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
-    mapping = aes(
-      Date, value,
-    ),
-    size = 1,
-    color = "red"
-  ) +
-  geom_line(
-    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
-    mapping = aes(
-      Date, value, 
-      color = as.character(doubling_time)
-    ),
-    size = 1,
-    alpha = 0.6
-  ) +
-  scale_y_log10(labels = scales::comma) +
-  ggtitle("") + ylab("") + xlab("") +
-  theme_minimal() +
-  guides(
-    color = guide_legend(title = "Doubling time scenarios", keywidth = 5)
-  )
-
-pest2 <- cowplot::plot_grid(pest2a, pest2b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
-cowplot::ggsave2("pest2.png", pest2, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
-
-#### optimising ####
-
-min_doubling_time <- function(x) {
-  es <- estimatepast_RKI_timeseries(rki_full, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)
-  esmax <- es[es$Date == max(es$Date), ]
-  abs(esmax$CumNumberDead - esmax$EstimationCumNumberDead)
-}
-
-est_doubling_time <- optim(par = 4, min_doubling_time, method = "Brent", lower = 1, upper = 7)$par
-
-est <- covid19germany::estimatepast_RKI_timeseries(
-  rki_full, prop_death = 0.01, mean_days_until_death = 17, doubling_time = est_doubling_time
-  ) %>%
-  dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
-  tidyr::pivot_longer(cols = c(
-    "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
-    "CumNumberDead", "EstimationCumNumberDead"
-  ), names_to = "CountType")
-
-pest3a <- ggplot() +
-  geom_line(
-    data = est %>% dplyr::filter(CountType == "CumNumberTestedIll", value >= 1) %>% dplyr::select(Date, value) %>% unique,
-    mapping = aes(
-      Date, value
-    ),
-    size = 1,
-    color = "red"
-  ) +
-  geom_line(
-    data = est %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
-    mapping = aes(
-      Date, value
-    ),
-    size = 1,
-  ) +
-  geom_line(
-    data = est %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
-    mapping = aes(
-      Date, value
-    ),
-    size = 1
-  ) +
-  scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
-  theme_minimal() +
-  guides(color = F, linetype = F)
-
-pest3b <- ggplot() +
-  geom_line(
-    data = est %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
-    mapping = aes(
-      Date, value,
-    ),
-    size = 1,
-    color = "red"
-  ) +
-  geom_line(
-    data = est %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
-    mapping = aes(
-      Date, value
-    ),
-    size = 1
-  ) +
-  scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated deaths") + ylab("") + xlab("") +
-  theme_minimal() +
-  guides(color = F)
-
-pest3 <- cowplot::plot_grid(pest3b, pest3a, align = "h", ncol = 2)
-cowplot::ggsave2("pest3.png", pest3, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
-
-
 
