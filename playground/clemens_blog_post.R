@@ -286,6 +286,76 @@ pest2b <- ggplot() +
 pest2 <- cowplot::plot_grid(pest2a, pest2b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
 cowplot::ggsave2("pest2.png", pest2, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
 
+#### optimising ####
+
+min_doubling_time <- function(x) {
+  es <- estimatepast_RKI_timeseries(rki_full, prop_death = 0.01, mean_days_until_death = 17, doubling_time = x)
+  esmax <- es[es$Date == max(es$Date), ]
+  abs(esmax$CumNumberDead - esmax$EstimationCumNumberDead)
+}
+
+est_doubling_time <- optim(par = 4, min_doubling_time, method = "Brent", lower = 1, upper = 7)$par
+
+est <- covid19germany::estimatepast_RKI_timeseries(
+  rki_full, prop_death = 0.01, mean_days_until_death = 17, doubling_time = est_doubling_time
+  ) %>%
+  dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
+  tidyr::pivot_longer(cols = c(
+    "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
+    "CumNumberDead", "EstimationCumNumberDead"
+  ), names_to = "CountType")
+
+pest3a <- ggplot() +
+  geom_line(
+    data = est %>% dplyr::filter(CountType == "CumNumberTestedIll", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+  ) +
+  geom_line(
+    data = est %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
+    mapping = aes(
+      Date, value
+    ),
+    size = 1
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F, linetype = F)
+
+pest3b <- ggplot() +
+  geom_line(
+    data = est %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value,
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est %>% dplyr::filter(CountType == "EstimationCumNumberDead", value >= 1),
+    mapping = aes(
+      Date, value
+    ),
+    size = 1
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated deaths") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F)
+
+pest3 <- cowplot::plot_grid(pest3b, pest3a, align = "h", ncol = 2)
+cowplot::ggsave2("pest3.png", pest3, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
 
 
 
