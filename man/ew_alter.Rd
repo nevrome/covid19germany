@@ -6,11 +6,10 @@
 \format{
 A data frame with 6 rows and 4 variables.
 \itemize{
-  \item \bold{Altersgruppe}
-  \item \bold{Landkreis}
-  \item \bold{EwGesamt}
-  \item \bold{EwMaennlich}
-  \item \bold{EwWeiblich}
+  \item \bold{Age}
+  \item \bold{PopulationTotal}
+  \item \bold{PopulationMale}
+  \item \bold{PopulationFemale}
 }
 }
 \description{

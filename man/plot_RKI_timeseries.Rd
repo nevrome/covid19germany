@@ -7,7 +7,7 @@
 plot_RKI_timeseries(
   x,
   group = "Bundesland",
-  type = "KumAnzahlFall",
+  type = "CumNumberTestedIll",
   label = T,
   logy = F
 )
@@ -15,9 +15,9 @@ plot_RKI_timeseries(
 \arguments{
 \item{x}{data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}}
 
-\item{group}{character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Geschlecht", "Altersgruppe". See \code{\link{group_RKI_timeseries}} for more information}
+\item{group}{character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Gender", "Age". See \code{\link{group_RKI_timeseries}} for more information}
 
-\item{type}{character. Type of count information. One of: "AnzahlFall", "AnzahlTodesfall", "KumAnzahlFall", "KumAnzahlTodesfall"}
+\item{type}{character. Type of count information. One of: "NumberNewTestedIll", "NumberNewDead", "CumNumberTestedIll", "CumNumberDead"}
 
 \item{label}{logical. Should labels be added?}
 
@@ -30,6 +30,6 @@ Please see the README for more information: \url{https://github.com/nevrome/covi
 \examples{
 rki_timeseries <- get_RKI_timeseries()
 
-plot_RKI_timeseries(rki_timeseries, "Geschlecht", "KumAnzahlFall")
+plot_RKI_timeseries(rki_timeseries, "Gender", "CumNumberTestedIll")
 
 }

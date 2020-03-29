@@ -9,11 +9,11 @@ A data frame with 401 rows and 8 variables.
   \item \bold{IdLandkreis}
   \item \bold{Landkreis}
   \item \bold{NUTS3}
-  \item \bold{FlaecheKm2}
-  \item \bold{EwGesamt}
-  \item \bold{EwMaennlich}
-  \item \bold{EwWeiblich}
-  \item \bold{EwProKm2}
+  \item \bold{AreaKm2}
+  \item \bold{PopulationTotal}
+  \item \bold{PopulationMale}
+  \item \bold{PopulationFemale}
+  \item \bold{PopulationperKm2}
 }
 }
 \description{

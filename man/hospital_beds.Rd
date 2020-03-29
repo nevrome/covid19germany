@@ -7,12 +7,12 @@
 A data frame with 16 rows and 7 variables.
 \itemize{
   \item \bold{Bundesland}
-  \item \bold{AnzahlKrankenhaeuser}
-  \item \bold{AnzahlKrankenhaeusermitIntensiv}
-  \item \bold{AnzahlBettenIntensiv}
-  \item \bold{AnzahlBelegungstageIntensiv}
-  \item \bold{AnzahlBehandlungsfaelleIntensiv}
-  \item \bold{AnzahlBehandlungsfaelleIntensivmitBeatmung}
+  \item \bold{NumberHospital}
+  \item \bold{NumberHospitalwithICU}
+  \item \bold{NumberICUBed}
+  \item \bold{NumberDaysICUBedinUse}
+  \item \bold{NumberICUCase}
+  \item \bold{NumberICUCasewithRespirator}
 }
 }
 \description{
