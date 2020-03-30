@@ -11,8 +11,6 @@
 #' \emph{EstimationCumNumberIllPresent} employs the last value in \emph{EstimationCumNumberIllPast} to estimate the number 
 #' of actually infected people beyond the \strong{mean_days_until_death} threshold with a simple exponential growth model considering
 #' \strong{doubling_time}.
-#' With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and \strong{prop_death} we can calculate an 
-#' expected number of deaths \emph{EstimationCumNumberDead}.
 #'
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
 #' @param ... variable names. One or multiple grouping columns of x, so Bundesland, Landkreis, Gender or Age
@@ -51,15 +49,17 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_deat
           EstimationCumNumberIllPresent = c(
             rep(NA, length(.data[["EstimationCumNumberIllPast"]]) - (mean_days_until_death)),
             max(.data[["EstimationCumNumberIllPast"]], na.rm = T) * 2^((0:(mean_days_until_death - 1))/doubling_time)
-          ),
-          EstimationCumNumberDead = dplyr::lag(c(
-            .data[["EstimationCumNumberIllPast"]][
-              1:(length(.data[["EstimationCumNumberIllPast"]]) - mean_days_until_death)
-            ],
-            .data[["EstimationCumNumberIllPresent"]][
-              (length(.data[["EstimationCumNumberIllPresent"]]) - (mean_days_until_death - 1)):length(.data[["EstimationCumNumberIllPresent"]]) 
-            ]
-          ), mean_days_until_death - 1) * prop_death
+          )#,
+          # With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and \strong{prop_death} we can calculate an 
+          # expected number of deaths \emph{EstimationCumNumberDead}.
+          # EstimationCumNumberDead = dplyr::lag(c(
+          #   .data[["EstimationCumNumberIllPast"]][
+          #     1:(length(.data[["EstimationCumNumberIllPast"]]) - mean_days_until_death)
+          #   ],
+          #   .data[["EstimationCumNumberIllPresent"]][
+          #     (length(.data[["EstimationCumNumberIllPresent"]]) - (mean_days_until_death - 1)):length(.data[["EstimationCumNumberIllPresent"]]) 
+          #   ]
+          # ), mean_days_until_death - 1) * prop_death
         )
     }
   ) %>%
