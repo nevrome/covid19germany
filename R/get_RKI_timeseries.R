@@ -6,7 +6,7 @@
 #' @param url character. Data source url
 #' @param cache logical. Should the data be cached?
 #' @param cache_dir character. Path to cache directory
-#' @param cache_max_age numeric. Maximum age of cache in seconds
+#' @param cache_max_age numeric. Maximum age of cache in seconds or "today"
 #'
 #' @return A tibble with the dataset
 #'
@@ -18,16 +18,28 @@
 #' @export 
 get_RKI_timeseries <- function(
   url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", 
-  cache = T, cache_dir = tempdir(), cache_max_age = 24 * 60 * 60
+  cache = T, cache_dir = tempdir(), cache_max_age = "today"
 ) {
+  
+  if (cache_max_age == "today") {
+    cache_threshold <- lubridate::now() - lubridate::as.duration(
+      lubridate::interval(lubridate::today("CEST"), lubridate::now())
+    )
+  } else {
+    cache_threshold <- lubridate::now() - lubridate::as.duration(
+      cache_max_age
+    )
+  }
   
   # caching is activated
   if (cache) {
     if (!dir.exists(cache_dir)) { dir.create(cache_dir) }
     tab_cache_file <- file.path(cache_dir, paste0("RKI_timeseries.RData"))
-    if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > (Sys.time() - cache_max_age)) {
+    if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > cache_threshold) {
+      message("Loading file from cache...")
       load(tab_cache_file)
     } else {
+      message("Downloading file...")
       this_tab <- download_RKI(url)
       save(this_tab, file = tab_cache_file)
     }

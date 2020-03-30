@@ -61,41 +61,14 @@ shinyserver <- function(input, output, session) {
                 ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
             ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
             scale_color_brewer(palette = "Set2") + xlab("") + ylab("")
-        p2 <- de %>% dplyr::filter(CountType %in% c("CumNumberDead", "EstimationCumNumberDead")) %>% 
-            ggplot() + geom_line(
-                ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
-            ) + theme_minimal() + guides(color = guide_legend(nrow = 2)) + scale_y_continuous(labels = scales::comma) +
-            scale_color_brewer(palette = "Accent") + xlab("") + ylab("")
-        
+
         logy <- ifelse(input$est_logy == "logarithmisch" , TRUE, FALSE)
         if (logy) {
             p1 <- p1 + ggplot2::scale_y_log10(labels = scales::comma) 
-            p2 <- p2 + ggplot2::scale_y_log10(labels = scales::comma) 
         }
         
-        cowplot::plot_grid(p1, p2, align = "hv", nrow = 2)
+        return(p1)
     })
-    
-    observeEvent(input$estimate_doubling_time, {
-        est_doubling_time <- optim(par = 4, min_doubling_time)$par
-        shiny::updateNumericInput(session, "doubling_time", value = est_doubling_time)
-    })
-    
-    min_doubling_time <- function(x) {
-        
-        rki_sel <- rki_df
-        if (input$est_group != "Keine") {
-            rki_sel <- rki_sel[rki_sel[[input$est_group]] == input$est_unit, ]
-        }
-        
-        es <- estimatepast_RKI_timeseries(
-            rki_sel, 
-            prop_death = input$prop_death, 
-            mean_days_until_death = input$mean_days_until_death, 
-            doubling_time = x
-        )
-        sum(abs(es$CumNumberDead - es$EstimationCumNumberDead), na.rm = T)
-    }
     
     observeEvent(input$est_group, {
         if (input$est_group == "Keine") {

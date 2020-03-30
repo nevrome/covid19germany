@@ -95,7 +95,8 @@ fluidPage(
                     numericInput(
                         inputId = "prop_death",
                         label = "Probability of death / Sterbewahrscheinlichkeit",
-                        value = 0.01
+                        value = 0.01,
+                        step = 0.01
                     ),
                     
                     sliderInput(
@@ -109,10 +110,6 @@ fluidPage(
                         label = "Doubling time of the number of infections (days) / Zeit in der sich die Zahl der Infizierten verdoppelt (in Tagen)",
                         value = 4
                     ),
-
-                    actionButton("estimate_doubling_time", "Estimate doubling time / Verdopplungszeit abschätzen"),
-                    
-                    shiny::br(), shiny::br(),
 
                     radioButtons(inputId = "est_logy",
                                  label = "y-axis / y-Achse",

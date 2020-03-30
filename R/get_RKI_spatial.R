@@ -23,10 +23,20 @@ get_RKI_spatial <- function(
     "Bundesland" = "https://opendata.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0.zip",
     "Landkreis" = "https://opendata.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0.zip"
   ),
-  cache = T, cache_dir = tempdir(), cache_max_age = 24 * 60 * 60
+  cache = T, cache_dir = tempdir(), cache_max_age = "today"
 ) {
-  
+
   check_if_packages_are_available("sf")
+    
+  if (cache_max_age == "today") {
+    cache_threshold <- lubridate::now() - lubridate::as.duration(
+      lubridate::interval(lubridate::today("CEST"), lubridate::now())
+    )
+  } else {
+    cache_threshold <- lubridate::now() - lubridate::as.duration(
+      cache_max_age
+    )
+  }
   
   url <- urls[names(urls) == resolution]
 
@@ -34,9 +44,11 @@ get_RKI_spatial <- function(
   if (cache) {
     if (!dir.exists(cache_dir)) { dir.create(cache_dir) }
     tab_cache_file <- file.path(cache_dir, paste0("RKI_spatial_", resolution, ".RData"))
-    if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > (Sys.time() - cache_max_age)) {
+    if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > cache_threshold) {
+      message("Loading file from cache...")
       load(tab_cache_file)
     } else {
+      message("Downloading file...")
       this_tab <- download_RKI_spatial(url, resolution)
       save(this_tab, file = tab_cache_file)
     }
