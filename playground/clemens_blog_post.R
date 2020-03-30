@@ -190,7 +190,7 @@ pest1a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
+  ggtitle("Estimated number of infected (red: Number of tested and positive individuals)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
