@@ -40,6 +40,7 @@ With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and
 expected number of deaths \emph{EstimationCumNumberDead}.
 }
 \examples{
+\donttest{
 rki_timeseries <- get_RKI_timeseries()
 
 estimatepast_RKI_timeseries(
@@ -51,5 +52,6 @@ estimatepast_RKI_timeseries(
   rki_timeseries, Bundesland, Gender, 
   prop_death = 0.03, mean_days_until_death = 17, doubling_time = 3
 )
+}
 
 }

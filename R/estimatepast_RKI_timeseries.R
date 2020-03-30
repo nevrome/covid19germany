@@ -21,6 +21,7 @@
 #' @param doubling_time numeric. Mean number of days for the number of infected to double
 #' 
 #' @examples
+#' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
 #' estimatepast_RKI_timeseries(
@@ -32,6 +33,7 @@
 #'   rki_timeseries, Bundesland, Gender, 
 #'   prop_death = 0.03, mean_days_until_death = 17, doubling_time = 3
 #' )
+#' }
 #'
 #' @export
 estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_death, doubling_time) {
