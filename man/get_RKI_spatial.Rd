@@ -12,7 +12,7 @@ get_RKI_spatial(
     "https://opendata.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0.zip"),
   cache = T,
   cache_dir = tempdir(),
-  cache_max_age = 24 * 60 * 60
+  cache_max_age = "today"
 )
 }
 \arguments{

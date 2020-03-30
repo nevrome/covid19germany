@@ -8,7 +8,7 @@ get_RKI_timeseries(
   url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
   cache = T,
   cache_dir = tempdir(),
-  cache_max_age = 24 * 60 * 60
+  cache_max_age = "today"
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ get_RKI_timeseries(
 
 \item{cache_dir}{character. Path to cache directory}
 
-\item{cache_max_age}{numeric. Maximum age of cache in seconds}
+\item{cache_max_age}{numeric. Maximum age of cache in seconds or "today"}
 }
 \value{
 A tibble with the dataset
