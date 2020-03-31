@@ -297,7 +297,7 @@ pest2b <-  ggplot() +
   scale_y_log10(labels = scales::comma) +
   ggtitle("") + ylab("") + xlab("") +
   theme_minimal() +
-  guides(color = F, linetype = F) +
+  guides(linetype = guide_legend(title = "Doubling time scenarios", keywidth = 5)) +
   geom_vline(
     aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(17)))
   ) +
