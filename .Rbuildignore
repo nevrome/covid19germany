@@ -6,3 +6,4 @@
 ^shinyapp$
 ^\.travis\.yml$
 ^blog_post$
+^\.gitattributes$
