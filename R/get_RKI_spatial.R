@@ -30,7 +30,7 @@ get_RKI_spatial <- function(
     
   if (cache_max_age == "today") {
     cache_threshold <- lubridate::now() - lubridate::as.duration(
-      lubridate::interval(lubridate::today("CEST"), lubridate::now())
+      lubridate::interval(lubridate::today(), lubridate::now())
     )
   } else {
     cache_threshold <- lubridate::now() - lubridate::as.duration(
