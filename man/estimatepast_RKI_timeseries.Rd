@@ -32,10 +32,12 @@ cumulative death count as presented by Tomas Pueyo in this
 \emph{EstimationCumNumberIllPast}, the actual number of infected, is calculated with the current 
 cumulative number of deaths \strong{CumNumberDead}, the death rate \strong{prop_death} and the average number 
 of days \strong{mean_days_until_death} from infection to death (in case of death). 
-This approach only allows to estimate values at least \strong{mean_days_until_death} days in the past. 
+This approach only allows to estimate values at least \strong{mean_days_until_death} days in the past.
 \emph{EstimationCumNumberIllPresent} employs the last value in \emph{EstimationCumNumberIllPast} to estimate the number 
 of actually infected people beyond the \strong{mean_days_until_death} threshold with a simple exponential growth model considering
 \strong{doubling_time}.
+With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and \strong{prop_death} we can calculate an 
+expected number of deaths \emph{EstimationCumNumberDeadFuture}.
 }
 \examples{
 \donttest{

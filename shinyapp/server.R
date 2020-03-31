@@ -52,7 +52,7 @@ shinyserver <- function(input, output, session) {
             dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
             tidyr::pivot_longer(cols = c(
                 "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
-                "CumNumberDead", "EstimationCumNumberDead"
+                "CumNumberDead", "EstimationCumNumberDeadFuture"
             ), names_to = "CountType"
         )
         

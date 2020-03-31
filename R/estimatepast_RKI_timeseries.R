@@ -7,10 +7,12 @@
 #' \emph{EstimationCumNumberIllPast}, the actual number of infected, is calculated with the current 
 #' cumulative number of deaths \strong{CumNumberDead}, the death rate \strong{prop_death} and the average number 
 #' of days \strong{mean_days_until_death} from infection to death (in case of death). 
-#' This approach only allows to estimate values at least \strong{mean_days_until_death} days in the past. 
+#' This approach only allows to estimate values at least \strong{mean_days_until_death} days in the past.
 #' \emph{EstimationCumNumberIllPresent} employs the last value in \emph{EstimationCumNumberIllPast} to estimate the number 
 #' of actually infected people beyond the \strong{mean_days_until_death} threshold with a simple exponential growth model considering
 #' \strong{doubling_time}.
+#' With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and \strong{prop_death} we can calculate an 
+#' expected number of deaths \emph{EstimationCumNumberDeadFuture}.
 #'
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
 #' @param ... variable names. One or multiple grouping columns of x, so Bundesland, Landkreis, Gender or Age
@@ -49,17 +51,24 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_deat
           EstimationCumNumberIllPresent = c(
             rep(NA, length(.data[["EstimationCumNumberIllPast"]]) - (mean_days_until_death)),
             max(.data[["EstimationCumNumberIllPast"]], na.rm = T) * 2^((0:(mean_days_until_death - 1))/doubling_time)
-          )#,
-          # With \emph{EstimationCumNumberIllPast}, \emph{EstimationCumNumberIllPresent} and \strong{prop_death} we can calculate an 
-          # expected number of deaths \emph{EstimationCumNumberDead}.
-          # EstimationCumNumberDead = dplyr::lag(c(
-          #   .data[["EstimationCumNumberIllPast"]][
-          #     1:(length(.data[["EstimationCumNumberIllPast"]]) - mean_days_until_death)
-          #   ],
-          #   .data[["EstimationCumNumberIllPresent"]][
-          #     (length(.data[["EstimationCumNumberIllPresent"]]) - (mean_days_until_death - 1)):length(.data[["EstimationCumNumberIllPresent"]]) 
-          #   ]
-          # ), mean_days_until_death - 1) * prop_death
+          )
+        ) %>%
+        rbind(
+          .,
+          tibble::tibble(
+            Date = tidyr::full_seq(
+              c(max(.[["Date"]]) + lubridate::days(1), max(.[["Date"]]) + lubridate::days(mean_days_until_death - 1)), 24*60*60
+            ),
+            NumberNewTestedIll = NA,
+            NumberNewDead = NA,
+            CumNumberTestedIll = NA,
+            CumNumberDead = NA, 
+            EstimationCumNumberIllPast = NA, 
+            EstimationCumNumberIllPresent = NA
+          )
+        ) %>%
+        dplyr::mutate(
+          EstimationCumNumberDeadFuture = dplyr::lag(.data[["EstimationCumNumberIllPresent"]], mean_days_until_death - 1) * prop_death
         )
     }
   ) %>%

@@ -153,7 +153,7 @@ est_multi <- lapply(1:nrow(model_grid), function(i) {
     dplyr::select(-NumberNewTestedIll, -NumberNewDead) %>%
     tidyr::pivot_longer(cols = c(
       "CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent",
-      "CumNumberDead", "EstimationCumNumberDead"
+      "CumNumberDead", "EstimationCumNumberDeadFuture"
     ), names_to = "CountType") %>%
     dplyr::mutate(
       prop_death = pd,
@@ -194,7 +194,11 @@ pest1a <- ggplot() +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
-    aes(xintercept = max(est_multi$Date) - 16 * 24*60*60)
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(17)))
+  ) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+    color = "blue"
   )
 
 pest1b <-  ggplot() +
@@ -232,9 +236,76 @@ pest1b <-  ggplot() +
     linetype = guide_legend(title = "Doubling time scenarios", keywidth = 5)
   ) +
   geom_vline(
-    aes(xintercept = max(est_multi$Date) - 16 * 24*60*60)
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(17)))
+  ) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+    color = "blue"
   )
 
 pest1 <- cowplot::plot_grid(pest1a, pest1b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
 cowplot::ggsave2("pest1.png", pest1, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
+
+pest2a <- ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDeadFuture", value >= 1) %>% dplyr::select(Date, value, doubling_time) %>% unique,
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(doubling_time), group = doubling_time
+    ),
+    size = 1,
+    alpha = 0.6
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  ggtitle("Estimated number of future deaths (red: Current cumulative number of deaths)") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F, linetype = F) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(17)))
+  ) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+    color = "blue"
+  )
+
+pest2b <-  ggplot() +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
+    mapping = aes(
+      Date, value
+    ),
+    size = 1,
+    color = "red"
+  ) +
+  geom_line(
+    data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDeadFuture", value >= 1) %>% dplyr::select(Date, value, doubling_time) %>% unique,
+    mapping = aes(
+      Date, value, 
+      linetype = as.character(doubling_time), group = doubling_time
+    ),
+    size = 1,
+    alpha = 0.6
+  ) +
+  scale_y_log10(labels = scales::comma) +
+  ggtitle("") + ylab("") + xlab("") +
+  theme_minimal() +
+  guides(color = F, linetype = F) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(17)))
+  ) +
+  geom_vline(
+    aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+    color = "blue"
+  )
+
+pest2 <- cowplot::plot_grid(pest2a, pest2b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
+cowplot::ggsave2("pest2.png", pest2, "png", "~/Desktop/covid19/", scale = 3, width = 10, height = 4, units = "cm")
 
