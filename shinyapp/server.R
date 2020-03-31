@@ -7,8 +7,8 @@ shinyserver <- function(input, output, session) {
         # define date of the next monday as limit for x axis
         # in R weekday of monday is 2
         min_meldedatum <- strptime(input$dateInput[1], format="%Y-%m-%d")
-        if (wday(min_meldedatum) != 2) {
-            tmp_wday <- 8 - (min_meldedatum %>% wday())
+        if (lubridate::wday(min_meldedatum) != 2) {
+            tmp_wday <- 8 - (min_meldedatum %>% lubridate::wday())
             min_meldedatum <- min_meldedatum + tmp_wday*(3600*24)
         }
 
@@ -56,18 +56,51 @@ shinyserver <- function(input, output, session) {
             ), names_to = "CountType"
         )
         
-        p1 <- de %>% dplyr::filter(CountType %in% c("CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent")) %>% 
+        p1 <- de %>% dplyr::filter(
+            CountType %in% c("CumNumberTestedIll", "EstimationCumNumberIllPast", "EstimationCumNumberIllPresent")
+        ) %>% 
             ggplot() + geom_line(
                 ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
-            ) + theme_minimal() + guides(color = guide_legend(nrow = 3)) + scale_y_continuous(labels = scales::comma) + 
-            scale_color_brewer(palette = "Set2") + xlab("") + ylab("")
+            ) + 
+            theme_minimal() + 
+            guides(color = guide_legend(nrow = 3)) + 
+            scale_y_continuous(labels = scales::comma) + 
+            xlab("") + ylab("") +
+            geom_vline(
+                aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(input$mean_days_until_death)))
+            ) +
+            geom_vline(
+                aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+                color = "blue"
+            )
+        
+        p2 <- de %>% dplyr::filter(
+            CountType %in% c("CumNumberDead", "EstimationCumNumberDeadFuture")
+        ) %>% 
+            ggplot() + geom_line(
+                ggplot2::aes(Date, value, color = CountType), size = 2, alpha = 0.7
+            ) + 
+            theme_minimal() + 
+            guides(color = guide_legend(nrow = 2)) + 
+            scale_y_continuous(labels = scales::comma) + 
+            xlab("") + ylab("") +
+            geom_vline(
+                aes(xintercept = lubridate::as_datetime(lubridate::today() - lubridate::days(input$mean_days_until_death)))
+            ) +
+            geom_vline(
+                aes(xintercept = lubridate::as_datetime(lubridate::today() - 1)),
+                color = "blue"
+            )
 
         logy <- ifelse(input$est_logy == "logarithmisch" , TRUE, FALSE)
         if (logy) {
             p1 <- p1 + ggplot2::scale_y_log10(labels = scales::comma) 
+            p2 <- p2 + ggplot2::scale_y_log10(labels = scales::comma)
         }
         
-        return(p1)
+        p <- cowplot::plot_grid(p1, p2, align = "vh", nrow = 2)
+        
+        return(p)
     })
     
     observeEvent(input$est_group, {

@@ -102,7 +102,7 @@ fluidPage(
                     sliderInput(
                         inputId = "mean_days_until_death",
                         label = "Number of days from infection to death / Durchschnittliche Zeit von Infektion bis Tod (im Todesfall)",
-                        min = 14, max = 56, value = 17
+                        min = 10, max = 30, value = 17
                     ),
                     
                     numericInput(
