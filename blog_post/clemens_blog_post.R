@@ -65,7 +65,7 @@ library(covid19germany)
 landkreis_sf <- get_RKI_spatial("Landkreis")
 
 rki_day_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
-  dplyr::filter(Date == lubridate::as_datetime("2020-03-28"))
+  dplyr::filter(Date == lubridate::as_datetime("2020-03-30"))
 
 landkreis_sf_COVID19 <- landkreis_sf %>%
   dplyr::left_join(
@@ -84,7 +84,7 @@ m1a <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberDead), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Cumulative number of deaths (28.03.2020)") +
+  ggtitle("Cumulative number of deaths (30.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -97,7 +97,7 @@ m1b <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberTestedIll), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Cumulative number of tested, positive cases (28.03.2020)") +
+  ggtitle("Cumulative number of tested, positive cases (30.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -113,7 +113,7 @@ m2a <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberDeadPopulation), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Deaths by 100,000 inhabitants (28.03.2020)") +
+  ggtitle("Deaths by 100,000 inhabitants (30.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -126,7 +126,7 @@ m2b <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberTestedIllPopulation), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Tested, positive cases by 100,000 inhabitants (28.03.2020)") +
+  ggtitle("Tested, positive cases by 100,000 inhabitants (30.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -190,7 +190,7 @@ pest1a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected (red: Number of tested and positive individuals)") + ylab("") + xlab("") +
+  ggtitle("Estimated number of infected (red: Current, cumulative number of tested and positive individuals)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
@@ -265,7 +265,7 @@ pest2a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of future deaths (red: Current cumulative number of deaths)") + ylab("") + xlab("") +
+  ggtitle("Estimated number of future deaths (red: Current, cumulative number of deaths)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
