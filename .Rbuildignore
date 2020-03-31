@@ -5,3 +5,4 @@
 ^data-raw$
 ^shinyapp$
 ^\.travis\.yml$
+^blog_post$
