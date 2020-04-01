@@ -15,7 +15,7 @@ p1a <- rki_grouped %>%
     color = "white", size = 0.3
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Cumulative number of deaths by Bundesland") + ylab("") + xlab("") +
+  ggtitle("Total number of deaths by federated state (Bundesland)") + ylab("") + xlab("") +
   theme_minimal() + theme(axis.text = element_text(size = 12)) +
   guides(fill = FALSE)
 
@@ -26,7 +26,7 @@ p1b <- rki_grouped %>%
     color = "white", size = 0.3
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Cumulative number of tested, positive cases by Bundesland") + ylab("") + xlab("") +
+  ggtitle("Total number of confirmed cases") + ylab("") + xlab("") +
   theme_minimal() + theme(axis.text = element_text(size = 12), legend.title = element_blank())
 
 p1 <- cowplot::plot_grid(p1a, p1b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
@@ -39,7 +39,7 @@ p2a <- rki_grouped %>%
     color = "white", size = 0.3
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Number of new daily deaths by Bundesland") + ylab("") + xlab("") +
+  ggtitle("Number of daily deaths") + ylab("") + xlab("") +
   theme_minimal() + theme(axis.text = element_text(size = 12)) +
   guides(fill = FALSE)
 
@@ -50,7 +50,7 @@ p2b <- rki_grouped %>%
     color = "white", size = 0.3
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Number of daily tested, positive cases by Bundesland") + ylab("") + xlab("") +
+  ggtitle("Number of daily confirmed cases") + ylab("") + xlab("") +
   theme_minimal() + theme(axis.text = element_text(size = 12), legend.title = element_blank())
 
 p2 <- cowplot::plot_grid(p2a, p2b, align = "h", ncol = 2, rel_widths = c(1, 1.5))
@@ -65,7 +65,7 @@ library(covid19germany)
 landkreis_sf <- get_RKI_spatial("Landkreis")
 
 rki_day_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
-  dplyr::filter(Date == lubridate::as_datetime("2020-03-30"))
+  dplyr::filter(Date == lubridate::as_datetime("2020-03-31"))
 
 landkreis_sf_COVID19 <- landkreis_sf %>%
   dplyr::left_join(
@@ -84,7 +84,7 @@ m1a <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberDead), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Cumulative number of deaths (30.03.2020)") +
+  ggtitle("Total number of deaths (31.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -97,7 +97,7 @@ m1b <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberTestedIll), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Cumulative number of tested, positive cases (30.03.2020)") +
+  ggtitle("Total number of confirmed cases (31.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -113,7 +113,7 @@ m2a <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberDeadPopulation), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Deaths by 100,000 inhabitants (30.03.2020)") +
+  ggtitle("Deaths by 100,000 inhabitants (31.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -126,7 +126,7 @@ m2b <- landkreis_sf_COVID19 %>%
   geom_sf(aes(fill = CumNumberTestedIllPopulation), size = 0) +
   scale_fill_viridis_c(direction = -1, option = "plasma") +
   theme_minimal() +
-  ggtitle("Tested, positive cases by 100,000 inhabitants (30.03.2020)") +
+  ggtitle("Confirmed cases by 100,000 inhabitants (31.03.2020)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -190,7 +190,7 @@ pest1a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected (red: Current, cumulative number of tested and positive individuals)") + ylab("") + xlab("") +
+  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
@@ -205,11 +205,12 @@ pest1b <-  ggplot() +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "CumNumberTestedIll", value >= 1) %>% dplyr::select(Date, value) %>% unique,
     mapping = aes(
-      Date, value
+      Date, value, color = "Cumulative, confirmed cases"
     ),
-    size = 1,
-    color = "red"
+    size = 1
   ) +
+  scale_color_manual(values = "red", guide = guide_legend(title = "")) +
+  ggnewscale::new_scale_color() +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPast", value >= 1),
     mapping = aes(
@@ -232,7 +233,7 @@ pest1b <-  ggplot() +
   ggtitle("") + ylab("") + xlab("") +
   theme_minimal() +
   guides(
-    color = guide_legend(title = "Death probability scenarios", keywidth = 5), 
+    color = guide_legend(title = "Mortality rate scenarios", keywidth = 5), 
     linetype = guide_legend(title = "Doubling time scenarios", keywidth = 5)
   ) +
   geom_vline(
@@ -265,7 +266,7 @@ pest2a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of future deaths (red: Current, cumulative number of deaths)") + ylab("") + xlab("") +
+  ggtitle("Estimated number of future deaths") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
@@ -280,11 +281,11 @@ pest2b <-  ggplot() +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "CumNumberDead", value >= 1) %>% dplyr::select(Date, value) %>% unique,
     mapping = aes(
-      Date, value
+      Date, value, color = "Cumulative, confirmed deaths"
     ),
-    size = 1,
-    color = "red"
+    size = 1
   ) +
+  scale_color_manual(values = "red", guide = guide_legend(title = "", order = 2)) +
   geom_line(
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDeadFuture", value >= 1) %>% dplyr::select(Date, value, doubling_time) %>% unique,
     mapping = aes(
