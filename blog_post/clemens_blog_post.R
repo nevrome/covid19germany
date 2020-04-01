@@ -62,7 +62,7 @@ library(sf)
 library(ggplot2)
 library(covid19germany)
 
-landkreis_sf <- get_RKI_spatial("Landkreis")
+landkreis_sf <- get_RKI_spatial("Landkreis", cache = F)
 
 rki_day_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
   dplyr::filter(Date == lubridate::as_datetime("2020-03-31"))
@@ -71,18 +71,26 @@ landkreis_sf_COVID19 <- landkreis_sf %>%
   dplyr::left_join(
     rki_day_landkreise, by = c("IdLandkreis")
   ) %>%
-  dplyr::left_join(
-    covid19germany::ew_kreise, by = c("IdLandkreis")
+  dplyr::mutate(
+    CumNumberDeadPopulation = CumNumberDead/EWZ * 100000,
+    CumNumberTestedIllPopulation = CumNumberTestedIll/EWZ * 100000
   ) %>%
   dplyr::mutate(
-    CumNumberDeadPopulation = CumNumberDead/PopulationTotal * 100000,
-    CumNumberTestedIllPopulation = CumNumberTestedIll/PopulationTotal * 100000
+    CumNumberDead = replace(CumNumberDead, CumNumberDead == 0, NA),
+    CumNumberTestedIll = replace(CumNumberTestedIll, CumNumberTestedIll == 0, NA),
+    CumNumberDeadPopulation = replace(CumNumberDeadPopulation, CumNumberDeadPopulation == 0, NA),
+    CumNumberTestedIllPopulation = replace(CumNumberTestedIllPopulation, CumNumberTestedIllPopulation == 0, NA)
   )
 
 m1a <- landkreis_sf_COVID19 %>%
   ggplot() +
-  geom_sf(aes(fill = CumNumberDead), size = 0) +
-  scale_fill_viridis_c(direction = -1, option = "plasma") +
+  geom_sf(aes(fill = CumNumberDead, color = "0"), size = 0) +
+  scale_fill_viridis_c(direction = -1, option = "plasma", na.value = "grey50")  +
+  scale_colour_manual(values = NA) +
+  guides(
+    fill = guide_colorbar(order = 2),
+    color = guide_legend(override.aes = list(fill = "grey50"))
+  ) +
   theme_minimal() +
   ggtitle("Total number of deaths (31.03.2020)") +
   theme(
@@ -94,8 +102,13 @@ m1a <- landkreis_sf_COVID19 %>%
 
 m1b <- landkreis_sf_COVID19 %>%
   ggplot() +
-  geom_sf(aes(fill = CumNumberTestedIll), size = 0) +
-  scale_fill_viridis_c(direction = -1, option = "plasma") +
+  geom_sf(aes(fill = CumNumberTestedIll, color = "0"), size = 0) +
+  scale_fill_viridis_c(direction = -1, option = "viridis", na.value = "grey50")  +
+  scale_colour_manual(values = NA) +
+  guides(
+    fill = guide_colorbar(order = 2),
+    color = guide_legend(override.aes = list(fill = "grey50"))
+  ) +
   theme_minimal() +
   ggtitle("Total number of confirmed cases (31.03.2020)") +
   theme(
@@ -110,8 +123,13 @@ cowplot::ggsave2("map1.png", map1, "png", "~/Desktop/covid19/", scale = 3, width
 
 m2a <- landkreis_sf_COVID19 %>%
   ggplot() +
-  geom_sf(aes(fill = CumNumberDeadPopulation), size = 0) +
-  scale_fill_viridis_c(direction = -1, option = "plasma") +
+  geom_sf(aes(fill = CumNumberDeadPopulation, color = "0"), size = 0) +
+  scale_fill_viridis_c(direction = -1, option = "plasma", na.value = "grey50")  +
+  scale_colour_manual(values = NA) +
+  guides(
+    fill = guide_colorbar(order = 2),
+    color = guide_legend(override.aes = list(fill = "grey50"))
+  ) +
   theme_minimal() +
   ggtitle("Deaths by 100,000 inhabitants (31.03.2020)") +
   theme(
@@ -123,8 +141,13 @@ m2a <- landkreis_sf_COVID19 %>%
 
 m2b <- landkreis_sf_COVID19 %>%
   ggplot() +
-  geom_sf(aes(fill = CumNumberTestedIllPopulation), size = 0) +
-  scale_fill_viridis_c(direction = -1, option = "plasma") +
+  geom_sf(aes(fill = CumNumberTestedIllPopulation, color = "0"), size = 0) +
+  scale_fill_viridis_c(direction = -1, option = "viridis", na.value = "grey50")  +
+  scale_colour_manual(values = NA) +
+  guides(
+    fill = guide_colorbar(order = 2),
+    color = guide_legend(override.aes = list(fill = "grey50"))
+  ) +
   theme_minimal() +
   ggtitle("Confirmed cases by 100,000 inhabitants (31.03.2020)") +
   theme(
@@ -233,7 +256,7 @@ pest1b <-  ggplot() +
   ggtitle("") + ylab("") + xlab("") +
   theme_minimal() +
   guides(
-    color = guide_legend(title = "Mortality rate scenarios", keywidth = 5), 
+    color = guide_legend(title = "Lethality scenarios", keywidth = 5), 
     linetype = guide_legend(title = "Doubling time scenarios", keywidth = 5)
   ) +
   geom_vline(
@@ -266,7 +289,7 @@ pest2a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of future deaths (y-axis scaling: linear 🡄 | 🡆 log10) ")  ylab("") + xlab("") +
+  ggtitle("Estimated number of infected (y-axis scaling: linear 🡄 | 🡆 log10)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
