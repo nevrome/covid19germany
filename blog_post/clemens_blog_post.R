@@ -190,7 +190,7 @@ pest1a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected") + ylab("") + xlab("") +
+  ggtitle("Estimated number of infected (y-axis scaling: linear 🡄 | 🡆 log10)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
@@ -266,7 +266,7 @@ pest2a <- ggplot() +
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of future deaths") + ylab("") + xlab("") +
+  ggtitle("Estimated number of future deaths (y-axis scaling: linear 🡄 | 🡆 log10) ")  ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
