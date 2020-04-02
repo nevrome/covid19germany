@@ -2,3 +2,7 @@ covid19_model
 covid19_model.d
 covid19_model.hpp
 covid19_model.o
+bayesian_analysis_Stephan.nb.html
+covid19_model.data.R
+doubling_time.png
+model_predictions.png
