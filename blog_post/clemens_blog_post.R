@@ -65,7 +65,7 @@ library(covid19germany)
 landkreis_sf <- get_RKI_spatial("Landkreis", cache = F)
 
 rki_day_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
-  dplyr::filter(Date == lubridate::as_datetime("2020-03-31"))
+  dplyr::filter(Date == lubridate::as_datetime("2020-04-01"))
 
 landkreis_sf_COVID19 <- landkreis_sf %>%
   dplyr::left_join(
@@ -92,7 +92,7 @@ m1a <- landkreis_sf_COVID19 %>%
     color = guide_legend(override.aes = list(fill = "grey50"))
   ) +
   theme_minimal() +
-  ggtitle("Total number of deaths (31.03.2020)") +
+  ggtitle("Total number of deaths (2020-04-01)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -110,7 +110,7 @@ m1b <- landkreis_sf_COVID19 %>%
     color = guide_legend(override.aes = list(fill = "grey50"))
   ) +
   theme_minimal() +
-  ggtitle("Total number of confirmed cases (31.03.2020)") +
+  ggtitle("Total number of confirmed cases (2020-04-01)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -131,7 +131,7 @@ m2a <- landkreis_sf_COVID19 %>%
     color = guide_legend(override.aes = list(fill = "grey50"))
   ) +
   theme_minimal() +
-  ggtitle("Deaths by 100,000 inhabitants (31.03.2020)") +
+  ggtitle("Deaths by 100,000 inhabitants (2020-04-01)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -149,7 +149,7 @@ m2b <- landkreis_sf_COVID19 %>%
     color = guide_legend(override.aes = list(fill = "grey50"))
   ) +
   theme_minimal() +
-  ggtitle("Confirmed cases by 100,000 inhabitants (31.03.2020)") +
+  ggtitle("Confirmed cases by 100,000 inhabitants (2020-04-01)") +
   theme(
     axis.title = element_blank(),
     axis.text = element_blank(),
@@ -165,8 +165,8 @@ cowplot::ggsave2("map2.png", map2, "png", "~/Desktop/covid19/", scale = 3, width
 rki_full <- covid19germany::get_RKI_timeseries(cache = F)
 
 model_grid <- expand.grid(
-  prop_death = c(0.01, 0.03, 0.05),
-  doubling_time = c(3, 5, 7)
+  prop_death = c(0.01, 0.05),
+  doubling_time = c(3, 7, 12)
 )
 
 est_multi <- lapply(1:nrow(model_grid), function(i) {
@@ -207,7 +207,7 @@ pest1a <- ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
     mapping = aes(
       Date, value, 
-      color = as.character(prop_death), linetype = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      color = as.character(prop_death), linetype = as.factor(doubling_time), group = interaction(prop_death, doubling_time)
     ),
     size = 1,
     alpha = 0.6
@@ -247,7 +247,7 @@ pest1b <-  ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberIllPresent", value >= 1),
     mapping = aes(
       Date, value, 
-      color = as.character(prop_death), linetype = as.character(doubling_time), group = interaction(prop_death, doubling_time)
+      color = as.character(prop_death), linetype = as.factor(doubling_time), group = interaction(prop_death, doubling_time)
     ),
     size = 1,
     alpha = 0.6
@@ -283,13 +283,13 @@ pest2a <- ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDeadFuture", value >= 1) %>% dplyr::select(Date, value, doubling_time) %>% unique,
     mapping = aes(
       Date, value, 
-      linetype = as.character(doubling_time), group = doubling_time
+      linetype = as.factor(doubling_time), group = doubling_time
     ),
     size = 1,
     alpha = 0.6
   ) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle("Estimated number of infected (y-axis scaling: linear 🡄 | 🡆 log10)") + ylab("") + xlab("") +
+  ggtitle("Estimated number of indeathsy-axis scaling: linear 🡄 | 🡆 log10)") + ylab("") + xlab("") +
   theme_minimal() +
   guides(color = F, linetype = F) +
   geom_vline(
@@ -313,7 +313,7 @@ pest2b <-  ggplot() +
     data = est_multi %>% dplyr::filter(CountType == "EstimationCumNumberDeadFuture", value >= 1) %>% dplyr::select(Date, value, doubling_time) %>% unique,
     mapping = aes(
       Date, value, 
-      linetype = as.character(doubling_time), group = doubling_time
+      linetype = as.factor(doubling_time), group = doubling_time
     ),
     size = 1,
     alpha = 0.6
