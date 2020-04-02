@@ -3,6 +3,7 @@ title: "Bayesian estimation of COVID-19 epidemic"
 output: html_notebook
 ---
 
+Last update: April 2nd 2020
 
 # Theory
 
@@ -115,7 +116,7 @@ We then prepared the input for the model:
 ```{r input data and params}
 selected_dat <- dplyr::filter(dat,
                               Date >= as.POSIXct("2020-02-23") &
-                                Date <= as.POSIXct("2020-03-27"))
+                                Date <= as.POSIXct("2020-03-31"))
 
 day <- as.numeric(difftime(selected_dat$Date, as.Date("2020-02-23"), units="days"))
 cases <- selected_dat$NumberNewTestedIll
@@ -136,7 +137,7 @@ dump(c("alpha0", "beta", "I0", "gamma"), file="covid19_model.init.R")
 We then ran the model and sampled from the posterior using 
 ```{bash}
 # The stan model was compiled to ./covid19_model
-./covid19_model sample data file=codid19_model.data.R init=covid19_model.init.R output file=sampling.csv
+./covid19_model sample data file=covid19_model.data.R init=covid19_model.init.R output file=sampling.csv
 ```
 
 We load the posterior as a table:
@@ -198,6 +199,39 @@ We can then plot the posteriors as a function of time together with the data:
 plot_curves %>%
   dplyr::group_by(date) %>%
   dplyr::summarise(
+    true_cases_5 = quantile(true_cases, 0.05),
+    true_cases_95 = quantile(true_cases, 0.95),
+    predicted_testcases_5 = quantile(predicted_testcases, 0.05),
+    predicted_testcases_95 = quantile(predicted_testcases, 0.95),
+    predicted_deaths_5 = quantile(predicted_deaths, 0.05),
+    predicted_deaths_95 = quantile(predicted_deaths, 0.95)
+  ) %>%
+  ggplot() +
+    geom_ribbon(mapping = aes(x = date, ymin = true_cases_5, ymax=true_cases_95),
+                fill = "dark green", alpha = 0.5) +
+    geom_ribbon(mapping = aes(x = date, ymin = predicted_testcases_5, ymax=predicted_testcases_95),
+                fill = "blue", alpha = 0.5) +
+    geom_ribbon(mapping = aes(x = date, ymin = predicted_deaths_5, ymax=predicted_deaths_95),
+                fill = "red", alpha = 0.5) +
+    geom_point(dat, mapping = aes(x = Date, y = NumberNewTestedIll),
+               col = "blue") +
+    geom_point(dplyr::filter(dat, NumberNewDead > 0), mapping = aes(x = Date, y = NumberNewDead), col = "red") +
+    scale_y_log10(labels = function(x) format(x, big.mark = ",", scientific = FALSE),
+                  breaks = c(1, 10, 100, 1000, 10000, 100000),
+                  limits = c(1, 1e5)) +
+    theme_minimal() +
+    ggtitle("Bayesian model predictions") +
+    theme(axis.title.x=element_blank(),
+          axis.title.y=element_blank()) +
+    annotate("text", x = as.POSIXct("2020-03-5"), y = 5e4, label = "true infections\n(given 1% fatality rate)", col="dark green") +
+    annotate("text", x = as.POSIXct("2020-03-25"), y = 1e3, label = "tested positive", col="blue") +
+    annotate("text", x = as.POSIXct("2020-03-25"), y = 10, label = "deaths", col="red") 
+```
+
+```{r cumulative model posteriors over time}
+plot_curves %>%
+  dplyr::group_by(date) %>%
+  dplyr::summarise(
     cum_true_cases_5 = quantile(cum_true_cases, 0.05),
     cum_true_cases_95 = quantile(cum_true_cases, 0.95),
     cum_predicted_testcases_5 = quantile(cum_predicted_testcases, 0.05),
@@ -227,6 +261,10 @@ plot_curves %>%
     annotate("text", x = as.POSIXct("2020-03-20"), y = 20, label = "deaths", col="red") 
 ```
 
+```{r save fig1}
+ggsave("model_predictions.png", width = 8, height = 5)
+```
+
 We can convert the growth rate into a doubling time and plot that as well:
 
 ```{r doubling time}
@@ -252,9 +290,11 @@ ggplot() +
   ggtitle("Modelling of doubling time (in days)") +
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank()) +
-  geom_vline(xintercept = as.POSIXct("2020-03-27")) +
-  ylim(c(0,13))
+  geom_vline(xintercept = as.POSIXct("2020-04-01"))
 ```
 
+```{r save fig2}
+ggsave("doubling_time.png", width=8, height=5)
+```
 
 
