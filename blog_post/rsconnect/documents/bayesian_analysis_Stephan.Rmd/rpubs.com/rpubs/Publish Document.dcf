@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/592641/6835d3baf8cc4ee3ad888394bdaa8730
+bundleId: https://api.rpubs.com/api/v1/document/592641/6835d3baf8cc4ee3ad888394bdaa8730
+url: http://rpubs.com/stschiff/592641
+when: 1585827315.191
