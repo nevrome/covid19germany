@@ -43,6 +43,7 @@ In summary, the key parameters are, together with short descriptions and prior i
 
 
 In addition, we fix the following parameters:
+
 | Parameter     | Description                      | Value     |
 |---------------|----------------------------------|-----------|
 | $\tau_t$      | Time from infection to  test     | 7         |
