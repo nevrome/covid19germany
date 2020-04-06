@@ -109,7 +109,8 @@ download_RKI <- function(url) {
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T)
-    )
+    ) %>%
+    dplyr::ungroup()
 
   return(res)
   
