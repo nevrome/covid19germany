@@ -17,8 +17,10 @@ explicit. Grouping can be done with one or multiple variables (see parameter \co
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \examples{
+\donttest{
 rki_timeseries <- get_RKI_timeseries()
 
 group_RKI_timeseries(rki_timeseries, Bundesland, Gender)
+}
 
 }
