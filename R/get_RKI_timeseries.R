@@ -53,9 +53,9 @@ get_RKI_timeseries <- function(
 
 download_RKI <- function(url) {
   
-  readr::read_csv(
+  res <- readr::read_csv(
     url,
-    na = c("0-1", "-1", "unbekannt", "-nicht erhoben-"),
+    na = c("0-1", "unbekannt", "-nicht erhoben-"),
     col_types = readr::cols(
       IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
@@ -72,10 +72,18 @@ download_RKI <- function(url) {
       AnzahlTodesfall = readr::col_integer(),
       ObjectId = readr::col_integer(),
       Meldedatum = readr::col_datetime(format = ""),
-      IdLandkreis = readr::col_integer()
+      IdLandkreis = readr::col_integer(),
+      Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
+      NeuerFall = readr::col_integer(),
+      NeuerTodesfall = readr::col_integer()
     )
   ) %>%
+    dplyr::filter(
+      .data[["NeuerFall"]] %in% c(0, 1), 
+      .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
+    ) %>%
     dplyr::transmute(
+      Version = .data[["Datenstand"]],
       ObjectId = .data[["ObjectId"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
@@ -85,7 +93,25 @@ download_RKI <- function(url) {
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
       NumberNewTestedIll = .data[["AnzahlFall"]],
-      NumberNewDead = .data[["AnzahlTodesfall"]],
-    )
+      NumberNewDead = .data[["AnzahlTodesfall"]]
+    ) %>%
+    # merge double observations
+    dplyr::group_by(
+      .data[["Version"]],
+      .data[["Date"]], 
+      .data[["IdBundesland"]], 
+      .data[["Bundesland"]], 
+      .data[["IdLandkreis"]],
+      .data[["Landkreis"]], 
+      .data[["Age"]],
+      .data[["Gender"]]
+    ) %>%
+    dplyr::summarise(
+      NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
+      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T)
+    ) %>%
+    dplyr::ungroup()
+
+  return(res)
   
 }

@@ -10,9 +10,11 @@
 #' @param logy logical. Should the y-axis be log10-scaled?
 #'
 #' @examples 
+#' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
 #' plot_RKI_timeseries(rki_timeseries, "Gender", "CumNumberTestedIll")
+#' }
 #'
 #' @export
 plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTestedIll", label = T, logy = F) {

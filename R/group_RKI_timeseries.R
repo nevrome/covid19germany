@@ -8,9 +8,11 @@
 #' @param ... variable names. One or multiple grouping columns of x, so Bundesland, Landkreis, Gender or Age
 #'
 #' @examples 
+#' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' 
 #' group_RKI_timeseries(rki_timeseries, Bundesland, Gender)
+#' }
 #'
 #' @export
 group_RKI_timeseries <- function(x, ...) {

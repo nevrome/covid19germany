@@ -28,8 +28,10 @@ Simple plotting function for the RKI data.
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \examples{
+\donttest{
 rki_timeseries <- get_RKI_timeseries()
 
 plot_RKI_timeseries(rki_timeseries, "Gender", "CumNumberTestedIll")
+}
 
 }
