@@ -53,7 +53,7 @@ get_RKI_timeseries <- function(
 
 download_RKI <- function(url) {
   
-  simple_read <- readr::read_csv(
+  res <- readr::read_csv(
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-"),
     col_types = readr::cols(
@@ -78,6 +78,10 @@ download_RKI <- function(url) {
       NeuerTodesfall = readr::col_integer()
     )
   ) %>%
+    dplyr::filter(
+      NeuerFall %in% c(0, 1), 
+      NeuerTodesfall %in% c(0, 1, -9)
+    ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
       ObjectId = .data[["ObjectId"]],
@@ -90,9 +94,8 @@ download_RKI <- function(url) {
       Gender = .data[["Geschlecht"]],
       NumberNewTestedIll = .data[["AnzahlFall"]],
       NumberNewDead = .data[["AnzahlTodesfall"]]
-    ) 
-  
-  merged_double_observations <- simple_read %>%
+    ) %>%
+    # merge double observations
     dplyr::group_by(
       .data[["Version"]],
       .data[["Date"]], 
@@ -107,8 +110,7 @@ download_RKI <- function(url) {
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T)
     )
-  
-  res <- merged_double_observations
+
   return(res)
   
 }
