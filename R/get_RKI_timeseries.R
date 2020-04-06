@@ -79,8 +79,8 @@ download_RKI <- function(url) {
     )
   ) %>%
     dplyr::filter(
-      NeuerFall %in% c(0, 1), 
-      NeuerTodesfall %in% c(0, 1, -9)
+      .data[["NeuerFall"]] %in% c(0, 1), 
+      .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
