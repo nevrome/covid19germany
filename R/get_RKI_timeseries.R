@@ -11,16 +11,16 @@
 #' @return A tibble with the dataset
 #'
 #' @examples
-#' \donttest{ 
+#' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' }
-#' 
-#' @export 
+#'
+#' @export
 get_RKI_timeseries <- function(
-  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", 
+  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
   cache = T, cache_dir = tempdir(), cache_max_age = "today"
 ) {
-  
+
   if (cache_max_age == "today") {
     cache_threshold <- lubridate::now() - lubridate::as.duration(
       lubridate::interval(lubridate::today(), lubridate::now())
@@ -30,7 +30,7 @@ get_RKI_timeseries <- function(
       cache_max_age
     )
   }
-  
+
   # caching is activated
   if (cache) {
     if (!dir.exists(cache_dir)) { dir.create(cache_dir) }
@@ -47,12 +47,12 @@ get_RKI_timeseries <- function(
   } else {
     this_tab <- download_RKI(url)
   }
-  
-  return(this_tab) 
+
+  return(this_tab)
 }
 
 download_RKI <- function(url) {
-  
+
   res <- readr::read_csv(
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-"),
@@ -61,7 +61,7 @@ download_RKI <- function(url) {
       Bundesland = readr::col_character(),
       Landkreis = readr::col_character(),
       Altersgruppe = readr::col_factor(
-        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"), 
+        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
         ordered = T,
         include_na = T
       ),
@@ -79,7 +79,7 @@ download_RKI <- function(url) {
     )
   ) %>%
     dplyr::filter(
-      .data[["NeuerFall"]] %in% c(0, 1), 
+      .data[["NeuerFall"]] %in% c(0, 1),
       .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
     ) %>%
     dplyr::transmute(
@@ -98,11 +98,11 @@ download_RKI <- function(url) {
     # merge double observations
     dplyr::group_by(
       .data[["Version"]],
-      .data[["Date"]], 
-      .data[["IdBundesland"]], 
-      .data[["Bundesland"]], 
+      .data[["Date"]],
+      .data[["IdBundesland"]],
+      .data[["Bundesland"]],
       .data[["IdLandkreis"]],
-      .data[["Landkreis"]], 
+      .data[["Landkreis"]],
       .data[["Age"]],
       .data[["Gender"]]
     ) %>%
@@ -113,5 +113,5 @@ download_RKI <- function(url) {
     dplyr::ungroup()
 
   return(res)
-  
+
 }
