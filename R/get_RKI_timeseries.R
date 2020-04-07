@@ -7,6 +7,7 @@
 #' @param cache logical. Should the data be cached?
 #' @param cache_dir character. Path to cache directory
 #' @param cache_max_age numeric. Maximum age of cache in seconds or "today"
+#' @param raw_only logical. Do not apply covid19germany filters to RKI data (raw_only = T) or do filter them (default, raw_only = F)
 #'
 #' @return A tibble with the dataset
 #'
