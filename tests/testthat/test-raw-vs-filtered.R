@@ -1,7 +1,7 @@
 context("test of all functions with an arbitrary setting")
 
 rki_timeseries <- get_RKI_timeseries()
-raw_timeseries <- get_RKI_timeseries(raw=T)
+raw_timeseries <- get_RKI_timeseries(raw_only=T)
 
 test_that("raw downloads give something else than filtered downloads", {
   expect_s3_class(

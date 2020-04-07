@@ -18,7 +18,7 @@
 #' @export
 get_RKI_timeseries <- function(
   url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
-  cache = T, cache_dir = tempdir(), cache_max_age = "today"
+  cache = T, cache_dir = tempdir(), cache_max_age = "today", raw_only = F
 ) {
 
   if (cache_max_age == "today") {
@@ -32,7 +32,8 @@ get_RKI_timeseries <- function(
   }
 
   # caching is activated
-  if (cache) {
+  # (too cumbersome to check contents of chached dataset if raw_only is active)
+  if (cache && !raw_only) {
     if (!dir.exists(cache_dir)) { dir.create(cache_dir) }
     tab_cache_file <- file.path(cache_dir, paste0("RKI_timeseries.RData"))
     if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > cache_threshold) {
@@ -45,13 +46,13 @@ get_RKI_timeseries <- function(
     }
   # caching is not activated
   } else {
-    this_tab <- download_RKI(url)
+    this_tab <- download_RKI(url, raw_only)
   }
 
   return(this_tab)
 }
 
-download_RKI <- function(url) {
+download_RKI <- function(url, raw_only = F) {
 
   res <- readr::read_csv(
     url,
@@ -77,7 +78,13 @@ download_RKI <- function(url) {
       NeuerFall = readr::col_integer(),
       NeuerTodesfall = readr::col_integer()
     )
-  ) %>%
+  )
+
+  if ( raw_only ){
+    return(res)
+  }
+
+  res <- res %>%
     dplyr::filter(
       .data[["NeuerFall"]] %in% c(0, 1),
       .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
