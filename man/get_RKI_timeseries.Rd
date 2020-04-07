@@ -8,7 +8,8 @@ get_RKI_timeseries(
   url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
   cache = T,
   cache_dir = tempdir(),
-  cache_max_age = "today"
+  cache_max_age = "today",
+  raw_only = F
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ get_RKI_timeseries(
 \item{cache_dir}{character. Path to cache directory}
 
 \item{cache_max_age}{numeric. Maximum age of cache in seconds or "today"}
+
+\item{raw_only}{logical. Do not apply covid19germany filters to RKI data (raw_only = T) or do filter them (default, raw_only = F)}
 }
 \value{
 A tibble with the dataset
@@ -28,7 +31,7 @@ Downloads the latest version of a COVID-19 timeseries dataset by the Robert Koch
 Please see the README for more information: \url{https://github.com/nevrome/covid19germany}
 }
 \examples{
-\donttest{ 
+\donttest{
 rki_timeseries <- get_RKI_timeseries()
 }
 

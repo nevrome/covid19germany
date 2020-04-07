@@ -7,20 +7,21 @@
 #' @param cache logical. Should the data be cached?
 #' @param cache_dir character. Path to cache directory
 #' @param cache_max_age numeric. Maximum age of cache in seconds or "today"
+#' @param raw_only logical. Do not apply covid19germany filters to RKI data (raw_only = T) or do filter them (default, raw_only = F)
 #'
 #' @return A tibble with the dataset
 #'
 #' @examples
-#' \donttest{ 
+#' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' }
-#' 
-#' @export 
+#'
+#' @export
 get_RKI_timeseries <- function(
-  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv", 
-  cache = T, cache_dir = tempdir(), cache_max_age = "today"
+  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
+  cache = T, cache_dir = tempdir(), cache_max_age = "today", raw_only = F
 ) {
-  
+
   if (cache_max_age == "today") {
     cache_threshold <- lubridate::now() - lubridate::as.duration(
       lubridate::interval(lubridate::today(), lubridate::now())
@@ -30,9 +31,10 @@ get_RKI_timeseries <- function(
       cache_max_age
     )
   }
-  
+
   # caching is activated
-  if (cache) {
+  # (too cumbersome to check contents of chached dataset if raw_only is active)
+  if (cache && !raw_only) {
     if (!dir.exists(cache_dir)) { dir.create(cache_dir) }
     tab_cache_file <- file.path(cache_dir, paste0("RKI_timeseries.RData"))
     if (file.exists(tab_cache_file) & file.mtime(tab_cache_file) > cache_threshold) {
@@ -45,14 +47,14 @@ get_RKI_timeseries <- function(
     }
   # caching is not activated
   } else {
-    this_tab <- download_RKI(url)
+    this_tab <- download_RKI(url, raw_only)
   }
-  
-  return(this_tab) 
+
+  return(this_tab)
 }
 
-download_RKI <- function(url) {
-  
+download_RKI <- function(url, raw_only = F) {
+
   res <- readr::read_csv(
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-"),
@@ -61,7 +63,7 @@ download_RKI <- function(url) {
       Bundesland = readr::col_character(),
       Landkreis = readr::col_character(),
       Altersgruppe = readr::col_factor(
-        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"), 
+        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
         ordered = T,
         include_na = T
       ),
@@ -77,9 +79,15 @@ download_RKI <- function(url) {
       NeuerFall = readr::col_integer(),
       NeuerTodesfall = readr::col_integer()
     )
-  ) %>%
+  )
+
+  if ( raw_only ){
+    return(res)
+  }
+
+  res <- res %>%
     dplyr::filter(
-      .data[["NeuerFall"]] %in% c(0, 1), 
+      .data[["NeuerFall"]] %in% c(0, 1),
       .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
     ) %>%
     dplyr::transmute(
@@ -98,11 +106,11 @@ download_RKI <- function(url) {
     # merge double observations
     dplyr::group_by(
       .data[["Version"]],
-      .data[["Date"]], 
-      .data[["IdBundesland"]], 
-      .data[["Bundesland"]], 
+      .data[["Date"]],
+      .data[["IdBundesland"]],
+      .data[["Bundesland"]],
       .data[["IdLandkreis"]],
-      .data[["Landkreis"]], 
+      .data[["Landkreis"]],
       .data[["Age"]],
       .data[["Gender"]]
     ) %>%
@@ -113,5 +121,5 @@ download_RKI <- function(url) {
     dplyr::ungroup()
 
   return(res)
-  
+
 }
