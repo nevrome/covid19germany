@@ -1,4 +1,4 @@
-context("test of all functions with an arbitrary setting")
+context("test of functions with raw or filtered output")
 
 rki_timeseries <- get_RKI_timeseries()
 raw_timeseries <- get_RKI_timeseries(raw_only=T)
