@@ -89,8 +89,7 @@ Data format: sf object with columns for cases and deaths as well as
 geometry information for the spatial units. One row per Bundesland or
 per Landkreis. This table only contains information for one day. It can
 also be used to plot past data when combined with the timeseries
-dataset. See the [Simple map](#simple-map) section for an implementation
-example.
+dataset.
 
 ### Population numbers
 
