@@ -1,0 +1,194 @@
+## Example code snippets
+
+### Get and join data
+
+```{r}
+library(magrittr)
+library(covid19germany)
+
+# Get RKI data and transform to daily time series, e.g. per "Bundesland" and "Landkreis"
+rki <- get_RKI_timeseries()
+rki_timeseries_bundesland <- rki %>% group_RKI_timeseries("Bundesland")
+rki_timeseries_landkreis <- rki %>% group_RKI_timeseries("Landkreis")
+
+# Join population info to RKI data
+rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
+  dplyr::left_join(ew_laender, by = "Bundesland")
+
+rki_timeseries_landkreis <- rki_timeseries_landkreis %>%
+  dplyr::left_join(ew_kreise, by = "IdLandkreis")
+
+# Join hospital info to RKI data
+rki_timeseries_bundesland <- rki_timeseries_bundesland %>%
+  dplyr::left_join(hospital_beds, by = "Bundesland")
+```
+
+### Simple plots
+
+```{r}
+library(magrittr)
+library(covid19germany)
+
+get_RKI_timeseries() %>% plot_RKI_timeseries("Age", "CumNumberDead")
+```
+
+```{r}
+library(ggplot2)
+library(magrittr)
+library(covid19germany)
+
+rki <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(rki, Bundesland) %>%
+  dplyr::filter(Date > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  ggplot() +
+  geom_bar(mapping = aes(x = Date,
+                         y = NumberNewTestedIll,
+                         fill = Bundesland),
+           stat = 'identity') +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen (täglich)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+```{r}
+library(ggplot2)
+library(magrittr)
+library(covid19germany)
+
+rki <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(rki, Bundesland) %>%
+  dplyr::filter(Date > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  dplyr::group_by(Bundesland) %>%
+  dplyr::mutate(kum_fall = cumsum(NumberNewTestedIll)) %>%
+  dplyr::ungroup() %>%
+  ggplot() +
+  geom_area(mapping = aes(x = Date,
+                          y = kum_fall,
+                          fill = Bundesland),
+            stat = 'identity',
+            na.rm = T) +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen (kumulativ)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+Since we have the inhabitant numbers right in the package, co-analysing them toegther with the epidemiologocal data is straight forward:
+  
+```{r}
+library(ggplot2)
+library(magrittr)
+library(covid19germany)
+
+rki <- get_RKI_timeseries(cache=F)
+
+group_RKI_timeseries(rki, Bundesland) %>%
+  dplyr::left_join(ew_laender, by="Bundesland") %>%
+  dplyr::filter(Date > "2020-02-25") %>%
+  tidyr::drop_na(Bundesland) %>%
+  dplyr::group_by(Bundesland) %>%
+  dplyr::mutate(kum_fall_per100k_ew = cumsum(NumberNewTestedIll) / PopulationTotal) %>%
+  dplyr::ungroup() %>%
+  ggplot() +
+  geom_line(mapping = aes(x = Date,
+                          y = kum_fall_per100k_ew,
+                          col = Bundesland)) +
+  theme_minimal() +
+  ggtitle("Gemeldete Infektionen pro 100K Einwohner (kumulativ)") +
+  theme(axis.title.x=element_blank(),
+        axis.title.y=element_blank())
+```
+
+### Simple Map
+
+```{r}
+library(sf)
+library(ggplot2)
+library(lubridate)
+library(magrittr)
+library(covid19germany)
+
+# download rki data
+rki <- get_RKI_timeseries()
+
+# download a shapefile with geoinformation for the german Landkreise
+landkreis_sf <- get_RKI_spatial("Landkreis")
+
+# download and filter rki data to 2020-03-21
+rki_202003021_landkreise <- group_RKI_timeseries(rki, "Landkreis") %>% 
+  dplyr::filter(Date == as_datetime("2020-03-21"))
+
+# merge spatial data and rki data
+landkreis_sf_COVID19 <- landkreis_sf %>%
+  dplyr::left_join(
+    rki_202003021_landkreise, by = c("IdLandkreis")
+  )
+
+# plot
+landkreis_sf_COVID19 %>%
+  ggplot() +
+  geom_sf(
+    aes(fill = CumNumberTestedIll)
+  ) +
+  scale_fill_viridis_c(direction = -1) +
+  theme_minimal() +
+  ggtitle("Summe der gemeldeten Infektionen pro Landkreis am 21.03.2020") +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  )
+```
+
+### Simple Model
+
+A simple modelling approach to predict the number of future cases regresses historical counts on time. These predictions assume no further interventions like social distancing! Since the spread-dynamics are exponential, we choose a simple log-linear regression approach on new cases per day (i.e. not cumulative in this analysis): 
+  
+```{r}
+library(covid19germany)
+
+## globals:
+MIN.CASES=5
+N.DAYS.FUTURE=7
+
+## read data:
+df = get_RKI_timeseries()
+
+## aggregate case-counts by regions:
+ag=aggregate(df$NumberNewTestedIll,by=list(Bundesland=df$Bundesland,Date=df$Date),sum)
+
+## split data by regions:
+ag.split=split(ag,ag$Bundesland)
+
+## plot
+par(mfrow=c(4,4))
+par(cex=1.2)
+for (this.ag in ag.split){
+  keep=(this.ag$x>=MIN.CASES)
+  this.ag=this.ag[keep,]
+  this.region=unique(this.ag$Bundesland)
+  
+  ## create model
+  this.ag = this.ag[order(this.ag$Date),]
+  this.ag[,"x.log"]=log(this.ag[,"x"])
+  mdl=lm("x.log ~ Date",data=this.ag)
+  
+  ## append N.DAYS.FUTURE to data
+  n=(nrow(this.ag)+1)
+  last.date=as.Date(max(this.ag$Date, na.rm = T))
+  this.ag[n:(n+N.DAYS.FUTURE-1),]=NA
+  this.ag[n:(n+N.DAYS.FUTURE-1),"Date"]=seq(last.date+1,by=1,length.out=N.DAYS.FUTURE)
+  
+  ## predict on all dates (including future dates)
+  this.ag[,"x.pred"]=exp(predict(mdl,newdata=this.ag))
+  
+  ## plot data and prediction
+  ymax=max(this.ag[,c("x.pred","x")],na.rm=TRUE)
+  plot(this.ag[,"Date"],this.ag[,"x"],type="b",col="black",pch=20,main=this.region,xlab="date",ylab="cases",ylim=c(0,ymax))
+  points(this.ag[,"Date"],this.ag[,"x.pred"],type="b",col="red")
+}
+```
