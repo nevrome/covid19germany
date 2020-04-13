@@ -14,6 +14,8 @@ An R package to load, visualise and analyse daily updated data on the
 COVID-19 outbreak in Germany. This package exists to simplify data
 analysis and was developed in the context of the [\#WirvsVirus
 hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
+A minimal webapp to explore the data is available
+[here](https://nevrome.shinyapps.io/covid19germany/).
 
 <p align="center">
 
