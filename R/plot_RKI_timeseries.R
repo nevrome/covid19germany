@@ -21,20 +21,44 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
 
   check_if_packages_are_available("ggplot2")
   
-  x <- group_RKI_timeseries(x, !!group)
+  if (is.na(group)) {
+    x <- group_RKI_timeseries(x)
+  } else {
+    x <- group_RKI_timeseries(x, !!group)
+  }
   
-  p <- x %>%
+  prep_data <- x %>%
     tidyr::pivot_longer(cols = tidyselect::contains("Number"), names_to = "Counter", values_to = "Number") %>%
-    dplyr::filter(.data[["Counter"]] == type) %>%
-    dplyr::mutate(label = dplyr::if_else(.data[["Date"]] == (max(x$Date) - 5*24*60*60), as.character(.data[[group]]), NA_character_)) %>%
-    ggplot2::ggplot(
+    dplyr::filter(.data[["Counter"]] == type)
+    
+  if (is.na(group)) {
+    p <- prep_data %>%
+      ggplot2::ggplot(
       ggplot2::aes_string(
-        "Date", "Number", 
-        color = group, fill = group, group = group,
-        label = "label"
+        "Date", "Number"
       )
-    ) +
-    ggplot2::ggtitle(type) +
+    )
+  } else {
+    p <- prep_data %>%
+      ggplot2::ggplot(
+        ggplot2::aes_string(
+          "Date", "Number", 
+          color = group, fill = group, group = group, label = group
+        )
+      )
+  }
+  
+  # parse title
+  title <- dplyr::case_when(
+    type == "NumberNewTestedIll" ~ "Number of new confirmed cases", 
+    type == "NumberNewDead" ~ "Number of new deaths", 
+    type == "CumNumberTestedIll" ~ "Total number of confirmed cases", 
+    type == "CumNumberDead" ~ "Total number of deaths"
+  )
+  title <- paste0(Sys.Date(), ": ", title)
+  
+  p <- p +
+    ggplot2::ggtitle(title) +
     ggplot2::theme_minimal()
 
   if (!logy) {
