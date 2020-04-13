@@ -10,9 +10,9 @@ library(covid19germany)
 
 rki <- get_RKI_timeseries(cache = F) 
 
-p1 <- rki %>% plot_RKI_timeseries(NA, "NumberNewTestedIll", label = F)
+p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F)
 p2 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll")
-p3 <- rki %>% plot_RKI_timeseries(NA, "NumberNewDead", label = F)
+p3 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead", label = F)
 p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead")
 
 p <- cowplot::plot_grid(p1, p2, p3, p4, nrow = 2, ncol = 2)
