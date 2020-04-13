@@ -7,3 +7,4 @@
 ^\.travis\.yml$
 ^blog_post$
 ^\.gitattributes$
+^README\.Rmd$

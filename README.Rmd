@@ -4,6 +4,24 @@ output: github_document
 
 <!-- Rmd -> md --> 
 
+```{r, echo=FALSE, message=FALSE}
+library(magrittr)
+library(covid19germany)
+
+rki <- get_RKI_timeseries(cache = F) 
+
+p1 <- rki %>% plot_RKI_timeseries(NA, "NumberNewTestedIll", label = F)
+p2 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll")
+p3 <- rki %>% plot_RKI_timeseries(NA, "NumberNewDead", label = F)
+p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead")
+
+p <- cowplot::plot_grid(p1, p2, p3, p4, nrow = 2, ncol = 2)
+
+cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 3, scale = 1.5)
+```
+
+![](man/figures/README_plot.png)
+
 [![Travis-CI Build Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https://travis-ci.com/nevrome/covid19germany) [![Coverage Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.svg)](https://codecov.io/github/nevrome/covid19germany?branch=master)
 
 # covid19germany

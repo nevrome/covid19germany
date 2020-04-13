@@ -1,6 +1,8 @@
 
 <!-- Rmd -> md -->
 
+![](man/figures/README_plot.png)
+
 [![Travis-CI Build
 Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https://travis-ci.com/nevrome/covid19germany)
 [![Coverage
