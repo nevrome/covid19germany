@@ -21,26 +21,28 @@ group_RKI_timeseries <- function(x, ...) {
   
   res <- x %>% 
     dplyr::select(
-      !!!.grouping_var, "NumberNewTestedIll", "NumberNewDead", "Date"
+      !!!.grouping_var, "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "Date"
     ) %>% 
     dplyr::group_by(
       !!!.grouping_var, .data[["Date"]]
     ) %>%
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
-      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T)
+      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
+      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
     ) %>%
     dplyr::ungroup() %>%
     tidyr::complete(
       tidyr::nesting(!!!.grouping_var),
       Date = tidyr::full_seq(.data[["Date"]], 24*60*60),
-      fill = list(NumberNewTestedIll = 0, NumberNewDead = 0)
+      fill = list(NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0)
     ) %>% dplyr::group_by(
       !!!.grouping_var
     ) %>%
     dplyr::mutate(
       CumNumberTestedIll = cumsum(.data[["NumberNewTestedIll"]]),
-      CumNumberDead = cumsum(.data[["NumberNewDead"]])
+      CumNumberDead = cumsum(.data[["NumberNewDead"]]),
+      CumNumberRecovered = cumsum(.data[["NumberNewRecovered"]])
     ) %>%
     dplyr::ungroup()
   
