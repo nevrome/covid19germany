@@ -44,6 +44,24 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_deat
   lapply(
     grouped_x,
     function(y) {
+      
+      new_dates <- tidyr::full_seq(
+        c(max(y[["Date"]]) + lubridate::days(1), max(y[["Date"]]) + lubridate::days(mean_days_until_death - 1)), 24*60*60
+      )
+      
+      new_rows <- y[1:length(new_dates),] %>%
+        dplyr::mutate(
+          Date = new_dates,
+          NumberNewTestedIll = NA,
+          NumberNewDead = NA,
+          NumberNewRecovered = NA,
+          CumNumberTestedIll = NA,
+          CumNumberDead = NA, 
+          CumNumberRecovered = NA,
+          EstimationCumNumberIllPast = NA, 
+          EstimationCumNumberIllPresent = NA
+        )
+
       y %>%
         dplyr::mutate(
           EstimationCumNumberIllPast = dplyr::lead(.data[["CumNumberDead"]], mean_days_until_death - 1) / 
@@ -53,20 +71,7 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_deat
             max(.data[["EstimationCumNumberIllPast"]], na.rm = T) * 2^((0:(mean_days_until_death - 1))/doubling_time)
           )
         ) %>%
-        rbind(
-          .,
-          tibble::tibble(
-            Date = tidyr::full_seq(
-              c(max(.[["Date"]]) + lubridate::days(1), max(.[["Date"]]) + lubridate::days(mean_days_until_death - 1)), 24*60*60
-            ),
-            NumberNewTestedIll = NA,
-            NumberNewDead = NA,
-            CumNumberTestedIll = NA,
-            CumNumberDead = NA, 
-            EstimationCumNumberIllPast = NA, 
-            EstimationCumNumberIllPresent = NA
-          )
-        ) %>%
+        rbind(., new_rows) %>%
         dplyr::mutate(
           EstimationCumNumberDeadFuture = dplyr::lag(.data[["EstimationCumNumberIllPresent"]], mean_days_until_death - 1) * prop_death
         )
