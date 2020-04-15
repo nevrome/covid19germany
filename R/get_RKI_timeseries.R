@@ -72,12 +72,14 @@ download_RKI <- function(url, raw_only = F) {
       ),
       AnzahlFall = readr::col_integer(),
       AnzahlTodesfall = readr::col_integer(),
+      AnzahlGenesen = readr::col_integer(),
       ObjectId = readr::col_integer(),
       Meldedatum = readr::col_datetime(format = ""),
       IdLandkreis = readr::col_integer(),
       Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
       NeuerFall = readr::col_integer(),
-      NeuerTodesfall = readr::col_integer()
+      NeuerTodesfall = readr::col_integer(),
+      NeuGenesen = readr::col_integer()
     )
   )
 
@@ -88,7 +90,8 @@ download_RKI <- function(url, raw_only = F) {
   res <- res %>%
     dplyr::filter(
       .data[["NeuerFall"]] %in% c(0, 1),
-      .data[["NeuerTodesfall"]] %in% c(0, 1, -9)
+      .data[["NeuerTodesfall"]] %in% c(0, 1, -9),
+      .data[["NeuGenesen"]] %in% c(0, 1)
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
@@ -101,7 +104,8 @@ download_RKI <- function(url, raw_only = F) {
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
       NumberNewTestedIll = .data[["AnzahlFall"]],
-      NumberNewDead = .data[["AnzahlTodesfall"]]
+      NumberNewDead = .data[["AnzahlTodesfall"]],
+      NumberNewRecovered = .data[["AnzahlGenesen"]]
     ) %>%
     # merge double observations
     dplyr::group_by(
@@ -116,7 +120,8 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
-      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T)
+      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
+      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
     ) %>%
     dplyr::ungroup()
 
