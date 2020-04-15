@@ -50,31 +50,32 @@ Robert Koch Institut.
 
 Data format: tibble/data.frame with one row per spatial unit
 (“Landkreis”), date and age group, with daily notifications of cases
-(“NumberNewTestedIll”) and deaths (“NumberNewDead”).
+(“NumberNewTestedIll”), deaths (“NumberNewDead”) and an estimation of
+the recovered cases (“NumberNewRecovered”).
 
-| ObjectId | Date       | IdBundesland | Bundesland    | IdLandkreis | Landkreis | Age     | Gender | NumberNewTestedIll | NumberNewDead |
-| -------: | :--------- | -----------: | :------------ | ----------: | :-------- | :------ | :----- | -----------------: | ------------: |
-|   404635 | 2020-03-19 |            3 | Niedersachsen |        3157 | LK Peine  | A35-A59 | M      |                  2 |             0 |
-|   404636 | 2020-03-20 |            3 | Niedersachsen |        3157 | LK Peine  | A35-A59 | M      |                  1 |             0 |
-|   404637 | 2020-03-21 |            3 | Niedersachsen |        3157 | LK Peine  | A35-A59 | M      |                  2 |             0 |
+| Version    | Date       | IdBundesland | Bundesland | IdLandkreis | Landkreis           | Age     | Gender | NumberNewTestedIll | NumberNewDead | NumberNewRecovered |
+| :--------- | :--------- | -----------: | :--------- | ----------: | :------------------ | :------ | :----- | -----------------: | ------------: | -----------------: |
+| 2020-04-15 | 2020-01-28 |            9 | Bayern     |        9181 | LK Landsberg a.Lech | A15-A34 | M      |                  1 |             0 |                  1 |
+| 2020-04-15 | 2020-01-28 |            9 | Bayern     |        9188 | LK Starnberg        | A35-A59 | M      |                  1 |             0 |                  1 |
+| 2020-04-15 | 2020-01-29 |            9 | Bayern     |        9162 | SK München          | A15-A34 | W      |                  1 |             0 |                  1 |
 
 You can convert this RKI data to daily timeseries for federal states
 (Bundesland), administrative districts (Landkreis), gender (Gender)
 and/or age (Age). It’s possible to group by muliple of these at once.
 
-    covid19germany::group_RKI_timeseries(data, "Bundesland" | "Landkreis" | "Gender" | "Age")
+    covid19germany::group_RKI_timeseries(data, Bundesland | Landkreis | Gender | Age)
 
-Data format: tibble/data.frame with a time series of cases, deaths,
-cumulative cases and cumulative deaths. One row per day and grouping
-unit. Days are continuous, without gaps. All time series start at
-2020-01-28, and go up to the current date (last update by RKI).
-`covid19germany::group_RKI_timeseries(data, "Bundesland")`:
+Data format: tibble/data.frame with a time series of cases, deaths and
+recoverings. One row per day and grouping unit. Days are continuous,
+without gaps. All time series start at 2020-01-28, and go up to the
+current date (last update by RKI).
+`covid19germany::group_RKI_timeseries(data)`:
 
-| Bundesland        | Date       | NumberNewTestedIll | NumberNewDead | CumNumberTestedIll | CumNumberDead | IdBundesland |
-| :---------------- | :--------- | -----------------: | ------------: | -----------------: | ------------: | -----------: |
-| Baden-Württemberg | 2020-01-24 |                  1 |             0 |                  1 |             0 |            8 |
-| Baden-Württemberg | 2020-01-25 |                  0 |             0 |                  1 |             0 |            8 |
-| Baden-Württemberg | 2020-01-26 |                  0 |             0 |                  1 |             0 |            8 |
+| Date       | NumberNewTestedIll | NumberNewDead | NumberNewRecovered | CumNumberTestedIll | CumNumberDead | CumNumberRecovered |
+| :--------- | -----------------: | ------------: | -----------------: | -----------------: | ------------: | -----------------: |
+| 2020-04-12 |               1721 |            29 |                 89 |             125192 |          3203 |              72480 |
+| 2020-04-13 |               1454 |            31 |                 63 |             126646 |          3234 |              72543 |
+| 2020-04-14 |                938 |            20 |                 39 |             127584 |          3254 |              72582 |
 
 ### RKI spatial
 
