@@ -55,7 +55,7 @@ get_RKI_timeseries <- function(
 
 download_RKI <- function(url, raw_only = F) {
 
-  res <- readr::read_csv(
+  download <- readr::read_csv(
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-"),
     col_types = readr::cols(
@@ -84,13 +84,45 @@ download_RKI <- function(url, raw_only = F) {
   )
 
   if ( raw_only ){
-    return(res)
+    return(download)
   }
 
-  res <- res %>%
+  testedill <- download %>%
     dplyr::filter(
-      .data[["NeuerFall"]] %in% c(0, 1),
-      .data[["NeuerTodesfall"]] %in% c(0, 1),
+      .data[["NeuerFall"]] %in% c(0, 1)
+    ) %>%
+    dplyr::transmute(
+      Version = .data[["Datenstand"]],
+      ObjectId = .data[["ObjectId"]],
+      Date = .data[["Meldedatum"]],
+      IdBundesland = .data[["IdBundesland"]],
+      Bundesland = .data[["Bundesland"]],
+      IdLandkreis = .data[["IdLandkreis"]],
+      Landkreis = .data[["Landkreis"]],
+      Age = .data[["Altersgruppe"]],
+      Gender = .data[["Geschlecht"]],
+      NumberNewTestedIll = .data[["AnzahlFall"]]
+    ) 
+  
+  dead <- download %>%
+    dplyr::filter(
+      .data[["NeuerTodesfall"]] %in% c(0, 1)
+    ) %>%
+    dplyr::transmute(
+      Version = .data[["Datenstand"]],
+      ObjectId = .data[["ObjectId"]],
+      Date = .data[["Meldedatum"]],
+      IdBundesland = .data[["IdBundesland"]],
+      Bundesland = .data[["Bundesland"]],
+      IdLandkreis = .data[["IdLandkreis"]],
+      Landkreis = .data[["Landkreis"]],
+      Age = .data[["Altersgruppe"]],
+      Gender = .data[["Geschlecht"]],
+      NumberNewDead = .data[["AnzahlTodesfall"]]
+    ) 
+  
+  recovered <- download %>%
+    dplyr::filter(
       .data[["NeuGenesen"]] %in% c(0, 1)
     ) %>%
     dplyr::transmute(
@@ -103,10 +135,19 @@ download_RKI <- function(url, raw_only = F) {
       Landkreis = .data[["Landkreis"]],
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
-      NumberNewTestedIll = .data[["AnzahlFall"]],
-      NumberNewDead = .data[["AnzahlTodesfall"]],
       NumberNewRecovered = .data[["AnzahlGenesen"]]
-    ) %>%
+    ) 
+  
+  merged <- testedill %>% dplyr::full_join(
+    dead, 
+    by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+  ) %>%
+    dplyr::full_join(
+      recovered, 
+      by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+    )
+  
+  res <- merged %>%
     # merge double observations
     dplyr::group_by(
       .data[["Version"]],
