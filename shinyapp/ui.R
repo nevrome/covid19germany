@@ -31,7 +31,7 @@ fluidPage(
                 selectInput(inputId = "typeInput",
                             label = "Count type / Zählinformation",
                             choices = c("CumNumberTestedIll", "CumNumberDead", "NumberNewTestedIll",
-                                        "NumberNewDead")),
+                                        "NumberNewDead", "NumberNewRecovered", "CumNumberRecovered")),
             
                 # select axis transformation
                 radioButtons(inputId = "logyInput",
@@ -108,7 +108,7 @@ fluidPage(
                     numericInput(
                         inputId = "doubling_time",
                         label = "Doubling time of the number of infections (days) / Zeit in der sich die Zahl der Infizierten verdoppelt (in Tagen)",
-                        value = 4
+                        value = 15
                     ),
 
                     radioButtons(inputId = "est_logy",
