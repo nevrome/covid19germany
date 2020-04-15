@@ -17,7 +17,8 @@ plot_RKI_timeseries(
 
 \item{group}{character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Gender", "Age". See \code{\link{group_RKI_timeseries}} for more information}
 
-\item{type}{character. Type of count information. One of: "NumberNewTestedIll", "NumberNewDead", "CumNumberTestedIll", "CumNumberDead"}
+\item{type}{character. Type of count information. 
+One of: "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "CumNumberTestedIll", "CumNumberDead", "CumNumberRecovered"}
 
 \item{label}{logical. Should labels be added?}
 
