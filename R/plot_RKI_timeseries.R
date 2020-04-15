@@ -5,7 +5,8 @@
 #'
 #' @param x data.frame. RKI data as downloaded with \code{\link{get_RKI_timeseries}}
 #' @param group character. Grouping of the underlying timeseries. One of: "Bundesland", "Landkreis", "Gender", "Age". See \code{\link{group_RKI_timeseries}} for more information
-#' @param type character. Type of count information. One of: "NumberNewTestedIll", "NumberNewDead", "CumNumberTestedIll", "CumNumberDead"
+#' @param type character. Type of count information. 
+#' One of: "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "CumNumberTestedIll", "CumNumberDead", "CumNumberRecovered"
 #' @param label logical. Should labels be added?
 #' @param logy logical. Should the y-axis be log10-scaled?
 #'
@@ -53,7 +54,9 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
     type == "NumberNewTestedIll" ~ "Number of new confirmed cases", 
     type == "NumberNewDead" ~ "Number of new deaths", 
     type == "CumNumberTestedIll" ~ "Total number of confirmed cases", 
-    type == "CumNumberDead" ~ "Total number of deaths"
+    type == "CumNumberDead" ~ "Total number of deaths",
+    type == "NumberNewRecovered" ~ "Number of new recoverings (estimated)",
+    type == "CumNumberRecovered" ~ "Total number of recoverings (estimated)", 
   )
   title <- paste0(Sys.Date(), ": ", title)
   
