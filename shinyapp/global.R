@@ -1,3 +1,5 @@
+#### Reminder: The package has to be installed FROM github to push it to shinyapps.io
+
 
 # important ---------------------------------------------------------------
 
