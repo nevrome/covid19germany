@@ -90,7 +90,7 @@ download_RKI <- function(url, raw_only = F) {
   res <- res %>%
     dplyr::filter(
       .data[["NeuerFall"]] %in% c(0, 1),
-      .data[["NeuerTodesfall"]] %in% c(0, 1, -9),
+      .data[["NeuerTodesfall"]] %in% c(0, 1),
       .data[["NeuGenesen"]] %in% c(0, 1)
     ) %>%
     dplyr::transmute(
