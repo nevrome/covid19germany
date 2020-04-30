@@ -73,8 +73,8 @@ download_RKI <- function(url, raw_only = F) {
       AnzahlFall = readr::col_integer(),
       AnzahlTodesfall = readr::col_integer(),
       AnzahlGenesen = readr::col_integer(),
-      ObjectId = readr::col_integer(),
-      Meldedatum = readr::col_datetime(format = ""),
+      FID = readr::col_integer(),
+      Meldedatum = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
       IdLandkreis = readr::col_integer(),
       Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
       NeuerFall = readr::col_integer(),
@@ -93,7 +93,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
+      FID = .data[["FID"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -110,7 +110,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
+      FID = .data[["FID"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -127,7 +127,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
+      FID = .data[["FID"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -140,11 +140,11 @@ download_RKI <- function(url, raw_only = F) {
   
   merged <- testedill %>% dplyr::full_join(
     dead, 
-    by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+    by = c("Version", "FID", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
   ) %>%
     dplyr::full_join(
       recovered, 
-      by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+      by = c("Version", "FID", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
     )
   
   res <- merged %>%
