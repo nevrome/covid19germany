@@ -79,14 +79,26 @@ download_RKI <- function(url, raw_only = F) {
       Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
       NeuerFall = readr::col_integer(),
       NeuerTodesfall = readr::col_integer(),
-      NeuGenesen = readr::col_integer()
+      NeuGenesen = readr::col_integer(),
+      Refdatum = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
+      IstErkrankungsbeginn = readr::col_integer()
     )
   )
 
   if ( raw_only ){
     return(download)
   }
+  
+  download <- download %>% 
+    dplyr::mutate(
+      StartOfDiseaseDate = lubridate::as_datetime(ifelse(
+        .data[["IstErkrankungsbeginn"]] == 1, 
+        .data[["Refdatum"]], 
+        NA
+      ))
+    )
 
+  # get correct count of testedill, dead and recovered
   testedill <- download %>%
     dplyr::filter(
       .data[["NeuerFall"]] %in% c(0, 1)
@@ -101,7 +113,8 @@ download_RKI <- function(url, raw_only = F) {
       Landkreis = .data[["Landkreis"]],
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
-      NumberNewTestedIll = .data[["AnzahlFall"]]
+      NumberNewTestedIll = .data[["AnzahlFall"]],
+      .data[["StartOfDiseaseDate"]]
     ) 
   
   dead <- download %>%
@@ -118,7 +131,8 @@ download_RKI <- function(url, raw_only = F) {
       Landkreis = .data[["Landkreis"]],
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
-      NumberNewDead = .data[["AnzahlTodesfall"]]
+      NumberNewDead = .data[["AnzahlTodesfall"]],
+      .data[["StartOfDiseaseDate"]]
     ) 
   
   recovered <- download %>%
@@ -135,7 +149,8 @@ download_RKI <- function(url, raw_only = F) {
       Landkreis = .data[["Landkreis"]],
       Age = .data[["Altersgruppe"]],
       Gender = .data[["Geschlecht"]],
-      NumberNewRecovered = .data[["AnzahlGenesen"]]
+      NumberNewRecovered = .data[["AnzahlGenesen"]],
+      .data[["StartOfDiseaseDate"]]
     ) 
   
   merged <- testedill %>% dplyr::full_join(
@@ -152,6 +167,7 @@ download_RKI <- function(url, raw_only = F) {
     dplyr::group_by(
       .data[["Version"]],
       .data[["Date"]],
+      .data[["StartOfDiseaseDate"]],
       .data[["IdBundesland"]],
       .data[["Bundesland"]],
       .data[["IdLandkreis"]],
