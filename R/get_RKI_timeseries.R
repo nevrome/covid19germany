@@ -57,7 +57,7 @@ download_RKI <- function(url, raw_only = F) {
 
   download <- readr::read_csv(
     url,
-    na = c("0-1", "unbekannt", "-nicht erhoben-"),
+    na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
     col_types = readr::cols(
       IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
@@ -67,6 +67,7 @@ download_RKI <- function(url, raw_only = F) {
         ordered = T,
         include_na = T
       ),
+      Altersgruppe2 = readr::col_character(),
       Geschlecht = readr::col_factor(
         include_na = T
       ),
