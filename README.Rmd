@@ -62,11 +62,11 @@ covid19germany::get_RKI_timeseries()
 
 Data format: tibble/data.frame with one row per spatial unit ("Landkreis"), date and age group, with daily notifications of cases ("NumberNewTestedIll"),  deaths ("NumberNewDead") and an estimation of the recovered cases ("NumberNewRecovered").
 
-|Version    |Date       | IdBundesland|Bundesland | IdLandkreis|Landkreis           |Age     |Gender | NumberNewTestedIll| NumberNewDead| NumberNewRecovered|
-|:----------|:----------|------------:|:----------|-----------:|:-------------------|:-------|:------|------------------:|-------------:|------------------:|
-|2020-04-15 |2020-01-28 |            9|Bayern     |        9181|LK Landsberg a.Lech |A15-A34 |M      |                  1|             0|                  1|
-|2020-04-15 |2020-01-28 |            9|Bayern     |        9188|LK Starnberg        |A35-A59 |M      |                  1|             0|                  1|
-|2020-04-15 |2020-01-29 |            9|Bayern     |        9162|SK München          |A15-A34 |W      |                  1|             0|                  1|
+|Version    |Date       |StartOfDiseaseDate | IdBundesland|Bundesland | IdLandkreis|Landkreis           |Age     |Gender | NumberNewTestedIll| NumberNewDead| NumberNewRecovered|
+|:----------|:----------|:------------------|------------:|:----------|-----------:|:-------------------|:-------|:------|------------------:|-------------:|------------------:|
+|2020-05-01 |2020-01-28 |2020-01-23         |            9|Bayern     |        9181|LK Landsberg a.Lech |A15-A34 |M      |                  1|             0|                  1|
+|2020-05-01 |2020-01-28 |2020-01-27         |            9|Bayern     |        9188|LK Starnberg        |A35-A59 |M      |                  1|             0|                  1|
+|2020-05-01 |2020-01-29 |2020-01-23         |            9|Bayern     |        9162|SK München          |A15-A34 |W      |                  1|             0|                  1|
 
 You can convert this RKI data to daily timeseries for federal states (Bundesland), administrative districts (Landkreis), gender (Gender) and/or age (Age). It's possible to group by muliple of these at once.
 
