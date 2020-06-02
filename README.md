@@ -51,7 +51,8 @@ Robert Koch Institut.
 Data format: tibble/data.frame with one row per spatial unit
 (“Landkreis”), date and age group, with daily notifications of cases
 (“NumberNewTestedIll”), deaths (“NumberNewDead”) and an estimation of
-the recovered cases (“NumberNewRecovered”).
+the recovered cases
+(“NumberNewRecovered”).
 
 | Version    | Date       | StartOfDiseaseDate | IdBundesland | Bundesland | IdLandkreis | Landkreis           | Age     | Gender | NumberNewTestedIll | NumberNewDead | NumberNewRecovered |
 | :--------- | :--------- | :----------------- | -----------: | :--------- | ----------: | :------------------ | :------ | :----- | -----------------: | ------------: | -----------------: |
@@ -61,7 +62,8 @@ the recovered cases (“NumberNewRecovered”).
 
 You can convert this RKI data to daily timeseries for federal states
 (Bundesland), administrative districts (Landkreis), gender (Gender)
-and/or age (Age). It’s possible to group by muliple of these at once.
+and/or age (Age). It’s possible to group by muliple of these at
+    once.
 
     covid19germany::group_RKI_timeseries(data, Bundesland | Landkreis | Gender | Age)
 
@@ -106,7 +108,8 @@ on 2018-12-31. Provided by the Statistisches Bundesamt. (Population data
 for administrative units of Berlin in dataset ew\_laender is missing.)
 
 Data format: tibble/data.frame with information about population and
-area size of Länder and Kreise. One row per Land/Landkreis/Age.
+area size of Länder and Kreise. One row per
+Land/Landkreis/Age.
 
 | Bundesland         |  AreaKm2 | PopulationTotal | PopulationMale | PopulationFemale | PopulationperKm2 |
 | :----------------- | -------: | --------------: | -------------: | ---------------: | ---------------: |
@@ -137,7 +140,8 @@ Bundesamt as well as the Robert Koch Institut.
 
 Data format: tibble/data.frame with information about number, facilities
 and occupancy rate of hospitals and hospital beds in the german Länder.
-One row per Land.
+One row per
+Land.
 
 | Bundesland        | NumberHospital | NumberHospitalwithICU | NumberICUBed | NumberDaysICUBedinUse | NumberICUCase | NumberICUCasewithRespirator |
 | :---------------- | :------------- | --------------------: | -----------: | --------------------: | ------------: | --------------------------: |
