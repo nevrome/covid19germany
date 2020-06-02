@@ -17,7 +17,7 @@ p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
 p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead", label = F)
 p6 <- rki %>% plot_RKI_timeseries("Age", "CumNumberRecovered")
 
-p <- cowplot::plot_grid(p1, p2, p3, p4, p5, p6, nrow = 3, ncol = 2)
+p <- cowplot::plot_grid(p1, p2, p3, p4, p5, p6, nrow = 2, ncol = 3)
 
 cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 3, scale = 1.7)
 ```
