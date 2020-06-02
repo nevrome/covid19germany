@@ -55,7 +55,7 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
     type == "NumberNewDead" ~ "Number of new deaths", 
     type == "CumNumberTestedIll" ~ "Total number of confirmed cases", 
     type == "CumNumberDead" ~ "Total number of deaths",
-    type == "NumberNewRecovered" ~ "Number of new recoverings (estimated)",
+    type == "NumberNewRecovered" ~ "Number of recoverings (estimated)",
     type == "CumNumberRecovered" ~ "Total number of recoverings (estimated)", 
   )
   title <- paste0(Sys.Date(), ": ", title)
