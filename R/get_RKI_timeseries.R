@@ -59,6 +59,7 @@ download_RKI <- function(url, raw_only = F) {
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
     col_types = readr::cols(
+      ObjectId = readr::col_integer(),
       IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
       Landkreis = readr::col_character(),
@@ -74,7 +75,6 @@ download_RKI <- function(url, raw_only = F) {
       AnzahlFall = readr::col_integer(),
       AnzahlTodesfall = readr::col_integer(),
       AnzahlGenesen = readr::col_integer(),
-      FID = readr::col_integer(),
       Meldedatum = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
       IdLandkreis = readr::col_integer(),
       Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
@@ -106,7 +106,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      FID = .data[["FID"]],
+      ObjectId = .data[["ObjectId"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -124,7 +124,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      FID = .data[["FID"]],
+      ObjectId = .data[["ObjectId"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -142,7 +142,7 @@ download_RKI <- function(url, raw_only = F) {
     ) %>%
     dplyr::transmute(
       Version = .data[["Datenstand"]],
-      FID = .data[["FID"]],
+      ObjectId = .data[["ObjectId"]],
       Date = .data[["Meldedatum"]],
       IdBundesland = .data[["IdBundesland"]],
       Bundesland = .data[["Bundesland"]],
@@ -156,11 +156,11 @@ download_RKI <- function(url, raw_only = F) {
   
   merged <- testedill %>% dplyr::full_join(
     dead, 
-    by = c("Version", "FID", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+    by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
   ) %>%
     dplyr::full_join(
       recovered, 
-      by = c("Version", "FID", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
+      by = c("Version", "ObjectId", "Date", "IdBundesland", "Bundesland", "IdLandkreis", "Landkreis", "Age", "Gender")
     )
   
   res <- merged %>%
