@@ -5,8 +5,8 @@ account: nevrome
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2027122
-bundleId: 3218852
+bundleId: 3516125
 url: https://nevrome.shinyapps.io/covid19germany/
-when: 1591110442.71098
+when: 1597413884.15449
 asMultiple: FALSE
 asStatic: FALSE
