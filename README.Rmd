@@ -11,15 +11,13 @@ library(covid19germany)
 rki <- get_RKI_timeseries(cache = F) 
 
 p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F)
-p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead", label = F)
-p3 <- rki %>% plot_RKI_timeseries("Age", "NumberNewRecovered")
+p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead")
 p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
-p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead", label = F)
-p6 <- rki %>% plot_RKI_timeseries("Age", "CumNumberRecovered")
+p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead")
 
-p <- cowplot::plot_grid(p1, p2, p3, p4, p5, p6, nrow = 2, ncol = 3)
+p <- cowplot::plot_grid(p1, p2, p4, p5, nrow = 2, ncol = 2)
 
-cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 3, scale = 1.7)
+cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 4, scale = 1.7)
 ```
 
 ![](man/figures/README_plot.png)
