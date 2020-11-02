@@ -8,8 +8,7 @@ Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https:/
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.svg)](https://codecov.io/github/nevrome/covid19germany?branch=master)
 
-covid19germany
-==============
+# covid19germany
 
 An R package to load, visualise and analyse daily updated data on the
 COVID-19 outbreak in Germany. This package exists to simplify data
@@ -29,16 +28,14 @@ A minimal webapp to explore the data is available
     -   [Population numbers](#population-numbers)
     -   [Hospital beds](#hospital-beds)
 
-Install
--------
+## Install
 
 Install the development version from github with
 
     if(!require('remotes')) install.packages('remotes')
     remotes::install_github("nevrome/covid19germany")
 
-Functions and data
-------------------
+## Functions and data
 
 ### RKI timeseries
 
