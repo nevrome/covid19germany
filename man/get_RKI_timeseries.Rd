@@ -5,7 +5,8 @@
 \title{get_RKI_timeseries}
 \usage{
 get_RKI_timeseries(
-  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
+  url = paste0("https://www.arcgis.com",
+    "/sharing/rest/content/items/f10774f1c63e40168479a1feb6c7ca74/data"),
   cache = T,
   cache_dir = tempdir(),
   cache_max_age = "today",

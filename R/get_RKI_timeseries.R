@@ -18,7 +18,10 @@
 #'
 #' @export
 get_RKI_timeseries <- function(
-  url = "https://opendata.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0.csv",
+  url = paste0(
+    "https://www.arcgis.com",
+    "/sharing/rest/content/items/f10774f1c63e40168479a1feb6c7ca74/data"
+  ),
   cache = T, cache_dir = tempdir(), cache_max_age = "today", raw_only = F
 ) {
 
@@ -59,7 +62,11 @@ download_RKI <- function(url, raw_only = F) {
     url,
     na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
     col_types = readr::cols(
-      ObjectId = readr::col_integer(),
+      # depending on if the original URL or the alternative one is used either 
+      # ObjectId or FID exists - to avoid a warning we let readr figure out the type
+      # automatically
+      #FID = readr::col_integer(),
+      #ObjectId = readr::col_integer(),
       IdBundesland = readr::col_integer(),
       Bundesland = readr::col_character(),
       Landkreis = readr::col_character(),
@@ -88,6 +95,11 @@ download_RKI <- function(url, raw_only = F) {
 
   if ( raw_only ){
     return(download)
+  }
+  
+  # name change for alternative URL
+  if ("FID" %in% colnames(download)) {
+    download <- download %>% dplyr::rename(ObjectId = .data[["FID"]])
   }
   
   download <- download %>% 
