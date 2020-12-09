@@ -39,7 +39,7 @@ Install the development version from github with
 
 ### RKI timeseries
 
-    covid19germany::get_RKI_timeseries()
+    rki <- covid19germany::get_RKI_timeseries()
 
 [Daily updated RKI data about COVID-19 cases and deaths for germany
 (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0).
@@ -59,15 +59,22 @@ the recovered cases (“NumberNewRecovered”).
 
 You can convert this RKI data to daily timeseries for federal states
 (Bundesland), administrative districts (Landkreis), gender (Gender)
-and/or age (Age). It’s possible to group by muliple of these at once.
+and/or age (Age).
 
-    covid19germany::group_RKI_timeseries(data, Bundesland | Landkreis | Gender | Age)
+    covid19germany::group_RKI_timeseries(rki, Bundesland)
+    covid19germany::group_RKI_timeseries(rki, Landkreis)
+    covid19germany::group_RKI_timeseries(rki, Gender)
+    covid19germany::group_RKI_timeseries(rki, Age)
+
+It’s possible to group by muliple of these at once, e.g.
+
+    covid19germany::group_RKI_timeseries(rki, Bundesland, Age)
 
 Data format: tibble/data.frame with a time series of cases, deaths and
 recoverings. One row per day and grouping unit. Days are continuous,
 without gaps. All time series start at 2020-01-28, and go up to the
 current date (last update by RKI).
-`covid19germany::group_RKI_timeseries(data)`:
+`covid19germany::group_RKI_timeseries(rki)`:
 
 | Date       | NumberNewTestedIll | NumberNewDead | NumberNewRecovered | CumNumberTestedIll | CumNumberDead | CumNumberRecovered |
 |:-----------|-------------------:|--------------:|-------------------:|-------------------:|--------------:|-------------------:|
@@ -77,7 +84,8 @@ current date (last update by RKI).
 
 ### RKI spatial
 
-    covid19germany::get_RKI_spatial("Bundesland" | "Landkreis")
+    covid19germany::get_RKI_spatial("Bundesland")
+    covid19germany::get_RKI_spatial("Landkreis")
 
 [Daily updated RKI data about COVID-19 cases and deaths for germany
 (spatial)](https://npgeo-corona-npgeo-de.hub.arcgis.com/search?groupIds=b28109b18022405bb965c602b13e1bbc).
