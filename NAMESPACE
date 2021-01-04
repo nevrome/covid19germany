@@ -3,6 +3,7 @@
 export(estimatepast_RKI_timeseries)
 export(get_RKI_spatial)
 export(get_RKI_timeseries)
+export(get_RKI_vaccination_progress)
 export(group_RKI_timeseries)
 export(plot_RKI_timeseries)
 importFrom(magrittr,"%>%")

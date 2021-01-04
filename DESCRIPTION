@@ -40,7 +40,8 @@ Imports:
   tibble,
   tidyr,
   tidyselect,
-  utils
+  utils,
+  readxl
 Suggests:
   ggplot2,
   sf,
