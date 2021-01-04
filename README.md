@@ -23,6 +23,7 @@ A minimal webapp to explore the data is available
 
 -   [**Install**](#Install)
 -   [**Functions and data**](#functions-and-data)
+    -   [RKI vaccination progress](#rki-vaccination-progress)
     -   [RKI timeseries](#rki-timeseries)
     -   [RKI spatial](#rki-spatial)
     -   [Population numbers](#population-numbers)
@@ -36,6 +37,22 @@ Install the development version from github with
     remotes::install_github("nevrome/covid19germany")
 
 ## Functions and data
+
+### RKI vaccination progress
+
+    rki_vaccinations <- covid19germany::get_RKI_vaccination_progress()
+
+[Daily updated RKI data about COVID-19 vaccinations in
+germany](https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html).
+Provided by the Robert Koch Institut.
+
+Data format: tibble/data.frame with one row per Bundesland.
+
+| DownloadDate | Bundesland        | CumNumberVaccinated | NewNumberVaccinated | IndicationAge | IndicationProfession | IndicationMedical | IndicationCareHome | Comment |
+|:-------------|:------------------|--------------------:|--------------------:|--------------:|---------------------:|------------------:|-------------------:|:--------|
+| 2021-01-04   | Baden-Württemberg |               24063 |                4014 |         11041 |                 7428 |              1382 |               4200 | NA      |
+| 2021-01-04   | Bayern            |               57833 |               11742 |         12855 |                25636 |              1091 |              20428 | NA      |
+| 2021-01-04   | Berlin            |               14616 |                1443 |          9817 |                 3647 |               105 |              10968 | NA      |
 
 ### RKI timeseries
 
