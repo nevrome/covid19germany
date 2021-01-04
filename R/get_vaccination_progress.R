@@ -32,6 +32,7 @@ get_RKI_vaccination_progress <- function(
     col_names = FALSE,
     col_types = c("text", "text", "text")
   )
+  
   # code is correct, but RKI table is wrong (4.1.2021)
   # time_of_last_update <- vaccination_meta[6,1] %>%
   #   as.character() %>%
@@ -45,6 +46,8 @@ get_RKI_vaccination_progress <- function(
     excel_table, sheet = 2, n_max = 16
   )
 
+  file.remove(excel_table)
+  
   if (raw_only) {
     return(vaccination_data)
   }
@@ -53,11 +56,12 @@ get_RKI_vaccination_progress <- function(
     dplyr::rename(
       CumNumberVaccinated = "Impfungen kumulativ",
       NewNumberVaccinated = "Differenz zum Vortag",
+      NumberVaccinatedPer1000 = "Impfungen pro 1.000 Einwohner",
       IndicationAge = "Indikation nach Alter*",
       IndicationProfession = "Berufliche Indikation*",
       IndicationMedical = "Medizinische Indikation*",
       IndicationCareHome = "Pflegeheim-bewohnerIn*",
-      Comment = "...8"
+      Comment = .data[[colnames(.)[ncol(.)]]]
     ) %>%
     dplyr::mutate(
       dplyr::across(where(is.numeric), as.integer)
