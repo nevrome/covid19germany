@@ -103,7 +103,7 @@ download_RKI <- function(url, raw_only = F) {
     return(download)
   }
   
-  message("Processing file...")
+  message("Processing...")
   # name change for alternative URL
   if ("FID" %in% colnames(download)) {
     download <- download %>% dplyr::rename(ObjectId = .data[["FID"]])

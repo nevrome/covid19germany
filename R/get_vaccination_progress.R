@@ -23,15 +23,19 @@ get_RKI_vaccination_progress <- function(
   ),
   raw_only = FALSE
 ) {
+  
+  message("Downloading file...")
   excel_table <- tempfile()
   utils::download.file(url, excel_table)
   
-  vaccination_meta <- readxl::read_xlsx(
-    excel_table, 
-    sheet = 1,
-    col_names = FALSE,
-    col_types = c("text", "text", "text")
-  )
+  message("Loading file into R...")
+  
+  # vaccination_meta <- readxl::read_xlsx(
+  #   excel_table, 
+  #   sheet = 1,
+  #   col_names = FALSE,
+  #   col_types = c("text")
+  # )
   
   # code is correct, but RKI table is wrong (4.1.2021)
   # time_of_last_update <- vaccination_meta[6,1] %>%
@@ -52,6 +56,7 @@ get_RKI_vaccination_progress <- function(
     return(vaccination_data)
   }
   
+  message("Processing...")
   res <- vaccination_data %>%
     dplyr::rename(
       CumNumberVaccinated = "Impfungen kumulativ",
