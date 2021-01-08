@@ -58,8 +58,11 @@ get_RKI_timeseries <- function(
 
 download_RKI <- function(url, raw_only = F) {
 
+  naked_download_file <- tempfile(fileext = ".csv")
+  utils::download.file(url, naked_download_file)
+  
   download <- readr::read_csv(
-    url,
+    naked_download_file,
     na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
     col_types = readr::cols(
       # depending on if the original URL or the alternative one is used either 
@@ -93,6 +96,8 @@ download_RKI <- function(url, raw_only = F) {
     )
   )
 
+  file.remove(naked_download_file)
+  
   if ( raw_only ){
     return(download)
   }
