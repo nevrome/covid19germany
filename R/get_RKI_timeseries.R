@@ -61,7 +61,7 @@ download_RKI <- function(url, raw_only = F) {
   naked_download_file <- tempfile(fileext = ".csv")
   utils::download.file(url, naked_download_file)
   
-  message("Processing file...")
+  message("Loading file into R...")
   download <- readr::read_csv(
     naked_download_file,
     na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
@@ -103,6 +103,7 @@ download_RKI <- function(url, raw_only = F) {
     return(download)
   }
   
+  message("Processing file...")
   # name change for alternative URL
   if ("FID" %in% colnames(download)) {
     download <- download %>% dplyr::rename(ObjectId = .data[["FID"]])
