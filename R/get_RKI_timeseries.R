@@ -44,7 +44,6 @@ get_RKI_timeseries <- function(
       message("Loading file from cache...")
       load(tab_cache_file)
     } else {
-      message("Downloading file...")
       this_tab <- download_RKI(url)
       save(this_tab, file = tab_cache_file)
     }
@@ -58,9 +57,11 @@ get_RKI_timeseries <- function(
 
 download_RKI <- function(url, raw_only = F) {
 
+  message("Downloading file...")
   naked_download_file <- tempfile(fileext = ".csv")
   utils::download.file(url, naked_download_file)
   
+  message("Processing file...")
   download <- readr::read_csv(
     naked_download_file,
     na = c("0-1", "unbekannt", "-nicht erhoben-", "Nicht \u00FCbermittelt"),
