@@ -65,8 +65,8 @@ get_RKI_vaccination_progress <- function(
       IndicationAge = "Indikation nach Alter*",
       IndicationProfession = "Berufliche Indikation*",
       IndicationMedical = "Medizinische Indikation*",
-      IndicationCareHome = "Pflegeheim-bewohnerIn*",
-      Comment = .data[[colnames(.)[ncol(.)]]]
+      IndicationCareHome = "Pflegeheim-bewohnerIn*"#,
+      #Comment = .data[[colnames(.)[ncol(.)]]]
     ) %>%
     dplyr::mutate(
       dplyr::across(where(is.numeric), as.integer)
