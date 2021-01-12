@@ -3,6 +3,8 @@
 
 ![](man/figures/README_plot.png)
 
+![](man/figures/README_plot_vac.png)
+
 [![Travis-CI Build
 Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https://travis-ci.com/nevrome/covid19germany)
 [![Coverage
@@ -40,11 +42,21 @@ Install the development version from github with
 
 ### RKI vaccination progress
 
-    rki_vaccinations <- covid19germany::get_RKI_vaccination_progress()
-
 [Daily updated RKI data about COVID-19 vaccinations in
 germany](https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html).
 Provided by the Robert Koch Institut.
+
+    rki_vaccinations_timeseries <- covid19germany::get_RKI_vaccination_timeseries()
+
+Data format: tibble/data.frame with one row per day.
+
+| Date       | NewNumberVaccinated |
+|:-----------|--------------------:|
+| 2020-12-27 |               23621 |
+| 2020-12-28 |               19060 |
+| 2020-12-29 |               42268 |
+
+    rki_vaccinations_progress <- covid19germany::get_RKI_vaccination_progress()
 
 Data format: tibble/data.frame with one row per Bundesland.
 
