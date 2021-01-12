@@ -41,7 +41,7 @@ p_vac <- vac_ts %>%
   ggplot() +
   geom_line(aes(x = Date, y = CumNumberVaccinated)) +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle(paste0(lubridate::today(), ": Total number of (first) vaccinations administered")) +
+  ggtitle(paste0(lubridate::today(), ": Total number of (first) vaccination doses administered")) +
   theme_minimal() +
   theme(axis.title.x = element_blank())
 
