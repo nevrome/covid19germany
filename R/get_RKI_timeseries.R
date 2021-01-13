@@ -59,7 +59,10 @@ download_RKI <- function(url, raw_only = F) {
 
   message("Downloading file...")
   naked_download_file <- tempfile(fileext = ".csv")
+  default_timeout <- getOption("timeout")
+  options(timeout=600)
   utils::download.file(url, naked_download_file)
+  options(timeout=default_timeout)
   
   message("Loading file into R...")
   download <- readr::read_csv(
