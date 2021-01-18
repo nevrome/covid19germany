@@ -30,7 +30,7 @@
 #' )
 #' 
 #' estimatepast_RKI_timeseries(
-#'   rki_timeseries, Bundesland, Gender, 
+#'   rki_timeseries, Bundesland, 
 #'   prop_death = 0.03, mean_days_until_death = 17, doubling_time = 3
 #' )
 #' }
