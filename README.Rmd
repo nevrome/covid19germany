@@ -7,11 +7,14 @@ output: github_document
 ```{r, echo=FALSE, message=FALSE}
 library(magrittr)
 library(covid19germany)
+library(ggplot2)
 
-rki <- get_RKI_timeseries(cache = T)
+rki <- get_RKI_timeseries(cache = F)
 
-p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F)
-p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead")
+p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank())
+p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead") +
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank())
 p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
 p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead")
 
@@ -20,7 +23,7 @@ p <- cowplot::plot_grid(
   p2, 
   p4 + ggplot2::scale_y_continuous(labels = scales::comma), 
   p5, 
-  nrow = 2, ncol = 2, rel_heights = c(1,0.8), align = "v", axis = 'l'
+  nrow = 2, ncol = 2, rel_heights = c(0.9,1), align = "v", axis = 'l'
 )
 
 cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 4, scale = 1.7)
