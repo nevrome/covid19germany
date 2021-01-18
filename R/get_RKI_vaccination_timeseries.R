@@ -36,7 +36,7 @@ get_RKI_vaccination_timeseries <- function(
     )
   ) %>%
     dplyr::mutate(
-      Datum = lubridate::as_date(Datum)
+      Datum = lubridate::as_date(.data[["Datum"]])
     )
   
   file.remove(excel_table)
