@@ -42,7 +42,7 @@ p_vac <- vac_ts %>%
     CumNumberVaccinated = cumsum(NewNumberVaccinated)
   ) %>%
   ggplot() +
-  geom_line(aes(x = Date, y = CumNumberVaccinated)) +
+  geom_bar(aes(x = Date, y = CumNumberVaccinated), stat = "identity") +
   scale_y_continuous(labels = scales::comma) +
   ggtitle(paste0(lubridate::today(), ": Total number of (first) vaccination doses administered")) +
   theme_minimal() +
