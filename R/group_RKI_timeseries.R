@@ -31,12 +31,19 @@ group_RKI_timeseries <- function(x, ...) {
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
       NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
     ) %>%
-    dplyr::ungroup() %>%
-    tidyr::complete(
-      tidyr::nesting(!!!.grouping_var),
-      Date = tidyr::full_seq(.data[["Date"]], 24*60*60),
-      fill = list(NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0)
-    ) %>% dplyr::group_by(
+    dplyr::ungroup()
+  
+  # add missing days with explicit 0 values
+  if (lubridate::is.Date(res$Date)) {
+    res <- res %>%
+      tidyr::complete(
+        tidyr::nesting(!!!.grouping_var),
+        Date = tidyr::full_seq(.data[["Date"]], 24*60*60),
+        fill = list(NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0)
+      )
+  }
+  
+  res <- res %>% dplyr::group_by(
       !!!.grouping_var
     ) %>%
     dplyr::mutate(

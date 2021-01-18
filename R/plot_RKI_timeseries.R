@@ -9,6 +9,7 @@
 #' One of: "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "CumNumberTestedIll", "CumNumberDead", "CumNumberRecovered"
 #' @param label logical. Should labels be added?
 #' @param logy logical. Should the y-axis be log10-scaled?
+#' @param by_week logical. Should the output plot be grouped by calender weeks or by days?
 #'
 #' @examples 
 #' \donttest{
@@ -18,10 +19,34 @@
 #' }
 #'
 #' @export
-plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTestedIll", label = T, logy = F) {
+plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTestedIll", label = T, logy = F, by_week = T) {
 
   check_if_packages_are_available("ggplot2")
   
+  # group by week
+  if (by_week) {
+    x <- x %>% dplyr::group_by(
+      week = lubridate::week(.data[["Date"]]), year = lubridate::year(.data[["Date"]]),
+      .data[["IdBundesland"]], .data[["Bundesland"]],
+      .data[["IdLandkreis"]], .data[["Landkreis"]],
+      .data[["Age"]], .data[["Gender"]]
+    ) %>% dplyr::summarise(
+      NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
+      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
+      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
+    ) %>%
+      dplyr::ungroup() %>%
+      dplyr::mutate(
+        week = formatC(.data[["week"]], width = 2, format = "d", flag = "0")
+      ) %>%
+      tidyr::unite(
+        col = "Date",
+        .data[["year"]],
+        .data[["week"]]
+      )
+  }
+  
+  # group by input grouping variable
   if (is.na(group)) {
     x <- group_RKI_timeseries(x)
   } else {
@@ -62,14 +87,15 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
   
   p <- p +
     ggplot2::ggtitle(title) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 60, vjust = 1, hjust = 1))
 
   if (!logy) {
     p <- p + 
-      ggplot2::geom_area()
+      ggplot2::geom_bar(stat = "identity")
   } else {
     p <- p + 
-      ggplot2::geom_line() +
+      ggplot2::geom_line(stat = "identity") +
       ggplot2::scale_y_log10()
   }
     
