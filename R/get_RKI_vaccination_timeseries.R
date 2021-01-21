@@ -31,7 +31,7 @@ get_RKI_vaccination_timeseries <- function(
   message("Loading file into R...")
   
   vaccination_ts <- readxl::read_xlsx(
-    excel_table, sheet = 3, n_max = as.numeric(
+    excel_table, sheet = 4, n_max = as.numeric(
       lubridate::today() - lubridate::date("2020-12-27")
     )
   ) %>%
@@ -49,7 +49,9 @@ get_RKI_vaccination_timeseries <- function(
   res <- vaccination_ts %>%
     dplyr::rename(
       Date = "Datum",
-      NewNumberVaccinated = "Gesamtzahl Impfungen"
+      NumberFirstVaccinations = "Erstimpfung",
+      NumberSecondVaccinations = "Zweitimpfung",
+      NumberVaccinations = "Gesamtzahl verabreichter Impfstoffdosen"
     ) %>%
     dplyr::mutate(
       dplyr::across(where(is.numeric), as.integer)

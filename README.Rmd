@@ -15,8 +15,10 @@ p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank())
 p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead") +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank())
-p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
-p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead")
+p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F) +
+  xlab("Calender week")
+p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead") +
+  xlab("Calender week")
 
 p <- cowplot::plot_grid(
   p1, 
@@ -38,17 +40,31 @@ library(ggplot2)
 vac_ts <- covid19germany::get_RKI_vaccination_timeseries()
 
 p_vac <- vac_ts %>%
+  dplyr::transmute(
+    Date,
+    CumNumberFirstVaccinations = cumsum(NumberFirstVaccinations),
+    CumNumberSecondVaccinations = cumsum(NumberSecondVaccinations)
+  ) %>%
+  tidyr::pivot_longer(
+    cols = c("CumNumberFirstVaccinations", "CumNumberSecondVaccinations"),
+    names_to = "Type",
+    values_to = "Number"
+  ) %>%
   dplyr::mutate(
-    CumNumberVaccinated = cumsum(NewNumberVaccinated)
+    Type = dplyr::recode(
+      Type,
+      "CumNumberFirstVaccinations" = "First dose",
+      "CumNumberSecondVaccinations" = "Second dose"
+    )
   ) %>%
   ggplot() +
-  geom_bar(aes(x = Date, y = CumNumberVaccinated), stat = "identity") +
+  geom_bar(aes(x = Date, y = Number, fill = Type), stat = "identity") +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle(paste0(lubridate::today(), ": Total number of (first) vaccination doses administered")) +
+  ggtitle(paste0(lubridate::today(), ": Total number of vaccination doses administered")) +
   theme_minimal() +
   theme(axis.title.x = element_blank())
 
-ggplot2::ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 3, scale = 0.8)
+ggplot2::ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 2.7, scale = 0.8)
 ```
 
 ![](man/figures/README_plot_vac.png)

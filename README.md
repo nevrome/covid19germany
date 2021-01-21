@@ -56,16 +56,6 @@ Data format: tibble/data.frame with one row per day.
 | 2020-12-28 |               19060 |
 | 2020-12-29 |               42268 |
 
-    rki_vaccinations_progress <- covid19germany::get_RKI_vaccination_progress()
-
-Data format: tibble/data.frame with one row per Bundesland.
-
-| DownloadDate | Bundesland        | CumNumberVaccinated | NewNumberVaccinated | IndicationAge | IndicationProfession | IndicationMedical | IndicationCareHome | Comment |
-|:-------------|:------------------|--------------------:|--------------------:|--------------:|---------------------:|------------------:|-------------------:|:--------|
-| 2021-01-04   | Baden-Württemberg |               24063 |                4014 |         11041 |                 7428 |              1382 |               4200 | NA      |
-| 2021-01-04   | Bayern            |               57833 |               11742 |         12855 |                25636 |              1091 |              20428 | NA      |
-| 2021-01-04   | Berlin            |               14616 |                1443 |          9817 |                 3647 |               105 |              10968 | NA      |
-
 ### RKI timeseries
 
     rki <- covid19germany::get_RKI_timeseries()
