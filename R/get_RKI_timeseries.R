@@ -8,6 +8,9 @@
 #' @param cache_dir character. Path to cache directory
 #' @param cache_max_age numeric. Maximum age of cache in seconds or "today"
 #' @param raw_only logical. Do not apply covid19germany filters to RKI data (raw_only = T) or do filter them (default, raw_only = F)
+#' @param timeout_for_download integer. The download of the raw data can take a long time 
+#' with slow internet connections. It may fail then when the timeout limit for 
+#' \link[utils]{download.file} is reached. This option allows to increase it.
 #'
 #' @return A tibble with the dataset
 #'
@@ -22,7 +25,9 @@ get_RKI_timeseries <- function(
     "https://www.arcgis.com",
     "/sharing/rest/content/items/f10774f1c63e40168479a1feb6c7ca74/data"
   ),
-  cache = T, cache_dir = tempdir(), cache_max_age = "today", raw_only = F
+  cache = T, cache_dir = tempdir(), cache_max_age = "today", 
+  raw_only = F,
+  timeout_for_download = 1000
 ) {
 
   if (cache_max_age == "today") {
@@ -44,23 +49,23 @@ get_RKI_timeseries <- function(
       message("Loading file from cache...")
       load(tab_cache_file)
     } else {
-      this_tab <- download_RKI(url)
+      this_tab <- download_RKI(url, timeout_for_download = timeout_for_download)
       save(this_tab, file = tab_cache_file)
     }
   # caching is not activated
   } else {
-    this_tab <- download_RKI(url, raw_only)
+    this_tab <- download_RKI(url, raw_only, timeout_for_download = timeout_for_download)
   }
 
   return(this_tab)
 }
 
-download_RKI <- function(url, raw_only = F) {
+download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
 
   message("Downloading file...")
   naked_download_file <- tempfile(fileext = ".csv")
   default_timeout <- getOption("timeout")
-  options(timeout=600)
+  options(timeout=timeout_for_download)
   utils::download.file(url, naked_download_file)
   options(timeout=default_timeout)
   

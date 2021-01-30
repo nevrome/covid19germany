@@ -10,7 +10,8 @@ get_RKI_timeseries(
   cache = T,
   cache_dir = tempdir(),
   cache_max_age = "today",
-  raw_only = F
+  raw_only = F,
+  timeout_for_download = 1000
 )
 }
 \arguments{
@@ -23,6 +24,10 @@ get_RKI_timeseries(
 \item{cache_max_age}{numeric. Maximum age of cache in seconds or "today"}
 
 \item{raw_only}{logical. Do not apply covid19germany filters to RKI data (raw_only = T) or do filter them (default, raw_only = F)}
+
+\item{timeout_for_download}{integer. The download of the raw data can take a long time 
+with slow internet connections. It may fail then when the timeout limit for 
+\link[utils]{download.file} is reached. This option allows to increase it.}
 }
 \value{
 A tibble with the dataset
