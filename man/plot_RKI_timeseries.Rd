@@ -10,7 +10,8 @@ plot_RKI_timeseries(
   type = "CumNumberTestedIll",
   label = T,
   logy = F,
-  by_week = T
+  by_month = T,
+  by_week = F
 )
 }
 \arguments{
@@ -25,7 +26,9 @@ One of: "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "CumNumberT
 
 \item{logy}{logical. Should the y-axis be log10-scaled?}
 
-\item{by_week}{logical. Should the output plot be grouped by calender weeks or by days?}
+\item{by_month}{logical. Should the output plot be grouped by month or by days?}
+
+\item{by_week}{logical. Deprecated and replaced by by_month}
 }
 \description{
 Simple plotting function for the RKI data.

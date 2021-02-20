@@ -14,18 +14,18 @@ rki <- get_RKI_timeseries(cache = F)
 p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank())
 p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead") +
-  theme(axis.text.x = element_blank(), axis.title.x = element_blank())
+  theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
+        axis.title.y = element_blank())
 p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F) +
   xlab("Calender week")
 p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead") +
-  xlab("Calender week")
+  xlab("Calender week") +
+  theme(axis.title.y = element_blank())
 
-p <- cowplot::plot_grid(
-  p1, 
-  p2, 
-  p4 + ggplot2::scale_y_continuous(labels = scales::comma), 
-  p5, 
-  nrow = 2, ncol = 2, rel_heights = c(0.9,1), align = "v", axis = 'l'
+p <- cowplot::plot_grid(p1, p2, p4, p5,
+  nrow = 2, ncol = 2, 
+  rel_widths = c(0.9,1),
+  rel_heights = c(0.9,1), align = "v", axis = 'l'
 )
 
 cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 4, scale = 1.7)

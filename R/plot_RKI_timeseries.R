@@ -9,7 +9,8 @@
 #' One of: "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "CumNumberTestedIll", "CumNumberDead", "CumNumberRecovered"
 #' @param label logical. Should labels be added?
 #' @param logy logical. Should the y-axis be log10-scaled?
-#' @param by_week logical. Should the output plot be grouped by calender weeks or by days?
+#' @param by_month logical. Should the output plot be grouped by month or by days?
+#' @param by_week logical. Deprecated and replaced by by_month
 #'
 #' @examples 
 #' \donttest{
@@ -19,14 +20,14 @@
 #' }
 #'
 #' @export
-plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTestedIll", label = T, logy = F, by_week = T) {
+plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTestedIll", label = T, logy = F, by_month = T, by_week = F) {
 
   check_if_packages_are_available("ggplot2")
   
-  # group by week
-  if (by_week) {
+  # group by month
+  if (by_month) {
     x <- x %>% dplyr::group_by(
-      week = lubridate::week(.data[["Date"]]), year = lubridate::year(.data[["Date"]]),
+      month = lubridate::month(.data[["Date"]], label = FALSE), year = lubridate::year(.data[["Date"]]),
       .data[["IdBundesland"]], .data[["Bundesland"]],
       .data[["IdLandkreis"]], .data[["Landkreis"]],
       .data[["Age"]], .data[["Gender"]]
@@ -37,12 +38,12 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
     ) %>%
       dplyr::ungroup() %>%
       dplyr::mutate(
-        week = formatC(.data[["week"]], width = 2, format = "d", flag = "0")
+        month = formatC(.data[["month"]], width = 2, format = "d", flag = "0")
       ) %>%
       tidyr::unite(
         col = "Date",
         .data[["year"]],
-        .data[["week"]]
+        .data[["month"]]
       )
   }
   
@@ -76,8 +77,8 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
   
   # parse title
   title <- dplyr::case_when(
-    type == "NumberNewTestedIll" ~ "Number of new confirmed cases", 
-    type == "NumberNewDead" ~ "Number of new deaths", 
+    type == "NumberNewTestedIll" ~ "Number of confirmed cases", 
+    type == "NumberNewDead" ~ "Number of deaths", 
     type == "CumNumberTestedIll" ~ "Total number of confirmed cases", 
     type == "CumNumberDead" ~ "Total number of deaths",
     type == "NumberNewRecovered" ~ "Number of recoverings (estimated)",
@@ -105,6 +106,8 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
       color = FALSE
     )
   }
+  
+  p <- p + ggplot2::scale_y_continuous(labels = scales::comma)
   
   return(p)
 }
