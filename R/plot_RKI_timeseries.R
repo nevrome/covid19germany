@@ -32,9 +32,14 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
       .data[["IdLandkreis"]], .data[["Landkreis"]],
       .data[["Age"]], .data[["Gender"]]
     ) %>% dplyr::summarise(
-      NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
-      NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
-      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
+      dplyr::across(
+        tidyselect::one_of(
+          "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered",
+          "MovingCorrectionTestedIll", "MovingCorrectionDead", "MovingCorrectionRecovered"
+        ),
+        function(x) {sum(x, na.rm = T)}
+      ),
+      .groups = "drop"
     ) %>%
       dplyr::ungroup() %>%
       dplyr::mutate(
