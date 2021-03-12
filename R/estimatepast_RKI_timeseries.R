@@ -46,7 +46,7 @@ estimatepast_RKI_timeseries <- function(x, ..., prop_death, mean_days_until_deat
     function(y) {
       
       new_dates <- tidyr::full_seq(
-        c(max(y[["Date"]]) + lubridate::days(1), max(y[["Date"]]) + lubridate::days(mean_days_until_death - 1)), 24*60*60
+        c(max(y[["Date"]]) + lubridate::days(1), max(y[["Date"]]) + lubridate::days(mean_days_until_death - 1)), 1
       )
       
       new_rows <- y[1:length(new_dates),] %>%
