@@ -38,7 +38,7 @@ group_RKI_timeseries <- function(x, ...) {
     res <- res %>%
       tidyr::complete(
         tidyr::nesting(!!!.grouping_var),
-        Date = tidyr::full_seq(.data[["Date"]], 24*60*60),
+        Date = tidyr::full_seq(.data[["Date"]], 1),
         fill = list(NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0)
       )
   }
