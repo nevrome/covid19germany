@@ -179,10 +179,10 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
     ) %>%
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
-      MovingCorrectionTestedIll = sum(.data[["MovingCorrectionTestedIll"]], na.rm = T),
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
-      MovingCorrectionDead = sum(.data[["MovingCorrectionDead"]], na.rm = T),
       NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T),
+      MovingCorrectionTestedIll = sum(.data[["MovingCorrectionTestedIll"]], na.rm = T),
+      MovingCorrectionDead = sum(.data[["MovingCorrectionDead"]], na.rm = T),
       MovingCorrectionRecovered = sum(.data[["MovingCorrectionRecovered"]], na.rm = T),
       .groups = "drop"
     )
