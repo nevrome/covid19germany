@@ -77,30 +77,28 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
       # depending on if the original URL or the alternative one is used either 
       # ObjectId or FID exists - to avoid a warning we let readr figure out the type
       # automatically
-      #FID = readr::col_integer(),
-      #ObjectId = readr::col_integer(),
-      IdBundesland = readr::col_integer(),
-      Bundesland = readr::col_character(),
-      Landkreis = readr::col_character(),
-      Altersgruppe = readr::col_factor(
-        levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
-        ordered = T,
-        include_na = T
-      ),
-      Altersgruppe2 = readr::col_character(),
-      Geschlecht = readr::col_factor(
-        include_na = T
-      ),
-      AnzahlFall = readr::col_integer(),
-      AnzahlTodesfall = readr::col_integer(),
-      AnzahlGenesen = readr::col_integer(),
-      Meldedatum = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
-      IdLandkreis = readr::col_integer(),
-      Datenstand = readr::col_datetime(format = "%d.%m.%Y, %H:%M Uhr"),
-      NeuerFall = readr::col_integer(),
-      NeuerTodesfall = readr::col_integer(),
-      NeuGenesen = readr::col_integer(),
-      Refdatum = readr::col_datetime(format = "%Y/%m/%d %H:%M:%S"),
+      #FID                 = readr::col_integer(),
+      #ObjectId            = readr::col_integer(),
+      IdBundesland         = readr::col_integer(),
+      Bundesland           = readr::col_character(),
+      Landkreis            = readr::col_character(),
+      Altersgruppe         = readr::col_factor(
+                               levels = c("A00-A04", "A05-A14", "A15-A34", "A35-A59", "A60-A79", "A80+"),
+                               ordered = T,
+                               include_na = T
+                             ),
+      Altersgruppe2        = readr::col_skip(),
+      Geschlecht           = readr::col_factor(include_na = T),
+      AnzahlFall           = readr::col_integer(),
+      AnzahlTodesfall      = readr::col_integer(),
+      AnzahlGenesen        = readr::col_integer(),
+      Meldedatum           = readr::col_date(format = "%Y/%m/%d %H:%M:%S"),
+      IdLandkreis          = readr::col_integer(),
+      Datenstand           = readr::col_date(format = "%d.%m.%Y, %H:%M Uhr"),
+      NeuerFall            = readr::col_integer(),
+      NeuerTodesfall       = readr::col_integer(),
+      NeuGenesen           = readr::col_integer(),
+      Refdatum             = readr::col_date(format = "%Y/%m/%d %H:%M:%S"),
       IstErkrankungsbeginn = readr::col_integer()
     )
   )
@@ -117,102 +115,56 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
     download <- download %>% dplyr::rename(ObjectId = .data[["FID"]])
   }
   
-  download <- download %>% 
-    dplyr::mutate(
-      StartOfDiseaseDate = lubridate::as_datetime(ifelse(
+  # get correct count of testedill, dead and recovered
+  processed <- download %>%
+    dplyr::transmute(
+      Version            = .data[["Datenstand"]],
+      ObjectId           = .data[["ObjectId"]],
+      Date               = .data[["Meldedatum"]],
+      IdBundesland       = .data[["IdBundesland"]],
+      Bundesland         = .data[["Bundesland"]],
+      IdLandkreis        = .data[["IdLandkreis"]],
+      Landkreis          = .data[["Landkreis"]],
+      Age                = .data[["Altersgruppe"]],
+      Gender             = .data[["Geschlecht"]],
+      StartOfDiseaseDate  = lubridate::as_date(ifelse(
         .data[["IstErkrankungsbeginn"]] == 1, 
         .data[["Refdatum"]], 
         NA
-      ))
-    )
-
-  # get correct count of testedill, dead and recovered
-  testedill <- download %>%
-    dplyr::filter(
-      .data[["NeuerFall"]] %in% c(0, 1)
-    ) %>%
-    dplyr::transmute(
-      Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
-      Date = .data[["Meldedatum"]],
-      IdBundesland = .data[["IdBundesland"]],
-      Bundesland = .data[["Bundesland"]],
-      IdLandkreis = .data[["IdLandkreis"]],
-      Landkreis = .data[["Landkreis"]],
-      Age = .data[["Altersgruppe"]],
-      Gender = .data[["Geschlecht"]],
-      StartOfDiseaseDate = .data[["StartOfDiseaseDate"]],
-      NumberNewTestedIll = .data[["AnzahlFall"]]
-    ) 
-  
-  dead <- download %>%
-    dplyr::filter(
-      .data[["NeuerTodesfall"]] %in% c(0, 1)
-    ) %>%
-    dplyr::transmute(
-      Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
-      Date = .data[["Meldedatum"]],
-      IdBundesland = .data[["IdBundesland"]],
-      Bundesland = .data[["Bundesland"]],
-      IdLandkreis = .data[["IdLandkreis"]],
-      Landkreis = .data[["Landkreis"]],
-      Age = .data[["Altersgruppe"]],
-      Gender = .data[["Geschlecht"]],
-      StartOfDiseaseDate = .data[["StartOfDiseaseDate"]],
-      NumberNewDead = .data[["AnzahlTodesfall"]]
-    ) 
-  
-  recovered <- download %>%
-    dplyr::filter(
-      .data[["NeuGenesen"]] %in% c(0, 1)
-    ) %>%
-    dplyr::transmute(
-      Version = .data[["Datenstand"]],
-      ObjectId = .data[["ObjectId"]],
-      Date = .data[["Meldedatum"]],
-      IdBundesland = .data[["IdBundesland"]],
-      Bundesland = .data[["Bundesland"]],
-      IdLandkreis = .data[["IdLandkreis"]],
-      Landkreis = .data[["Landkreis"]],
-      Age = .data[["Altersgruppe"]],
-      Gender = .data[["Geschlecht"]],
-      StartOfDiseaseDate = .data[["StartOfDiseaseDate"]],
-      NumberNewRecovered = .data[["AnzahlGenesen"]]
-    ) 
-  
-  merged <- testedill %>% dplyr::full_join(
-    dead, 
-    by = c(
-      "Version", 
-      "ObjectId", 
-      "Date", 
-      "IdBundesland", 
-      "Bundesland", 
-      "IdLandkreis", 
-      "Landkreis", 
-      "Age", 
-      "Gender",
-      "StartOfDiseaseDate"
-    )
-  ) %>%
-    dplyr::full_join(
-      recovered, 
-      by = c(      
-        "Version", 
-        "ObjectId", 
-        "Date", 
-        "IdBundesland", 
-        "Bundesland", 
-        "IdLandkreis", 
-        "Landkreis", 
-        "Age", 
-        "Gender",
-        "StartOfDiseaseDate"
+      )), 
+      NumberNewTestedIll = ifelse(
+        .data[["NeuerFall"]] %in% c(0, 1),
+        .data[["AnzahlFall"]],
+        NA
+      ),
+      MovingCorrectionTestedIll = ifelse(
+        .data[["NeuerFall"]] %in% c(-1, 1),
+        .data[["AnzahlFall"]],
+        NA
+      ),
+      NumberNewDead = ifelse(
+        .data[["NeuerTodesfall"]] %in% c(0, 1),
+        .data[["AnzahlTodesfall"]],
+        NA
+      ),
+      MovingCorrectionDead = ifelse(
+        .data[["NeuerTodesfall"]] %in% c(-1, 1),
+        .data[["AnzahlTodesfall"]],
+        NA
+      ),
+      NumberNewRecovered = ifelse(
+        .data[["NeuGenesen"]] %in% c(0, 1),
+        .data[["AnzahlGenesen"]],
+        NA
+      ),
+      MovingCorrectionRecovered = ifelse(
+        .data[["NeuGenesen"]] %in% c(-1, 1),
+        .data[["AnzahlGenesen"]],
+        NA
       )
     )
   
-  res <- merged %>%
+  res <- processed %>%
     # merge double observations
     dplyr::group_by(
       .data[["Version"]],
@@ -228,10 +180,13 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
-      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
-    ) %>%
-    dplyr::ungroup()
-
+      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T),
+      MovingCorrectionTestedIll = sum(.data[["MovingCorrectionTestedIll"]], na.rm = T),
+      MovingCorrectionDead = sum(.data[["MovingCorrectionDead"]], na.rm = T),
+      MovingCorrectionRecovered = sum(.data[["MovingCorrectionRecovered"]], na.rm = T),
+      .groups = "drop"
+    )
+  
   return(res)
 
 }

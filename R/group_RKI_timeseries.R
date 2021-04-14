@@ -21,15 +21,21 @@ group_RKI_timeseries <- function(x, ...) {
   
   res <- x %>% 
     dplyr::select(
-      !!!.grouping_var, "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered", "Date"
-    ) %>% 
+      !!!.grouping_var,
+      "NumberNewTestedIll", "NumberNewDead", "NumberNewRecovered",
+      "MovingCorrectionTestedIll", "MovingCorrectionDead", "MovingCorrectionRecovered",
+      "Date"
+    ) %>%
     dplyr::group_by(
       !!!.grouping_var, .data[["Date"]]
     ) %>%
     dplyr::summarise(
       NumberNewTestedIll = sum(.data[["NumberNewTestedIll"]], na.rm = T),
       NumberNewDead = sum(.data[["NumberNewDead"]], na.rm = T),
-      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T)
+      NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T),
+      MovingCorrectionTestedIll = sum(.data[["MovingCorrectionTestedIll"]], na.rm = T),
+      MovingCorrectionDead = sum(.data[["MovingCorrectionDead"]], na.rm = T),
+      MovingCorrectionRecovered = sum(.data[["MovingCorrectionRecovered"]], na.rm = T)
     ) %>%
     dplyr::ungroup()
   
@@ -38,8 +44,11 @@ group_RKI_timeseries <- function(x, ...) {
     res <- res %>%
       tidyr::complete(
         tidyr::nesting(!!!.grouping_var),
-        Date = tidyr::full_seq(.data[["Date"]], 24*60*60),
-        fill = list(NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0)
+        Date = tidyr::full_seq(.data[["Date"]], 1),
+        fill = list(
+          NumberNewTestedIll = 0, NumberNewDead = 0, NumberNewRecovered = 0,
+          MovingCorrectionTestedIll = 0, MovingCorrectionDead = 0, MovingCorrectionRecovered = 0
+        )
       )
   }
   
@@ -49,7 +58,10 @@ group_RKI_timeseries <- function(x, ...) {
     dplyr::mutate(
       CumNumberTestedIll = cumsum(.data[["NumberNewTestedIll"]]),
       CumNumberDead = cumsum(.data[["NumberNewDead"]]),
-      CumNumberRecovered = cumsum(.data[["NumberNewRecovered"]])
+      CumNumberRecovered = cumsum(.data[["NumberNewRecovered"]]),
+      CumMovingCorrectionTestedIll = cumsum(.data[["MovingCorrectionTestedIll"]]),
+      CumMovingCorrectionDead = cumsum(.data[["MovingCorrectionDead"]]),
+      CumMovingCorrectionRecovered = cumsum(.data[["MovingCorrectionRecovered"]])
     ) %>%
     dplyr::ungroup()
   
