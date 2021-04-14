@@ -9,7 +9,7 @@ library(magrittr)
 library(covid19germany)
 library(ggplot2)
 
-rki <- get_RKI_timeseries(cache = F)
+rki <- get_RKI_timeseries(cache_dir = "cache")
 
 p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank())

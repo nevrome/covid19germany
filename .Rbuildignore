@@ -8,3 +8,4 @@
 ^blog_post$
 ^\.gitattributes$
 ^README\.Rmd$
+^cache$
