@@ -49,12 +49,15 @@ get_RKI_vaccination_timeseries <- function(
   res <- vaccination_ts %>%
     dplyr::rename(
       Date = "Datum",
-      NumberFirstVaccinations = "Erstimpfung",
-      NumberSecondVaccinations = "Zweitimpfung",
+      NumberVaccinatedOnce = "Einmal geimpft",
+      NumberFullyVaccinated = "Vollständig geimpft",
       NumberVaccinations = "Gesamtzahl verabreichter Impfstoffdosen"
     ) %>%
     dplyr::mutate(
       dplyr::across(where(is.numeric), as.integer)
+    ) %>%
+    dplyr::mutate(
+      NumberFullyVaccinated = tidyr::replace_na(NumberFullyVaccinated, 0)
     )
   
   return(res)

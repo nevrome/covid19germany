@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- Rmd -> md --> 
@@ -42,19 +44,19 @@ vac_ts <- covid19germany::get_RKI_vaccination_timeseries()
 p_vac <- vac_ts %>%
   dplyr::transmute(
     Date,
-    CumNumberFirstVaccinations = cumsum(NumberFirstVaccinations),
-    CumNumberSecondVaccinations = cumsum(NumberSecondVaccinations)
+    CumNumberFullyVaccinated = cumsum(NumberFullyVaccinated),
+    CumNumberVaccinatedOnlyOnce = cumsum(NumberVaccinatedOnce) - CumNumberFullyVaccinated
   ) %>%
   tidyr::pivot_longer(
-    cols = c("CumNumberFirstVaccinations", "CumNumberSecondVaccinations"),
+    cols = c("CumNumberVaccinatedOnlyOnce", "CumNumberFullyVaccinated"),
     names_to = "Type",
     values_to = "Number"
   ) %>%
   dplyr::mutate(
     Type = dplyr::recode(
       Type,
-      "CumNumberFirstVaccinations" = "First dose",
-      "CumNumberSecondVaccinations" = "Second dose"
+      "CumNumberVaccinatedOnlyOnce" = "First dose",
+      "CumNumberFullyVaccinated" = "Fully vaccinated"
     )
   ) %>%
   ggplot() +
