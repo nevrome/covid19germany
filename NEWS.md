@@ -1,3 +1,7 @@
+# 0.2.1
+
+- deleted shinyapp code - never got any updates and there are many good dashboards available
+
 # 0.2.0
 
 - simplified README to make maintenance more easy
