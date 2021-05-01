@@ -60,7 +60,7 @@ p_vac <- vac_ts %>%
     )
   ) %>%
   ggplot() +
-  geom_bar(aes(x = Date, y = Number, fill = Type), stat = "identity") +
+  geom_area(aes(x = Date, y = Number, fill = Type)) +
   scale_y_continuous(labels = scales::comma) +
   ggtitle(paste0(lubridate::today(), ": Total number of vaccination doses administered")) +
   theme_minimal() +
