@@ -16,8 +16,6 @@ An R package to load, visualise and analyse daily updated data on the
 COVID-19 outbreak in Germany. This package exists to simplify data
 analysis and was developed in the context of the [\#WirvsVirus
 hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
-A minimal webapp to explore the data is available
-[here](https://nevrome.shinyapps.io/covid19germany/).
 
 <p align="center">
 <img src="man/figures/Logo_Projekt_01.png" width = 300>
@@ -48,14 +46,6 @@ Provided by the Robert Koch Institut.
 
     rki_vaccinations_timeseries <- covid19germany::get_RKI_vaccination_timeseries()
 
-Data format: tibble/data.frame with one row per day.
-
-| Date       | NewNumberVaccinated |
-|:-----------|--------------------:|
-| 2020-12-27 |               23621 |
-| 2020-12-28 |               19060 |
-| 2020-12-29 |               42268 |
-
 ### RKI timeseries
 
     rki <- covid19germany::get_RKI_timeseries()
@@ -64,17 +54,6 @@ Data format: tibble/data.frame with one row per day.
 (timeseries)](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/dd4580c810204019a7b8eb3e0b329dd6_0).
 Provided by the Bundesamt für Kartographie und Geodäsie as well as the
 Robert Koch Institut.
-
-Data format: tibble/data.frame with one row per spatial unit
-(“Landkreis”), date and age group, with daily notifications of cases
-(“NumberNewTestedIll”), deaths (“NumberNewDead”) and an estimation of
-the recovered cases (“NumberNewRecovered”).
-
-| Version    | Date       | StartOfDiseaseDate | IdBundesland | Bundesland | IdLandkreis | Landkreis           | Age     | Gender | NumberNewTestedIll | NumberNewDead | NumberNewRecovered |
-|:-----------|:-----------|:-------------------|-------------:|:-----------|------------:|:--------------------|:--------|:-------|-------------------:|--------------:|-------------------:|
-| 2020-05-01 | 2020-01-28 | 2020-01-23         |            9 | Bayern     |        9181 | LK Landsberg a.Lech | A15-A34 | M      |                  1 |             0 |                  1 |
-| 2020-05-01 | 2020-01-28 | 2020-01-27         |            9 | Bayern     |        9188 | LK Starnberg        | A35-A59 | M      |                  1 |             0 |                  1 |
-| 2020-05-01 | 2020-01-29 | 2020-01-23         |            9 | Bayern     |        9162 | SK München          | A15-A34 | W      |                  1 |             0 |                  1 |
 
 You can convert this RKI data to daily timeseries for federal states
 (Bundesland), administrative districts (Landkreis), gender (Gender)
@@ -85,21 +64,9 @@ and/or age (Age).
     covid19germany::group_RKI_timeseries(rki, Gender)
     covid19germany::group_RKI_timeseries(rki, Age)
 
-It’s possible to group by muliple of these at once, e.g.
+It’s possible to group by multiple of these at once, e.g.
 
     covid19germany::group_RKI_timeseries(rki, Bundesland, Age)
-
-Data format: tibble/data.frame with a time series of cases, deaths and
-recoverings. One row per day and grouping unit. Days are continuous,
-without gaps. All time series start at 2020-01-28, and go up to the
-current date (last update by RKI).
-`covid19germany::group_RKI_timeseries(rki)`:
-
-| Date       | NumberNewTestedIll | NumberNewDead | NumberNewRecovered | CumNumberTestedIll | CumNumberDead | CumNumberRecovered |
-|:-----------|-------------------:|--------------:|-------------------:|-------------------:|--------------:|-------------------:|
-| 2020-04-12 |               1721 |            29 |                 89 |             125192 |          3203 |              72480 |
-| 2020-04-13 |               1454 |            31 |                 63 |             126646 |          3234 |              72543 |
-| 2020-04-14 |                938 |            20 |                 39 |             127584 |          3254 |              72582 |
 
 ### RKI spatial
 
@@ -110,12 +77,6 @@ current date (last update by RKI).
 (spatial)](https://npgeo-corona-npgeo-de.hub.arcgis.com/search?groupIds=b28109b18022405bb965c602b13e1bbc).
 Provided by the Bundesamt für Kartographie und Geodäsie as well as the
 Robert Koch Institut.
-
-Data format: sf object with columns for cases and deaths as well as
-geometry information for the spatial units. One row per Bundesland or
-per Landkreis. This table only contains information for one day. It can
-also be used to plot past data when combined with the timeseries
-dataset.
 
 ### Population numbers
 
@@ -130,27 +91,6 @@ and
 on 2018-12-31. Provided by the Statistisches Bundesamt. (Population data
 for administrative units of Berlin in dataset ew\_laender is missing.)
 
-Data format: tibble/data.frame with information about population and
-area size of Länder and Kreise. One row per Land/Landkreis/Age.
-
-| Bundesland         |  AreaKm2 | PopulationTotal | PopulationMale | PopulationFemale | PopulationperKm2 |
-|:-------------------|---------:|----------------:|---------------:|-----------------:|-----------------:|
-| Schleswig-Holstein | 15804.30 |         2896712 |        1419457 |          1477255 |              183 |
-| Hamburg            |   755.09 |         1841179 |         902048 |           939131 |             2438 |
-| Niedersachsen      | 47709.51 |         7982448 |        3943243 |          4039205 |              167 |
-
-| IdLandkreis | NameLandkreis          | NUTS3 | AreaKm2 | PopulationTotal | PopulationMale | PopulationFemale | PopulationperKm2 |
-|------------:|:-----------------------|:------|--------:|----------------:|---------------:|-----------------:|-----------------:|
-|        1001 | Flensburg, Stadt       | DEF01 |   56.73 |           89504 |          44599 |            44905 |             1578 |
-|        1002 | Kiel, Landeshauptstadt | DEF02 |  118.65 |          247548 |         120566 |           126982 |             2086 |
-|        1003 | Lübeck, Hansestadt     | DEF03 |  214.19 |          217198 |         104371 |           112827 |             1014 |
-
-| Age     | PopulationTotal | PopulationMale | PopulationFemale |
-|:--------|----------------:|---------------:|-----------------:|
-| A00-A04 |         3926397 |        2014097 |          1912300 |
-| A05-A14 |         7364418 |        3786605 |          3577813 |
-| A15-A34 |        19213113 |        9977728 |          9235385 |
-
 ### Hospital beds
 
     covid19germany::hospital_beds
@@ -159,13 +99,3 @@ area size of Länder and Kreise. One row per Land/Landkreis/Age.
 Germany](http://www.gbe-bund.de/gbe10/f?f=328::Intensivstation) in 2017
 with a last update from 2018-11-13. Provided by the Statistisches
 Bundesamt as well as the Robert Koch Institut.
-
-Data format: tibble/data.frame with information about number, facilities
-and occupancy rate of hospitals and hospital beds in the german Länder.
-One row per Land.
-
-| Bundesland        | NumberHospital | NumberHospitalwithICU | NumberICUBed | NumberDaysICUBedinUse | NumberICUCase | NumberICUCasewithRespirator |
-|:------------------|:---------------|----------------------:|-------------:|----------------------:|--------------:|----------------------------:|
-| Baden-Württemberg | 265            |                   123 |         3262 |                900678 |        259066 |                       47528 |
-| Bayern            | 354            |                   178 |         3790 |               1085912 |        300728 |                       62044 |
-| Berlin            | 83             |                    35 |         1450 |                439183 |         94480 |                       22887 |
