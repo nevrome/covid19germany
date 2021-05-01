@@ -49,7 +49,7 @@ get_RKI_vaccination_timeseries <- function(
   res <- vaccination_ts %>%
     dplyr::rename(
       Date = "Datum",
-      NumberVaccinatedOnce = "Einmal geimpft",
+      NumberVaccinatedOnce = "Begonnene Impfserie",
       NumberFullyVaccinated = "Vollst\u00E4ndig geimpft",
       NumberVaccinations = "Gesamtzahl verabreichter Impfstoffdosen"
     ) %>%

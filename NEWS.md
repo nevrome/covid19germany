@@ -1,3 +1,7 @@
+# 0.2.2
+
+- vaccination dataset was slightly changed yet again and the parser code required a column name change
+
 # 0.2.1
 
 - deleted shinyapp code - never got any updates and there are many good dashboards available
