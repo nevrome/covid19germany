@@ -1,3 +1,7 @@
+# 0.2.3
+
+- vaccination dataset was changed again
+
 # 0.2.2
 
 - vaccination dataset was slightly changed yet again and the parser code required a column name change

@@ -36,7 +36,7 @@ get_RKI_vaccination_timeseries <- function(
     )
   ) %>%
     dplyr::mutate(
-      Datum = lubridate::as_date(.data[["Datum"]])
+      Datum = lubridate::as_date(.data[["Datum"]], format = "%d.%m.%Y")
     )
   
   file.remove(excel_table)
@@ -49,8 +49,8 @@ get_RKI_vaccination_timeseries <- function(
   res <- vaccination_ts %>%
     dplyr::rename(
       Date = "Datum",
-      NumberVaccinatedOnce = "Begonnene Impfserie",
-      NumberFullyVaccinated = "Vollst\u00E4ndig geimpft",
+      NumberVaccinatedOnce = "Erstimpfung",
+      NumberFullyVaccinated = "Zweitimpfung",
       NumberVaccinations = "Gesamtzahl verabreichter Impfstoffdosen"
     ) %>%
     dplyr::mutate(
