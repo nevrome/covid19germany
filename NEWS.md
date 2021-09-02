@@ -1,3 +1,7 @@
+# 0.2.4
+
+- tiny fix in the plot function to avoid a ggplot2 warning
+
 # 0.2.3
 
 - vaccination dataset was changed again
