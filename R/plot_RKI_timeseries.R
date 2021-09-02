@@ -107,8 +107,8 @@ plot_RKI_timeseries <- function(x, group = "Bundesland", type = "CumNumberTested
     
   if (!label) {
     p <- p + ggplot2::guides(
-      fill = FALSE,
-      color = FALSE
+      fill = "none",
+      color = "none"
     )
   }
   

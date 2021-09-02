@@ -30,7 +30,7 @@ p <- cowplot::plot_grid(p1, p2, p4, p5,
   rel_heights = c(0.9,1), align = "v", axis = 'l'
 )
 
-cowplot::ggsave2("man/figures/README_plot.png", device = "png", p, width = 10, height = 4, scale = 1.7)
+ggsave("man/figures/README_plot.png", device = "png", p, width = 10, height = 4, scale = 1.7, bg = "white")
 ```
 
 ![](man/figures/README_plot.png)
@@ -66,7 +66,7 @@ p_vac <- vac_ts %>%
   theme_minimal() +
   theme(axis.title.x = element_blank())
 
-ggplot2::ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 2.7, scale = 0.8)
+ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 2.7, scale = 0.8, bg = "white")
 ```
 
 ![](man/figures/README_plot_vac.png)
