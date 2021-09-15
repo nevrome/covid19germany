@@ -5,8 +5,7 @@
 
 ![](man/figures/README_plot_vac.png)
 
-[![Travis-CI Build
-Status](https://travis-ci.com/nevrome/covid19germany.svg?branch=master)](https://travis-ci.com/nevrome/covid19germany)
+[![R-CMD-check](https://github.com/nevrome/covid19germany/actions/workflows/check-release.yaml/badge.svg)](https://github.com/nevrome/covid19germany/actions/workflows/check-release.yaml)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.svg)](https://codecov.io/github/nevrome/covid19germany?branch=master)
 

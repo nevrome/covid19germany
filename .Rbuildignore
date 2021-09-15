@@ -10,3 +10,4 @@
 ^README\.Rmd$
 ^cache$
 ^NEWS\.md$
+^\.github$
