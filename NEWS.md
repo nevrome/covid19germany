@@ -1,3 +1,7 @@
+# 0.2.5
+
+- the spatial datasets were renamed
+
 # 0.2.4
 
 - tiny fix in the plot function to avoid a ggplot2 warning
