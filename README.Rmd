@@ -35,7 +35,7 @@ ggsave("man/figures/README_plot.png", device = "png", p, width = 10, height = 4,
 
 ![](man/figures/README_plot.png)
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(magrittr)
 library(ggplot2)
 

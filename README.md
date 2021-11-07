@@ -13,7 +13,7 @@ Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.sv
 
 An R package to load, visualise and analyse daily updated data on the
 COVID-19 outbreak in Germany. This package exists to simplify data
-analysis and was developed in the context of the [\#WirvsVirus
+analysis and was developed in the context of the [#WirvsVirus
 hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
 
 <p align="center">
@@ -88,7 +88,7 @@ Länder](https://www.statistikportal.de/de/bevoelkerung/flaeche-und-bevoelkerung
 and
 [Kreise](https://www.destatis.de/DE/Themen/Laender-Regionen/Regionales/Gemeindeverzeichnis/Administrativ/04-kreise.html)
 on 2018-12-31. Provided by the Statistisches Bundesamt. (Population data
-for administrative units of Berlin in dataset ew\_laender is missing.)
+for administrative units of Berlin in dataset ew_laender is missing.)
 
 ### Hospital beds
 
