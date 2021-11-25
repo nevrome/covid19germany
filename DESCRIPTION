@@ -1,6 +1,6 @@
 Package: covid19germany
 Title: Load, Visualise and Analyse Daily Updated Data on the COVID-19 Outbreak in Germany
-Version: 0.2.5
+Version: 0.3.0
 Authors@R: 
     c(person(given = "Clemens",
              family = "Schmid",

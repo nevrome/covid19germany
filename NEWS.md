@@ -1,3 +1,9 @@
+# 0.3.0
+
+- updated `get_RKI_vaccination_timeseries()` to include booster vaccination numbers and changed the output column names to better represent the current situation
+- adjusted the README figures to the new vaccination data
+- more simplification of the already extremely basic unit tests
+
 # 0.2.5
 
 - the spatial datasets were renamed
