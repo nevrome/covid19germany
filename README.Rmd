@@ -18,9 +18,11 @@ p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
 p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead") +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_blank())
-p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
+p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F) +
+  xlab("")
 p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead") +
-  theme(axis.title.y = element_blank())
+  theme(axis.title.y = element_blank()) +
+  xlab("")
 
 p <- cowplot::plot_grid(p1, p2, p4, p5,
   nrow = 2, ncol = 2, 
