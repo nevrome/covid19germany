@@ -18,10 +18,8 @@ p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
 p2 <- rki %>% plot_RKI_timeseries("Age", "NumberNewDead") +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank(),
         axis.title.y = element_blank())
-p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F) +
-  xlab("Calender week")
+p4 <- rki %>% plot_RKI_timeseries("Age", "CumNumberTestedIll", label = F)
 p5 <- rki %>% plot_RKI_timeseries("Age", "CumNumberDead") +
-  xlab("Calender week") +
   theme(axis.title.y = element_blank())
 
 p <- cowplot::plot_grid(p1, p2, p4, p5,
@@ -42,31 +40,43 @@ library(ggplot2)
 vac_ts <- covid19germany::get_RKI_vaccination_timeseries()
 
 p_vac <- vac_ts %>%
-  dplyr::transmute(
-    Date,
-    CumNumberFullyVaccinated = cumsum(NumberFullyVaccinated),
-    CumNumberVaccinatedOnlyOnce = cumsum(NumberVaccinatedOnce) - CumNumberFullyVaccinated
-  ) %>%
+  dplyr::select(-NumberVaccinations) %>%
   tidyr::pivot_longer(
-    cols = c("CumNumberVaccinatedOnlyOnce", "CumNumberFullyVaccinated"),
+    cols = tidyselect::starts_with("Number"),
     names_to = "Type",
     values_to = "Number"
   ) %>%
   dplyr::mutate(
     Type = dplyr::recode(
       Type,
-      "CumNumberVaccinatedOnlyOnce" = "First dose",
-      "CumNumberFullyVaccinated" = "Fully vaccinated"
-    )
+      "NumberFirstInjections" = "First dose",
+      "NumberSecondInjections" = "Second dose",
+      "NumberBoosterInjections" = "Booster",
+    ) %>% factor(levels = c(
+      "First dose", "Second dose", "Booster"
+    ) %>% rev)
   ) %>%
+  dplyr::group_by(
+      month = formatC(lubridate::month(Date, label = FALSE), width = 2, format = "d", flag = "0"), 
+      year = lubridate::year(Date),
+      Type
+  ) %>%
+  dplyr::summarise(
+    Number = sum(Number, na.rm = T),
+    .groups = "drop"
+  ) %>%
+  tidyr::unite(col = "year_month",  year, month) %>% 
   ggplot() +
-  geom_area(aes(x = Date, y = Number, fill = Type)) +
+  geom_bar(aes(x = year_month, y = Number, fill = Type), stat = "identity") +
   scale_y_continuous(labels = scales::comma) +
-  ggtitle(paste0(lubridate::today(), ": Total number of vaccination doses administered")) +
+  ggtitle(paste0(lubridate::today(), ": Number of vaccination doses administered")) +
   theme_minimal() +
-  theme(axis.title.x = element_blank())
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = ggplot2::element_text(angle = 60, vjust = 1, hjust = 1)
+  )
 
-ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 2.7, scale = 0.8, bg = "white")
+ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 3, scale = 1, bg = "white")
 ```
 
 ![](man/figures/README_plot_vac.png)
