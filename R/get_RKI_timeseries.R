@@ -165,6 +165,7 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
     )
   
   res <- processed %>%
+    dtplyr::lazy_dt() %>%
     # merge double observations
     dplyr::group_by(
       .data[["Version"]],
@@ -183,10 +184,10 @@ download_RKI <- function(url, raw_only = F, timeout_for_download = 1000) {
       NumberNewRecovered = sum(.data[["NumberNewRecovered"]], na.rm = T),
       MovingCorrectionTestedIll = sum(.data[["MovingCorrectionTestedIll"]], na.rm = T),
       MovingCorrectionDead = sum(.data[["MovingCorrectionDead"]], na.rm = T),
-      MovingCorrectionRecovered = sum(.data[["MovingCorrectionRecovered"]], na.rm = T),
-      .groups = "drop"
-    )
-  
+      MovingCorrectionRecovered = sum(.data[["MovingCorrectionRecovered"]], na.rm = T)
+    ) %>%
+    tibble::as_tibble()
+
   return(res)
 
 }

@@ -1,3 +1,7 @@
+# 0.3.1
+
+- replaced dplyr with dtplyr in the processing of the cases timeseries, which gives a massive speed boost
+
 # 0.3.0
 
 - updated `get_RKI_vaccination_timeseries()` to include booster vaccination numbers and changed the output column names to better represent the current situation
