@@ -18,7 +18,8 @@
 #' \donttest{
 #' rki_timeseries <- get_RKI_timeseries()
 #' }
-#'
+#' 
+#' @import data.table
 #' @export
 get_RKI_timeseries <- function(
   url = paste0(
