@@ -1,3 +1,8 @@
+# 0.3.2
+
+- fixed an indexing issue in the reading procedure for the vaccination table
+- fixed a breaking file name issue in the spatial data download for the Bundesland-level
+
 # 0.3.1
 
 - replaced dplyr with dtplyr in the processing of the cases timeseries, which gives a massive speed boost
