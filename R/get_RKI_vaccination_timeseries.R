@@ -32,7 +32,7 @@ get_RKI_vaccination_timeseries <- function(
   
   vaccination_ts <- readxl::read_xlsx(
     excel_table, sheet = 4, n_max = as.numeric(
-      lubridate::today() - lubridate::date("2020-12-27") - 2 # correction factor
+      lubridate::today() - lubridate::date("2020-12-27")
     )
   ) %>%
     dplyr::mutate(
@@ -51,7 +51,8 @@ get_RKI_vaccination_timeseries <- function(
       Date = "Datum",
       NumberFirstInjections = "Erstimpfung",
       NumberSecondInjections = "Zweitimpfung",
-      NumberBoosterInjections = "Auffrischimpfung",
+      NumberFirstBoosterInjections = "Erste Auffrischimpfung",
+      NumberSecondBoosterInjections = "Zweite Auffrischimpfung",
       NumberVaccinations = "Gesamtzahl verabreichter Impfstoffdosen"
     ) %>%
     dplyr::mutate(

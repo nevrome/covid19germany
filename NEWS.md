@@ -1,3 +1,7 @@
+# 0.3.3
+
+- fixed another breaking column name change in the vaccination table
+
 # 0.3.2
 
 - fixed an indexing issue in the reading procedure for the vaccination table

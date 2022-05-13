@@ -11,7 +11,7 @@ library(magrittr)
 library(covid19germany)
 library(ggplot2)
 
-rki <- get_RKI_timeseries(cache_dir = "cache")
+rki <- get_RKI_timeseries(cache_dir = "cache", timeout_for_download = 100000)
 
 p1 <- rki %>% plot_RKI_timeseries("Age", "NumberNewTestedIll", label = F) +
   theme(axis.text.x = element_blank(), axis.title.x = element_blank())
@@ -53,9 +53,10 @@ p_vac <- vac_ts %>%
       Type,
       "NumberFirstInjections" = "First dose",
       "NumberSecondInjections" = "Second dose",
-      "NumberBoosterInjections" = "Booster",
+      "NumberFirstBoosterInjections" = "First Booster",
+      "NumberSecondBoosterInjections" = "Second Booster",
     ) %>% factor(levels = c(
-      "First dose", "Second dose", "Booster"
+      "First dose", "Second dose", "First Booster", "Second Booster"
     ) %>% rev)
   ) %>%
   dplyr::group_by(
@@ -79,6 +80,10 @@ p_vac <- vac_ts %>%
   )
 
 ggsave("man/figures/README_plot_vac.png", device = "png", p_vac, width = 10, height = 3, scale = 1, bg = "white")
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+spatial <- covid19germany::get_RKI_spatial()
 ```
 
 ![](man/figures/README_plot_vac.png)
