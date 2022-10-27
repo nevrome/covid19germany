@@ -1,3 +1,7 @@
+# 0.3.4
+
+- fixed file name issue with the shape files for `get_RKI_spatial()`
+
 # 0.3.3
 
 - fixed another breaking column name change in the vaccination table
