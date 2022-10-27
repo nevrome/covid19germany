@@ -16,13 +16,13 @@ COVID-19 outbreak in Germany. This package exists to simplify data
 analysis and was developed in the context of the [\#WirvsVirus
 hackathon](https://www.bundesregierung.de/breg-de/themen/coronavirus/wir-vs-virus-1731968).
 
--   [**Install**](#Install)
--   [**Functions and data**](#functions-and-data)
-    -   [RKI vaccination progress](#rki-vaccination-progress)
-    -   [RKI timeseries](#rki-timeseries)
-    -   [RKI spatial](#rki-spatial)
-    -   [Population numbers](#population-numbers)
-    -   [Hospital beds](#hospital-beds)
+- [**Install**](#Install)
+- [**Functions and data**](#functions-and-data)
+  - [RKI vaccination progress](#rki-vaccination-progress)
+  - [RKI timeseries](#rki-timeseries)
+  - [RKI spatial](#rki-spatial)
+  - [Population numbers](#population-numbers)
+  - [Hospital beds](#hospital-beds)
 
 ## Install
 
