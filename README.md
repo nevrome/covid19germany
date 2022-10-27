@@ -5,10 +5,6 @@
 
 ![](man/figures/README_plot_vac.png)
 
-[![R-CMD-check](https://github.com/nevrome/covid19germany/actions/workflows/check-release.yaml/badge.svg)](https://github.com/nevrome/covid19germany/actions/workflows/check-release.yaml)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/nevrome/covid19germany/master.svg)](https://codecov.io/github/nevrome/covid19germany?branch=master)
-
 # covid19germany
 
 An R package to load, visualise and analyse daily updated data on the
