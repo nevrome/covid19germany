@@ -69,12 +69,14 @@ download_RKI_spatial <- function(url, resolution) {
   utils::unzip(shape_zip, exdir = unzip_dir)
   
   if (resolution == "Bundesland") {
-    sf_object <- sf::read_sf(file.path(unzip_dir, "BL_mit_EW_und_Faellen.shp")) %>% 
+    path_to_shp <- list.files(unzip_dir, pattern = ".*Bundes.*\\.shp", full.names = TRUE)
+    sf_object <- sf::read_sf(path_to_shp) %>% 
       dplyr::mutate(
         Bundesland = .data[["LAN_ew_GEN"]]  
       )
   } else if (resolution == "Landkreis") {
-    sf_object <- sf::read_sf(file.path(unzip_dir, "RKI_Corona_Landkreise.shp")) %>% 
+    path_to_shp <- list.files(unzip_dir, pattern = ".*Land.*\\.shp", full.names = TRUE)
+    sf_object <- sf::read_sf(path_to_shp) %>% 
       dplyr::mutate(
         IdLandkreis = as.integer(.data[["RS"]])  
       )
